@@ -7,6 +7,10 @@
   "scripts": {
     "build": "pika-pack build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:etienne-dldc/tumau.git"
+  },
   "publishConfig": {
     "access": "public"
   },

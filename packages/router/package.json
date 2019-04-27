@@ -1,11 +1,15 @@
 {
   "name": "@tumau/router",
   "version": "1.0.0-alpha.2",
-  "description": "",
+  "description": "Router for @tumau/core",
   "main": "index.js",
   "types": "./pkg/dist-types/index.d.ts",
   "scripts": {
     "build": "pika-pack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:etienne-dldc/tumau.git"
   },
   "publishConfig": {
     "access": "public"
