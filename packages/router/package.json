@@ -7,6 +7,9 @@
   "scripts": {
     "build": "pika-pack build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "@pika/pack": {
     "pipeline": [
       [
