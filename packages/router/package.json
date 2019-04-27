@@ -1,6 +1,6 @@
 {
   "name": "@tumau/router",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.5",
   "description": "Router for @tumau/core",
   "main": "index.js",
   "types": "./pkg/dist-types/index.d.ts",
@@ -27,7 +27,7 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@tumau/core": "1.0.0-alpha.3"
+    "@tumau/core": "^1.0.0-alpha.5"
   },
   "devDependencies": {
     "@pika/pack": "^0.3.7",
