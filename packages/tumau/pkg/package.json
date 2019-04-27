@@ -1,7 +1,7 @@
 {
   "name": "@tumau/core",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.3",
   "license": "MIT",
   "files": [
     "dist-*/",
@@ -12,11 +12,18 @@
   "main": "dist-node/index.js",
   "pika": true,
   "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:etienne-dldc/tumau.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "@pika/pack": "^0.3.7",
     "@pika/plugin-build-node": "^0.3.16",
     "@pika/plugin-ts-standard-pkg": "^0.3.16",
     "typescript": "^3.4.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
