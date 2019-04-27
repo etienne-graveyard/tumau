@@ -8,11 +8,8 @@
     "publish": "lerna publish from-package --contents pkg",
     "nuke": "lerna exec \"rm -f package-lock.json npm-shrinkwrap.json\" && lerna clean --yes && lerna bootstrap && lerna exec --stream -- \"test -f package-lock.json || npm install --package-lock-only\""
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
-    "oao": "^1.6.0"
+    "lerna": "^3.13.4"
   },
   "dependencies": {}
 }
