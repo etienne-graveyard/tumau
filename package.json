@@ -1,15 +1,15 @@
 {
   "name": "root",
-  "version": "1.0.0-alpha.3",
   "private": true,
   "scripts": {
-    "version": "lerna exec npm version",
-    "build": "lerna run build",
-    "publish": "lerna publish from-package --contents pkg",
-    "nuke": "lerna exec \"rm -f package-lock.json npm-shrinkwrap.json\" && lerna clean --yes && lerna bootstrap && lerna exec --stream -- \"test -f package-lock.json || npm install --package-lock-only\""
+    "build-all": "yarn run --cwd='./packages/tumau' build && yarn run --cwd=\"./packages/router\" build",
+    "link": "yarn link --cwd='./packages/tumau/pkg' && yarn link --cwd='./packages/router/pkg' && yarn link '@tumau/core' --cwd='./packages/router'",
+    "version": "yarn version --cwd='./packages/tumau' && yarn version --cwd='./packages/router'"
   },
-  "devDependencies": {
-    "lerna": "^3.13.4"
-  },
-  "dependencies": {}
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {},
+  "dependencies": {},
+  "version": "0.0.0"
 }
