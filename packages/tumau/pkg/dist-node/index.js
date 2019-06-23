@@ -4,143 +4,37 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var http = _interopDefault(require('http'));
-var querystring = require('querystring');
 var string_decoder = require('string_decoder');
+var querystring = require('querystring');
+var http = _interopDefault(require('http'));
 
-const Middleware = {
-  compose
+(function (HttpMethod) {
+  HttpMethod["ALL"] = "ALL";
+  HttpMethod["GET"] = "GET";
+  HttpMethod["HEAD"] = "HEAD";
+  HttpMethod["PATCH"] = "PATCH";
+  HttpMethod["OPTIONS"] = "OPTIONS";
+  HttpMethod["CONNECT"] = "CONNECT";
+  HttpMethod["DELETE"] = "DELETE";
+  HttpMethod["TRACE"] = "TRACE";
+  HttpMethod["POST"] = "POST";
+  HttpMethod["PUT"] = "PUT";
+})(exports.HttpMethod || (exports.HttpMethod = {}));
+
+const HttpHeaders = {
+  ContentLength: 'content-length',
+  ContentType: 'content-type',
+  ContentEncoding: 'content-encoding',
+  AccessControlAllowOrigin: 'access-control-allow-origin',
+  AccessControlAllowHeaders: 'access-control-allow-headers',
+  Origin: 'origin'
 };
-
-function compose(...middlewares) {
-  return async function (ctx, next) {
-    // last called middleware #
-    let index = -1;
-    return dispatch(0);
-
-    function dispatch(i) {
-      if (i <= index) {
-        return Promise.reject(new Error('next() called multiple times'));
-      }
-
-      index = i;
-      let fn = middlewares[i];
-
-      if (i === middlewares.length) {
-        fn = next;
-      }
-
-      if (!fn) {
-        return Promise.resolve();
-      }
-
-      try {
-        return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
-      } catch (err) {
-        return Promise.reject(err);
-      }
-    }
-  };
-}
-
-function notNill(maybe) {
-  if (maybe === null || maybe === undefined) {
-    throw Error(`Unexpected nill`);
-  }
-
-  return maybe;
-}
-
-const Request = {
-  create: createRequest,
-  parseUrl
+const ContentType = {
+  Json: 'application/json'
 };
-
-async function createRequest(req) {
-  const url = notNill(req.url); // never null because IncomingMessage come from http.Server
-
-  const parsed = parseUrl(url);
-  const method = notNill(req.method); // const route = router.find(method, parsed.pathname);
-  // const notFound = route.middlewares.length === 0;
-
-  const request = {
-    req,
-    url,
-    method,
-    href: parsed.href,
-    path: parsed.path,
-    pathname: parsed.pathname,
-    rawQuery: parsed.query,
-    query: parsed.query ? querystring.parse(parsed.query) : null,
-    search: parsed.search,
-    body: {},
-    headers: req.headers
-  };
-  return request;
-}
-
-function parseUrl(url) {
-  const obj = {
-    query: null,
-    search: null,
-    _raw: url,
-    href: url,
-    path: url,
-    pathname: url
-  };
-  let idx = url.indexOf('?', 1);
-
-  if (idx !== -1) {
-    const search = url.substring(idx);
-    obj.search = search;
-    obj.query = search.substring(1);
-    obj.pathname = url.substring(0, idx);
-  }
-
-  return obj;
-} // =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
-
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
+const ContentEncoding = {
+  Identity: 'identity'
+};
 
 const ALL_STATUS = {
   100: 'Continue',
@@ -272,126 +166,6 @@ const HttpStatus = {
 //   if (!n) throw new Error('invalid status message: "' + code + '"')
 //   return n
 // }
-
-(function (HttpMethod) {
-  HttpMethod["ALL"] = "ALL";
-  HttpMethod["GET"] = "GET";
-  HttpMethod["HEAD"] = "HEAD";
-  HttpMethod["PATCH"] = "PATCH";
-  HttpMethod["OPTIONS"] = "OPTIONS";
-  HttpMethod["CONNECT"] = "CONNECT";
-  HttpMethod["DELETE"] = "DELETE";
-  HttpMethod["TRACE"] = "TRACE";
-  HttpMethod["POST"] = "POST";
-  HttpMethod["PUT"] = "PUT";
-})(exports.HttpMethod || (exports.HttpMethod = {}));
-
-const HttpHeaders = {
-  ContentLength: 'content-length',
-  ContentType: 'content-type',
-  ContentEncoding: 'content-encoding',
-  AccessControlAllowOrigin: 'access-control-allow-origin',
-  AccessControlAllowHeaders: 'access-control-allow-headers',
-  Origin: 'origin'
-};
-const ContentType = {
-  Json: 'application/json'
-};
-const ContentEncoding = {
-  Identity: 'identity'
-};
-
-const Response = {
-  create: createResponse
-};
-
-async function createResponse(res) {
-  let responseData = null;
-  const response = {
-    res,
-    create,
-
-    get sent() {
-      return responseData !== null;
-    },
-
-    clearBody,
-    __send
-  };
-  return response;
-
-  function create(options = {}, config = {}) {
-    const {
-      force = false
-    } = config;
-
-    if (responseData !== null && force === false) {
-      throw new Error(`responseData already set !`);
-    }
-
-    const {
-      code = 200,
-      headers = {},
-      json = {}
-    } = options;
-    responseData = {
-      code,
-      headers,
-      json
-    };
-  }
-
-  function clearBody() {
-    if (responseData) {
-      delete responseData.json;
-    }
-  }
-
-  function __send(ctx) {
-    if (res.finished) {
-      throw new Error('Response finished ?');
-    }
-
-    if (responseData === null) {
-      throw new Error('No response sent !');
-    }
-
-    if (res.headersSent) {
-      throw new Error('Header already sent !');
-    }
-
-    const headers = _objectSpread({}, responseData.headers);
-
-    const isEmpty = HttpStatus.isEmpty(responseData.code) || ctx.request.method === exports.HttpMethod.HEAD || ctx.request.method === exports.HttpMethod.OPTIONS;
-    const bodyStr = JSON.stringify(responseData.json);
-    const length = Buffer.byteLength(bodyStr); // ignore body
-
-    if (isEmpty === false) {
-      headers[HttpHeaders.ContentLength] = length;
-      headers[HttpHeaders.ContentType] = ContentType.Json;
-    }
-
-    res.writeHead(responseData.code, headers);
-
-    if (isEmpty) {
-      return res.end();
-    }
-
-    return res.end(bodyStr);
-  }
-}
-
-const Context = {
-  create: createContext
-};
-
-async function createContext(request, response) {
-  const context = {
-    request,
-    response
-  };
-  return context;
-}
 
 class HttpError extends Error {
   constructor(code, message) {
@@ -612,6 +386,232 @@ function createBodyParser(options = {}) {
   }
 }
 
+const Context = {
+  create: createContext
+};
+
+async function createContext(request, response) {
+  const context = {
+    request,
+    response
+  };
+  return context;
+}
+
+const Middleware = {
+  compose
+};
+
+function compose(...middlewares) {
+  return async function (ctx, next) {
+    // last called middleware #
+    let index = -1;
+    return dispatch(0);
+
+    function dispatch(i) {
+      if (i <= index) {
+        return Promise.reject(new Error('next() called multiple times'));
+      }
+
+      index = i;
+      let fn = middlewares[i];
+
+      if (i === middlewares.length) {
+        fn = next;
+      }
+
+      if (!fn) {
+        return Promise.resolve();
+      }
+
+      try {
+        return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+  };
+}
+
+function notNill(maybe) {
+  if (maybe === null || maybe === undefined) {
+    throw Error(`Unexpected nill`);
+  }
+
+  return maybe;
+}
+
+const Request = {
+  create: createRequest,
+  parseUrl
+};
+
+async function createRequest(req) {
+  const url = notNill(req.url); // never null because IncomingMessage come from http.Server
+
+  const parsed = parseUrl(url);
+  const method = notNill(req.method); // const route = router.find(method, parsed.pathname);
+  // const notFound = route.middlewares.length === 0;
+
+  const request = {
+    req,
+    url,
+    method,
+    href: parsed.href,
+    path: parsed.path,
+    pathname: parsed.pathname,
+    rawQuery: parsed.query,
+    query: parsed.query ? querystring.parse(parsed.query) : null,
+    search: parsed.search,
+    body: {},
+    headers: req.headers
+  };
+  return request;
+}
+
+function parseUrl(url) {
+  const obj = {
+    query: null,
+    search: null,
+    _raw: url,
+    href: url,
+    path: url,
+    pathname: url
+  };
+  let idx = url.indexOf('?', 1);
+
+  if (idx !== -1) {
+    const search = url.substring(idx);
+    obj.search = search;
+    obj.query = search.substring(1);
+    obj.pathname = url.substring(0, idx);
+  }
+
+  return obj;
+} // =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+const Response = {
+  create: createResponse
+};
+
+async function createResponse(res) {
+  let responseData = null;
+  const response = {
+    res,
+    create,
+
+    get sent() {
+      return responseData !== null;
+    },
+
+    clearBody,
+    __send
+  };
+  return response;
+
+  function create(options = {}, config = {}) {
+    const {
+      force = false
+    } = config;
+
+    if (responseData !== null && force === false) {
+      throw new Error(`responseData already set !`);
+    }
+
+    const {
+      code = 200,
+      headers = {},
+      json = {}
+    } = options;
+    responseData = {
+      code,
+      headers,
+      json
+    };
+  }
+
+  function clearBody() {
+    if (responseData) {
+      delete responseData.json;
+    }
+  }
+
+  function __send(ctx) {
+    if (res.finished) {
+      throw new Error('Response finished ?');
+    }
+
+    if (responseData === null) {
+      throw new Error('No response sent !');
+    }
+
+    if (res.headersSent) {
+      throw new Error('Header already sent !');
+    }
+
+    const headers = _objectSpread({}, responseData.headers);
+
+    const isEmpty = HttpStatus.isEmpty(responseData.code) || ctx.request.method === exports.HttpMethod.HEAD || ctx.request.method === exports.HttpMethod.OPTIONS;
+    const bodyStr = JSON.stringify(responseData.json);
+    const length = Buffer.byteLength(bodyStr); // ignore body
+
+    if (isEmpty === false) {
+      headers[HttpHeaders.ContentLength] = length;
+      headers[HttpHeaders.ContentType] = ContentType.Json;
+    }
+
+    res.writeHead(responseData.code, headers);
+
+    if (isEmpty) {
+      return res.end();
+    }
+
+    return res.end(bodyStr);
+  }
+}
+
 const Server = {
   create: createServer
 };
@@ -687,8 +687,13 @@ function createServer(mainMiddleware, options = {}) {
   }
 }
 
+exports.BodyParser = BodyParser;
+exports.ContentEncoding = ContentEncoding;
+exports.ContentType = ContentType;
 exports.Context = Context;
 exports.HttpErrors = HttpErrors;
+exports.HttpHeaders = HttpHeaders;
+exports.HttpStatus = HttpStatus;
 exports.Middleware = Middleware;
 exports.Request = Request;
 exports.Response = Response;
