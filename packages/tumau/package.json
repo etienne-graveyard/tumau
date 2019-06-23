@@ -1,6 +1,6 @@
 {
   "name": "@tumau/core",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "",
   "main": "pkg/dist-node/index.js",
   "types": "pkg/dist-types/index.d.ts",
