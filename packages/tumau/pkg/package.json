@@ -1,7 +1,7 @@
 {
   "name": "@tumau/core",
   "description": "",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.8",
   "license": "MIT",
   "files": [
     "dist-*/",

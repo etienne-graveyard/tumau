@@ -1,7 +1,7 @@
 {
   "name": "@tumau/router",
   "description": "Router for @tumau/core",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.8",
   "license": "MIT",
   "files": [
     "dist-*/",
@@ -14,7 +14,7 @@
     "url": "https://github.com:etienne-dldc/tumau.git"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.6"
+    "@tumau/core": "^1.0.0-alpha.8"
   },
   "devDependencies": {
     "@pika/pack": "^0.4.0",

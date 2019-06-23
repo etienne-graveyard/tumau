@@ -38,5 +38,6 @@
     "@pika/plugin-build-types": "^0.4.0",
     "@pika/plugin-ts-standard-pkg": "^0.4.0",
     "typescript": "^3.5.2"
-  }
+  },
+  "gitHead": "1d4b418dbc20e628c8b67644460cd128bcb922ec"
 }
