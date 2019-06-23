@@ -4,4 +4,4 @@
 
 # TUMAU
 
-Node server written in typescript
+A Zero dependency node HTTP server written in Typescript

@@ -1,7 +1,7 @@
 {
   "name": "@tumau/core",
   "version": "1.0.0-alpha.8",
-  "description": "",
+  "description": "A Zero dependency node HTTP server written in Typescript",
   "main": "pkg/dist-node/index.js",
   "types": "pkg/dist-types/index.d.ts",
   "scripts": {
@@ -36,5 +36,5 @@
     "@pika/plugin-ts-standard-pkg": "^0.4.0",
     "typescript": "^3.5.2"
   },
-  "gitHead": "1d4b418dbc20e628c8b67644460cd128bcb922ec"
+  "dependencies": {}
 }

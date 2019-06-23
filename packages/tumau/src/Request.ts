@@ -38,9 +38,6 @@ async function createRequest(req: IncomingMessage): Promise<Request> {
   const parsed = parseUrl(url);
   const method = notNill(req.method) as HttpMethod;
 
-  // const route = router.find(method, parsed.pathname);
-  // const notFound = route.middlewares.length === 0;
-
   const request: Request = {
     req,
     url,
@@ -77,13 +74,3 @@ function parseUrl(url: string): ParsedUrl {
   }
   return obj;
 }
-
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
-// =======================
