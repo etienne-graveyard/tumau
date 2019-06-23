@@ -8,84 +8,39 @@ var http = _interopDefault(require('http'));
 var querystring = require('querystring');
 var string_decoder = require('string_decoder');
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-
 const Middleware = {
   compose
 };
 
 function compose(...middlewares) {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref = _asyncToGenerator(function* (ctx, next) {
-        // last called middleware #
-        let index = -1;
-        return dispatch(0);
+  return async function (ctx, next) {
+    // last called middleware #
+    let index = -1;
+    return dispatch(0);
 
-        function dispatch(i) {
-          if (i <= index) {
-            return Promise.reject(new Error('next() called multiple times'));
-          }
+    function dispatch(i) {
+      if (i <= index) {
+        return Promise.reject(new Error('next() called multiple times'));
+      }
 
-          index = i;
-          let fn = middlewares[i];
+      index = i;
+      let fn = middlewares[i];
 
-          if (i === middlewares.length) {
-            fn = next;
-          }
+      if (i === middlewares.length) {
+        fn = next;
+      }
 
-          if (!fn) {
-            return Promise.resolve();
-          }
+      if (!fn) {
+        return Promise.resolve();
+      }
 
-          try {
-            return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
-          } catch (err) {
-            return Promise.reject(err);
-          }
-        }
-      });
-
-      return function (_x, _x2) {
-        return _ref.apply(this, arguments);
-      };
-    }()
-  );
+      try {
+        return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+  };
 }
 
 const Request = {
@@ -93,33 +48,26 @@ const Request = {
   parseUrl
 };
 
-function createRequest(_x) {
-  return _createRequest.apply(this, arguments);
-}
+async function createRequest(req) {
+  const url = req.url; // never null because IncomingMessage come from http.Server
 
-function _createRequest() {
-  _createRequest = _asyncToGenerator(function* (req) {
-    const url = req.url; // never null because IncomingMessage come from http.Server
+  const parsed = parseUrl(url);
+  const method = req.method; // const route = router.find(method, parsed.pathname);
+  // const notFound = route.middlewares.length === 0;
 
-    const parsed = parseUrl(url);
-    const method = req.method; // const route = router.find(method, parsed.pathname);
-    // const notFound = route.middlewares.length === 0;
-
-    const request = {
-      req,
-      url,
-      method,
-      href: parsed.href,
-      path: parsed.path,
-      pathname: parsed.pathname,
-      rawQuery: parsed.query,
-      query: parsed.query ? querystring.parse(parsed.query) : null,
-      search: parsed.search,
-      body: {}
-    };
-    return request;
-  });
-  return _createRequest.apply(this, arguments);
+  const request = {
+    req,
+    url,
+    method,
+    href: parsed.href,
+    path: parsed.path,
+    pathname: parsed.pathname,
+    rawQuery: parsed.query,
+    query: parsed.query ? querystring.parse(parsed.query) : null,
+    search: parsed.search,
+    body: {}
+  };
+  return request;
 }
 
 function parseUrl(url) {
@@ -155,60 +103,45 @@ const Response = {
   create: createResponse
 };
 
-function createResponse(_x) {
-  return _createResponse.apply(this, arguments);
-}
+async function createResponse(res) {
+  const response = {
+    res,
+    send
+  };
+  return response;
 
-function _createResponse() {
-  _createResponse = _asyncToGenerator(function* (res) {
-    const response = {
-      res,
-      send
-    };
-    return response;
-
-    function send(options = {}) {
-      const _options$code = options.code,
-            code = _options$code === void 0 ? 200 : _options$code,
-            _options$headers = options.headers,
-            headers = _options$headers === void 0 ? {} : _options$headers,
-            _options$json = options.json,
-            json = _options$json === void 0 ? {
+  function send(options = {}) {
+    const {
+      code = 200,
+      headers = {},
+      json = {
         enpty: true
-      } : _options$json;
-      const obj = {};
-
-      for (let k in headers) {
-        obj[k.toLowerCase()] = headers[k];
       }
+    } = options;
+    const obj = {};
 
-      const dataStr = JSON.stringify(json);
-      obj['content-type'] = obj['content-type'] || res.getHeader('content-type') || 'application/json;charset=utf-8';
-      obj['content-length'] = Buffer.byteLength(dataStr);
-      res.writeHead(code, obj);
-      res.end(dataStr);
+    for (let k in headers) {
+      obj[k.toLowerCase()] = headers[k];
     }
-  });
-  return _createResponse.apply(this, arguments);
+
+    const dataStr = JSON.stringify(json);
+    obj['content-type'] = obj['content-type'] || res.getHeader('content-type') || 'application/json;charset=utf-8';
+    obj['content-length'] = Buffer.byteLength(dataStr);
+    res.writeHead(code, obj);
+    res.end(dataStr);
+  }
 }
 
 const Context = {
   create: createContext
 };
 
-function createContext(_x, _x2) {
-  return _createContext.apply(this, arguments);
-}
-
-function _createContext() {
-  _createContext = _asyncToGenerator(function* (request, response) {
-    const context = {
-      request,
-      response
-    };
-    return context;
-  });
-  return _createContext.apply(this, arguments);
+async function createContext(request, response) {
+  const context = {
+    request,
+    response
+  };
+  return context;
 }
 
 (function (HTTPMethod) {
@@ -229,66 +162,50 @@ const BodyParser = {
 };
 
 function createBodyParser() {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref = _asyncToGenerator(function* (ctx, next) {
-        if (ctx.request.method === exports.HTTPMethod.GET || ctx.request.method === exports.HTTPMethod.DELETE) {
-          return next();
-        }
+  return async (ctx, next) => {
+    if (ctx.request.method === exports.HTTPMethod.GET || ctx.request.method === exports.HTTPMethod.DELETE) {
+      return next();
+    }
 
-        const _1mb = 1024 * 1024 * 1024;
+    const _1mb = 1024 * 1024 * 1024;
 
-        const body = yield parseBody(ctx.request.req, {
-          limit: _1mb
-        });
-        ctx.request.body = body;
-        return next();
-      });
-
-      return function (_x, _x2) {
-        return _ref.apply(this, arguments);
-      };
-    }()
-  );
+    const body = await parseBody(ctx.request.req, {
+      limit: _1mb
+    });
+    ctx.request.body = body;
+    return next();
+  };
 } // Allowed whitespace is defined in RFC 7159
 // http://www.rfc-editor.org/rfc/rfc7159.txt
 
 
 const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
 
-function parseBody(_x3, _x4) {
-  return _parseBody.apply(this, arguments);
-}
+async function parseBody(req, options) {
+  // defaults
+  const len = req.headers['content-length'];
+  const encoding = req.headers['content-encoding'] || 'identity';
 
-function _parseBody() {
-  _parseBody = _asyncToGenerator(function* (req, options) {
-    // defaults
-    const len = req.headers['content-length'];
-    const encoding = req.headers['content-encoding'] || 'identity';
+  if (encoding !== 'identity') {
+    throw new Error('Supports only identity');
+  }
 
-    if (encoding !== 'identity') {
-      throw new Error('Supports only identity');
-    }
-
-    const length = parseInt(len);
-    const str = yield raw(req, {
-      limit: options.limit,
-      length: length
-    });
-
-    if (!str) {
-      return {};
-    } // strict JSON test
-
-
-    if (!strictJSONReg.test(str)) {
-      throw new Error('invalid JSON, only supports object and array');
-    }
-
-    return JSON.parse(str);
+  const length = parseInt(len);
+  const str = await raw(req, {
+    limit: options.limit,
+    length: length
   });
-  return _parseBody.apply(this, arguments);
+
+  if (!str) {
+    return {};
+  } // strict JSON test
+
+
+  if (!strictJSONReg.test(str)) {
+    throw new Error('invalid JSON, only supports object and array');
+  }
+
+  return JSON.parse(str);
 }
 
 function raw(stream, options) {
@@ -431,29 +348,20 @@ function createServer(mainMiddleware, options = {}) {
     });
   }
 
-  function handler(_x, _x2) {
-    return _handler.apply(this, arguments);
-  }
-
-  function _handler() {
-    _handler = _asyncToGenerator(function* (req, res) {
-      const request = yield Request.create(req);
-      const response = yield Response.create(res);
-      const ctx = yield Context.create(request, response);
-      return Promise.resolve(mainMiddleware(ctx,
-      /*#__PURE__*/
-      _asyncToGenerator(function* () {
-        return ctx.response.send({
-          code: 500,
-          json: {
-            message: 'Server did not respond'
-          }
-        });
-      }))).catch(err => {
-        return onError(err, ctx);
+  async function handler(req, res) {
+    const request = await Request.create(req);
+    const response = await Response.create(res);
+    const ctx = await Context.create(request, response);
+    return Promise.resolve(mainMiddleware(ctx, async () => {
+      return ctx.response.send({
+        code: 500,
+        json: {
+          message: 'Server did not respond'
+        }
       });
+    })).catch(err => {
+      return onError(err, ctx);
     });
-    return _handler.apply(this, arguments);
   }
 } // function mutate(str: string, req: http.IncomingMessage) {
 //   req.url = req.url.substring(str.length) || '/';

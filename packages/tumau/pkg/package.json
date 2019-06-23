@@ -7,9 +7,6 @@
     "dist-*/",
     "bin/"
   ],
-  "source": "dist-src/index.js",
-  "types": "dist-types/index.d.ts",
-  "main": "dist-node/index.js",
   "pika": true,
   "sideEffects": false,
   "repository": {
@@ -18,12 +15,16 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@pika/pack": "^0.3.7",
-    "@pika/plugin-build-node": "^0.3.16",
-    "@pika/plugin-ts-standard-pkg": "^0.3.16",
-    "typescript": "^3.4.5"
+    "@pika/pack": "^0.4.0",
+    "@pika/plugin-build-node": "^0.4.0",
+    "@pika/plugin-build-types": "^0.4.0",
+    "@pika/plugin-ts-standard-pkg": "^0.4.0",
+    "typescript": "^3.5.2"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "source": "dist-src/index.js",
+  "types": "dist-types/index.d.ts",
+  "main": "dist-node/index.js"
 }

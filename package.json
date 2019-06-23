@@ -2,8 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build-all": "yarn run --cwd='./packages/tumau' build && yarn run --cwd=\"./packages/router\" build",
-    "link": "yarn link --cwd='./packages/tumau/pkg' && yarn link --cwd='./packages/router/pkg' && yarn link '@tumau/core' --cwd='./packages/router'"
+    "build": "lerna run build"
   },
   "workspaces": [
     "packages/*"
