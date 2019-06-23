@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "publish": "lerna publish from-package --contents pkg"
+    "publish": "lerna publish from-package --contents pkg",
+    "version": "lerna run build"
   },
   "workspaces": [
     "packages/*"
