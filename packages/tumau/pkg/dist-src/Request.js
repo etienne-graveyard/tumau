@@ -3,7 +3,7 @@ export const Request = {
     create: createRequest,
     parseUrl,
 };
-function createRequest(req) {
+async function createRequest(req) {
     const url = req.url; // never null because IncomingMessage come from http.Server
     const parsed = parseUrl(url);
     const method = req.method;
@@ -19,6 +19,7 @@ function createRequest(req) {
         rawQuery: parsed.query,
         query: parsed.query ? parseQueryString(parsed.query) : null,
         search: parsed.search,
+        body: {},
     };
     return request;
 }
@@ -40,3 +41,12 @@ function parseUrl(url) {
     }
     return obj;
 }
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================

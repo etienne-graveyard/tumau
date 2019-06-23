@@ -15,7 +15,7 @@ interface SendOptions {
   headers?: OutgoingHttpHeaders;
 }
 
-function createResponse(res: http.ServerResponse): Response {
+async function createResponse(res: http.ServerResponse): Promise<Response> {
   const response: Response = {
     res,
     send,

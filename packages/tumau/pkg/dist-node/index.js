@@ -6,6 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var http = _interopDefault(require('http'));
 var querystring = require('querystring');
+var string_decoder = require('string_decoder');
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
@@ -43,30 +44,82 @@ function _asyncToGenerator(fn) {
   };
 }
 
+const Middleware = {
+  compose
+};
+
+function compose(...middlewares) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(function* (ctx, next) {
+        // last called middleware #
+        let index = -1;
+        return dispatch(0);
+
+        function dispatch(i) {
+          if (i <= index) {
+            return Promise.reject(new Error('next() called multiple times'));
+          }
+
+          index = i;
+          let fn = middlewares[i];
+
+          if (i === middlewares.length) {
+            fn = next;
+          }
+
+          if (!fn) {
+            return Promise.resolve();
+          }
+
+          try {
+            return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
+          } catch (err) {
+            return Promise.reject(err);
+          }
+        }
+      });
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }()
+  );
+}
+
 const Request = {
   create: createRequest,
   parseUrl
 };
 
-function createRequest(req) {
-  const url = req.url; // never null because IncomingMessage come from http.Server
+function createRequest(_x) {
+  return _createRequest.apply(this, arguments);
+}
 
-  const parsed = parseUrl(url);
-  const method = req.method; // const route = router.find(method, parsed.pathname);
-  // const notFound = route.middlewares.length === 0;
+function _createRequest() {
+  _createRequest = _asyncToGenerator(function* (req) {
+    const url = req.url; // never null because IncomingMessage come from http.Server
 
-  const request = {
-    req,
-    url,
-    method,
-    href: parsed.href,
-    path: parsed.path,
-    pathname: parsed.pathname,
-    rawQuery: parsed.query,
-    query: parsed.query ? querystring.parse(parsed.query) : null,
-    search: parsed.search
-  };
-  return request;
+    const parsed = parseUrl(url);
+    const method = req.method; // const route = router.find(method, parsed.pathname);
+    // const notFound = route.middlewares.length === 0;
+
+    const request = {
+      req,
+      url,
+      method,
+      href: parsed.href,
+      path: parsed.path,
+      pathname: parsed.pathname,
+      rawQuery: parsed.query,
+      query: parsed.query ? querystring.parse(parsed.query) : null,
+      search: parsed.search,
+      body: {}
+    };
+    return request;
+  });
+  return _createRequest.apply(this, arguments);
 }
 
 function parseUrl(url) {
@@ -88,52 +141,255 @@ function parseUrl(url) {
   }
 
   return obj;
-}
+} // =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
+// =======================
 
 const Response = {
   create: createResponse
 };
 
-function createResponse(res) {
-  const response = {
-    res,
-    send
-  };
-  return response;
+function createResponse(_x) {
+  return _createResponse.apply(this, arguments);
+}
 
-  function send(options = {}) {
-    const _options$code = options.code,
-          code = _options$code === void 0 ? 200 : _options$code,
-          _options$headers = options.headers,
-          headers = _options$headers === void 0 ? {} : _options$headers,
-          _options$json = options.json,
-          json = _options$json === void 0 ? {
-      enpty: true
-    } : _options$json;
-    const obj = {};
+function _createResponse() {
+  _createResponse = _asyncToGenerator(function* (res) {
+    const response = {
+      res,
+      send
+    };
+    return response;
 
-    for (let k in headers) {
-      obj[k.toLowerCase()] = headers[k];
+    function send(options = {}) {
+      const _options$code = options.code,
+            code = _options$code === void 0 ? 200 : _options$code,
+            _options$headers = options.headers,
+            headers = _options$headers === void 0 ? {} : _options$headers,
+            _options$json = options.json,
+            json = _options$json === void 0 ? {
+        enpty: true
+      } : _options$json;
+      const obj = {};
+
+      for (let k in headers) {
+        obj[k.toLowerCase()] = headers[k];
+      }
+
+      const dataStr = JSON.stringify(json);
+      obj['content-type'] = obj['content-type'] || res.getHeader('content-type') || 'application/json;charset=utf-8';
+      obj['content-length'] = Buffer.byteLength(dataStr);
+      res.writeHead(code, obj);
+      res.end(dataStr);
     }
-
-    const dataStr = JSON.stringify(json);
-    obj['content-type'] = obj['content-type'] || res.getHeader('content-type') || 'application/json;charset=utf-8';
-    obj['content-length'] = Buffer.byteLength(dataStr);
-    res.writeHead(code, obj);
-    res.end(dataStr);
-  }
+  });
+  return _createResponse.apply(this, arguments);
 }
 
 const Context = {
   create: createContext
 };
 
-function createContext(request, response) {
-  const context = {
-    request,
-    response
-  };
-  return context;
+function createContext(_x, _x2) {
+  return _createContext.apply(this, arguments);
+}
+
+function _createContext() {
+  _createContext = _asyncToGenerator(function* (request, response) {
+    const context = {
+      request,
+      response
+    };
+    return context;
+  });
+  return _createContext.apply(this, arguments);
+}
+
+(function (HTTPMethod) {
+  HTTPMethod["ALL"] = "ALL";
+  HTTPMethod["GET"] = "GET";
+  HTTPMethod["HEAD"] = "HEAD";
+  HTTPMethod["PATCH"] = "PATCH";
+  HTTPMethod["OPTIONS"] = "OPTIONS";
+  HTTPMethod["CONNECT"] = "CONNECT";
+  HTTPMethod["DELETE"] = "DELETE";
+  HTTPMethod["TRACE"] = "TRACE";
+  HTTPMethod["POST"] = "POST";
+  HTTPMethod["PUT"] = "PUT";
+})(exports.HTTPMethod || (exports.HTTPMethod = {}));
+
+const BodyParser = {
+  create: createBodyParser
+};
+
+function createBodyParser() {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(function* (ctx, next) {
+        if (ctx.request.method === exports.HTTPMethod.GET || ctx.request.method === exports.HTTPMethod.DELETE) {
+          return next();
+        }
+
+        const _1mb = 1024 * 1024 * 1024;
+
+        const body = yield parseBody(ctx.request.req, {
+          limit: _1mb
+        });
+        ctx.request.body = body;
+        return next();
+      });
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }()
+  );
+} // Allowed whitespace is defined in RFC 7159
+// http://www.rfc-editor.org/rfc/rfc7159.txt
+
+
+const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
+
+function parseBody(_x3, _x4) {
+  return _parseBody.apply(this, arguments);
+}
+
+function _parseBody() {
+  _parseBody = _asyncToGenerator(function* (req, options) {
+    // defaults
+    const len = req.headers['content-length'];
+    const encoding = req.headers['content-encoding'] || 'identity';
+
+    if (encoding !== 'identity') {
+      throw new Error('Supports only identity');
+    }
+
+    const length = parseInt(len);
+    const str = yield raw(req, {
+      limit: options.limit,
+      length: length
+    });
+
+    if (!str) {
+      return {};
+    } // strict JSON test
+
+
+    if (!strictJSONReg.test(str)) {
+      throw new Error('invalid JSON, only supports object and array');
+    }
+
+    return JSON.parse(str);
+  });
+  return _parseBody.apply(this, arguments);
+}
+
+function raw(stream, options) {
+  return new Promise(function executor(resolve, reject) {
+    readStream(stream, options.length, options.limit, function onRead(err, buf) {
+      if (err) return reject(err);
+      resolve(buf);
+    });
+  });
+}
+
+function halt(stream) {
+  stream.unpipe();
+  stream.pause();
+}
+
+function readStream(stream, length, limit, callback) {
+  let complete = false;
+  let sync = true; // check the length and limit options.
+  // note: we intentionally leave the stream paused,
+  // so users should handle the stream themselves.
+
+  if (length > limit) {
+    return done(new Error('request entity too large'));
+  }
+
+  const decoder = new string_decoder.StringDecoder('utf8');
+  let received = 0;
+  let buffer = ''; // attach listeners
+
+  stream.on('aborted', onAborted);
+  stream.on('close', cleanup);
+  stream.on('data', onData);
+  stream.on('end', onEnd);
+  stream.on('error', onEnd); // mark sync section complete
+
+  sync = false;
+
+  function done(err, data) {
+    // mark complete
+    complete = true;
+
+    if (sync) {
+      process.nextTick(invokeCallback);
+    } else {
+      invokeCallback();
+    }
+
+    function invokeCallback() {
+      cleanup();
+
+      if (err) {
+        // halt the stream on error
+        halt(stream);
+      }
+
+      callback(null, data);
+    }
+  }
+
+  function onAborted() {
+    if (complete) return;
+    done(new Error('request aborted'));
+  }
+
+  function onData(chunk) {
+    if (complete) return;
+    received += chunk.length;
+
+    if (limit !== null && received > limit) {
+      done(new Error('request entity too large'));
+    } else {
+      buffer += decoder.write(chunk);
+    }
+  }
+
+  function onEnd(err) {
+    if (complete) {
+      return;
+    }
+
+    if (err) {
+      return done(err);
+    }
+
+    if (length !== null && received !== length) {
+      done(new Error('request size did not match content length'));
+    } else {
+      var string = buffer + decoder.end();
+      done(null, string);
+    }
+  }
+
+  function cleanup() {
+    buffer = null;
+    stream.removeListener('aborted', onAborted);
+    stream.removeListener('data', onData);
+    stream.removeListener('end', onEnd);
+    stream.removeListener('error', onEnd);
+    stream.removeListener('close', cleanup);
+  }
 }
 
 const Server = {
@@ -147,6 +403,7 @@ function createServer(mainMiddleware, options = {}) {
   // const globalMiddlewares: Middlewares = [];
   // const onNoMatch: Middleware = options.onNoMatch || defaultOnNoMatch;
 
+  const rootMiddleware = Middleware.compose(BodyParser.create(), mainMiddleware);
   const server = {
     httpServer,
     listen
@@ -180,9 +437,9 @@ function createServer(mainMiddleware, options = {}) {
 
   function _handler() {
     _handler = _asyncToGenerator(function* (req, res) {
-      const request = Request.create(req);
-      const response = Response.create(res);
-      const ctx = Context.create(request, response);
+      const request = yield Request.create(req);
+      const response = yield Response.create(res);
+      const ctx = yield Context.create(request, response);
       return Promise.resolve(mainMiddleware(ctx,
       /*#__PURE__*/
       _asyncToGenerator(function* () {
@@ -298,63 +555,6 @@ class Polka extends Router {
 
 
 */
-
-(function (HTTPMethod) {
-  HTTPMethod["ALL"] = "ALL";
-  HTTPMethod["GET"] = "GET";
-  HTTPMethod["HEAD"] = "HEAD";
-  HTTPMethod["PATCH"] = "PATCH";
-  HTTPMethod["OPTIONS"] = "OPTIONS";
-  HTTPMethod["CONNECT"] = "CONNECT";
-  HTTPMethod["DELETE"] = "DELETE";
-  HTTPMethod["TRACE"] = "TRACE";
-  HTTPMethod["POST"] = "POST";
-  HTTPMethod["PUT"] = "PUT";
-})(exports.HTTPMethod || (exports.HTTPMethod = {}));
-
-const Middleware = {
-  compose
-};
-
-function compose(...middlewares) {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref = _asyncToGenerator(function* (ctx, next) {
-        // last called middleware #
-        let index = -1;
-        return dispatch(0);
-
-        function dispatch(i) {
-          if (i <= index) {
-            return Promise.reject(new Error('next() called multiple times'));
-          }
-
-          index = i;
-          let fn = middlewares[i];
-
-          if (i === middlewares.length) {
-            fn = next;
-          }
-
-          if (!fn) {
-            return Promise.resolve();
-          }
-
-          try {
-            return Promise.resolve(fn(ctx, dispatch.bind(null, i + 1)));
-          } catch (err) {
-            return Promise.reject(err);
-          }
-        }
-      });
-
-      return function (_x, _x2) {
-        return _ref.apply(this, arguments);
-      };
-    }()
-  );
-}
 
 exports.Context = Context;
 exports.Middleware = Middleware;

@@ -1,4 +1,4 @@
-import { HTTPMethod, Middleware, Context } from '@tumau/core';
+import { HTTPMethod, Middleware, Context } from '../../tumau/pkg/dist-types';
 import { RouterContext } from './RouterContext';
 interface ParseResult {
     keys: Array<string>;

@@ -10,10 +10,10 @@ export const Context = {
   create: createContext,
 };
 
-function createContext<Req extends Request = Request, Res extends Response = Response>(
+async function createContext<Req extends Request = Request, Res extends Response = Response>(
   request: Req,
   response: Res
-): Context<Req, Res> {
+): Promise<Context<Req, Res>> {
   const context: Context<Req, Res> = {
     request,
     response,

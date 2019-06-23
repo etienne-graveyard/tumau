@@ -20,6 +20,9 @@
         "@pika/plugin-ts-standard-pkg"
       ],
       [
+        "@pika/plugin-build-types"
+      ],
+      [
         "@pika/plugin-build-node"
       ]
     ]
@@ -30,9 +33,10 @@
     "@tumau/core": "^1.0.0-alpha.5"
   },
   "devDependencies": {
-    "@pika/pack": "^0.3.7",
-    "@pika/plugin-build-node": "^0.3.16",
-    "@pika/plugin-ts-standard-pkg": "^0.3.16",
-    "typescript": "^3.4.5"
+    "@pika/pack": "^0.4.0",
+    "@pika/plugin-build-node": "^0.4.0",
+    "@pika/plugin-build-types": "^0.4.0",
+    "@pika/plugin-ts-standard-pkg": "^0.4.0",
+    "typescript": "^3.5.2"
   }
 }

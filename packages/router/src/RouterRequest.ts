@@ -1,4 +1,4 @@
-import { Request } from '@tumau/core';
+import { Request } from '../../tumau/pkg/dist-types';
 import { Params, RouterMiddleware, FindResult } from './Router';
 
 export interface RouterRequest extends Request {
@@ -13,11 +13,11 @@ export const RouterRequest = {
   isRouterRequest,
 };
 
-function createRouterRequest(
+async function createRouterRequest(
   request: Request | RouterRequest,
   find: FindResult | false,
   noMatch: RouterMiddleware
-): RouterRequest {
+): Promise<RouterRequest> {
   const middleware = find ? find.route.middleware : noMatch;
   const pattern = find ? find.route.pattern : '';
   const parentRoutePattern = isRouterRequest(request) ? request.parentRoutePattern + pattern : pattern;

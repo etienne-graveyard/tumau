@@ -3,6 +3,7 @@ import { Middleware } from './Middleware';
 import { Request } from './Request';
 import { Response } from './Response';
 import { Context } from './Context';
+import { BodyParser } from './BodyParser';
 
 export interface Server {
   httpServer: http.Server;
@@ -25,6 +26,11 @@ function createServer(mainMiddleware: Middleware, options: Options = {}): Server
   // const apps = {};
   // const globalMiddlewares: Middlewares = [];
   // const onNoMatch: Middleware = options.onNoMatch || defaultOnNoMatch;
+
+  const rootMiddleware = Middleware.compose(
+    BodyParser.create(),
+    mainMiddleware
+  );
 
   const server: Server = {
     httpServer,
@@ -57,9 +63,9 @@ function createServer(mainMiddleware: Middleware, options: Options = {}): Server
   }
 
   async function handler(req: http.IncomingMessage, res: http.ServerResponse) {
-    const request = Request.create(req);
-    const response = Response.create(res);
-    const ctx = Context.create(request, response);
+    const request = await Request.create(req);
+    const response = await Response.create(res);
+    const ctx = await Context.create(request, response);
 
     return Promise.resolve(
       mainMiddleware(ctx, async () => {

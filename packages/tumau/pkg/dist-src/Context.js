@@ -1,7 +1,7 @@
 export const Context = {
     create: createContext,
 };
-function createContext(request, response) {
+async function createContext(request, response) {
     const context = {
         request,
         response,

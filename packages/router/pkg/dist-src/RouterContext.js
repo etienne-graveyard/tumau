@@ -1,7 +1,7 @@
 export const RouterContext = {
     create: createRouterContext,
 };
-function createRouterContext(parentCtx, routerRequest) {
+async function createRouterContext(parentCtx, routerRequest) {
     const { request, ...other } = parentCtx;
     const ctx = {
         ...other,

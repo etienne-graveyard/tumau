@@ -1,4 +1,4 @@
-import { Context, Response } from '@tumau/core';
+import { Context, Response } from '../../tumau/pkg/dist-types';
 import { RouterRequest } from './RouterRequest';
 
 export interface RouterContext extends Context<RouterRequest, Response> {}
@@ -7,7 +7,10 @@ export const RouterContext = {
   create: createRouterContext,
 };
 
-function createRouterContext(parentCtx: Context | RouterContext, routerRequest: RouterRequest): RouterContext {
+async function createRouterContext(
+  parentCtx: Context | RouterContext,
+  routerRequest: RouterRequest
+): Promise<RouterContext> {
   const { request, ...other } = parentCtx;
 
   const ctx: RouterContext = {

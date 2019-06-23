@@ -1,7 +1,7 @@
 export const Response = {
     create: createResponse,
 };
-function createResponse(res) {
+async function createResponse(res) {
     const response = {
         res,
         send,

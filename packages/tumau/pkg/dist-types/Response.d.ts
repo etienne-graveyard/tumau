@@ -12,5 +12,5 @@ interface SendOptions {
     json?: object;
     headers?: OutgoingHttpHeaders;
 }
-declare function createResponse(res: http.ServerResponse): Response;
+declare function createResponse(res: http.ServerResponse): Promise<Response>;
 export {};

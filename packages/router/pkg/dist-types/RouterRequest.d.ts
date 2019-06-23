@@ -1,4 +1,4 @@
-import { Request } from '@tumau/core';
+import { Request } from '../../tumau/pkg/dist-types';
 import { Params, RouterMiddleware, FindResult } from './Router';
 export interface RouterRequest extends Request {
     params: Params;
@@ -10,6 +10,6 @@ export declare const RouterRequest: {
     create: typeof createRouterRequest;
     isRouterRequest: typeof isRouterRequest;
 };
-declare function createRouterRequest(request: Request | RouterRequest, find: FindResult | false, noMatch: RouterMiddleware): RouterRequest;
+declare function createRouterRequest(request: Request | RouterRequest, find: FindResult | false, noMatch: RouterMiddleware): Promise<RouterRequest>;
 declare function isRouterRequest(request: Request | RouterRequest): request is RouterRequest;
 export {};

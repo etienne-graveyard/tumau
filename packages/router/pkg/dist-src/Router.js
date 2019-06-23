@@ -1,5 +1,5 @@
 import http from 'http';
-import { HTTPMethod } from '@tumau/core';
+import { HTTPMethod } from '../../tumau/pkg/dist-types';
 import { RouterRequest } from './RouterRequest';
 import { RouterContext } from './RouterContext';
 const ROUTE_TOKEN = Symbol('ROUTE_TOKEN');
@@ -31,10 +31,7 @@ function createRoute(method, route, exact, middleware) {
         middleware,
     };
 }
-async function defaultOnNotFound(ctx, _next) {
-    // TODO:
-    const { href, method, params, path, pathname } = ctx.request;
-    console.log({ href, method, params, path, pathname });
+async function defaultOnNotFound(ctx) {
     return ctx.response.send({
         code: 404,
         json: {
@@ -72,8 +69,8 @@ function createRouter(routes, options = {}) {
     const onNotFound = options.onNotFound || defaultOnNotFound;
     const router = async (ctx, next) => {
         const findResult = find(ctx.request);
-        const routerRequest = RouterRequest.create(ctx.request, findResult, onNotFound);
-        const routerCtx = RouterContext.create(ctx, routerRequest);
+        const routerRequest = await RouterRequest.create(ctx.request, findResult, onNotFound);
+        const routerCtx = await RouterContext.create(ctx, routerRequest);
         return routerRequest.middleware(routerCtx, next);
     };
     return router;

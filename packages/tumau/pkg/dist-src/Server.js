@@ -1,7 +1,9 @@
 import http from 'http';
+import { Middleware } from './Middleware';
 import { Request } from './Request';
 import { Response } from './Response';
 import { Context } from './Context';
+import { BodyParser } from './BodyParser';
 export const Server = {
     create: createServer,
 };
@@ -12,6 +14,7 @@ function createServer(mainMiddleware, options = {}) {
     // const apps = {};
     // const globalMiddlewares: Middlewares = [];
     // const onNoMatch: Middleware = options.onNoMatch || defaultOnNoMatch;
+    const rootMiddleware = Middleware.compose(BodyParser.create(), mainMiddleware);
     const server = {
         httpServer,
         listen,
@@ -37,9 +40,9 @@ function createServer(mainMiddleware, options = {}) {
         });
     }
     async function handler(req, res) {
-        const request = Request.create(req);
-        const response = Response.create(res);
-        const ctx = Context.create(request, response);
+        const request = await Request.create(req);
+        const response = await Response.create(res);
+        const ctx = await Context.create(request, response);
         return Promise.resolve(mainMiddleware(ctx, async () => {
             return ctx.response.send({
                 code: 500,

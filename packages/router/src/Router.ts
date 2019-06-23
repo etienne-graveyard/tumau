@@ -1,5 +1,5 @@
 import http from 'http';
-import { HTTPMethod, Middleware, Next, Request, Context } from '@tumau/core';
+import { HTTPMethod, Middleware, Next, Request, Context } from '../../tumau/pkg/dist-types';
 import { RouterRequest } from './RouterRequest';
 import { RouterContext } from './RouterContext';
 
@@ -67,10 +67,7 @@ function createRoute(method: HTTPMethod, route: string, exact: boolean, middlewa
   };
 }
 
-async function defaultOnNotFound(ctx: RouterContext, _next: Next) {
-  // TODO:
-  const { href, method, params, path, pathname } = ctx.request;
-  console.log({ href, method, params, path, pathname });
+async function defaultOnNotFound(ctx: RouterContext) {
   return ctx.response.send({
     code: 404,
     json: {
@@ -80,10 +77,10 @@ async function defaultOnNotFound(ctx: RouterContext, _next: Next) {
 }
 
 function parseRoute(str: string, exact: boolean = true): ParseResult {
-  var c,
-    o,
-    tmp,
-    ext,
+  var c: string,
+    o: number,
+    tmp: string | any[],
+    ext: number,
     keys = [],
     pattern = '',
     arr = str.split('/');
@@ -116,8 +113,8 @@ function createRouter(routes: Array<Route>, options: Options = {}): Router {
 
   const router: Router = async (ctx, next) => {
     const findResult = find(ctx.request);
-    const routerRequest = RouterRequest.create(ctx.request, findResult, onNotFound);
-    const routerCtx = RouterContext.create(ctx, routerRequest);
+    const routerRequest = await RouterRequest.create(ctx.request, findResult, onNotFound);
+    const routerCtx = await RouterContext.create(ctx, routerRequest);
     return routerRequest.middleware(routerCtx, next);
   };
 

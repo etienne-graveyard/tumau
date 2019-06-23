@@ -2,7 +2,7 @@ export const RouterRequest = {
     create: createRouterRequest,
     isRouterRequest,
 };
-function createRouterRequest(request, find, noMatch) {
+async function createRouterRequest(request, find, noMatch) {
     const middleware = find ? find.route.middleware : noMatch;
     const pattern = find ? find.route.pattern : '';
     const parentRoutePattern = isRouterRequest(request) ? request.parentRoutePattern + pattern : pattern;
