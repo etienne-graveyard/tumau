@@ -1,4 +1,4 @@
-import { Request } from '../../tumau/pkg/dist-types';
+import { Request } from '@tumau/core';
 import { Params, RouterMiddleware, FindResult } from './Router';
 
 export interface RouterRequest extends Request {
@@ -33,5 +33,6 @@ async function createRouterRequest(
 }
 
 function isRouterRequest(request: Request | RouterRequest): request is RouterRequest {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return !!(request as any).middleware;
 }

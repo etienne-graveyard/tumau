@@ -8,7 +8,7 @@ export interface Server {
 }
 interface Options {
     httpServer?: http.Server;
-    onError?: (err: any, ctx: Context) => void;
+    onError?: (err: {}, ctx: Context) => void;
 }
 export declare const Server: {
     create: typeof createServer;

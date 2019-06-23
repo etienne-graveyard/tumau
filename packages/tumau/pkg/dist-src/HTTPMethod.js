@@ -1,13 +1,13 @@
-export var HTTPMethod;
-(function (HTTPMethod) {
-    HTTPMethod["ALL"] = "ALL";
-    HTTPMethod["GET"] = "GET";
-    HTTPMethod["HEAD"] = "HEAD";
-    HTTPMethod["PATCH"] = "PATCH";
-    HTTPMethod["OPTIONS"] = "OPTIONS";
-    HTTPMethod["CONNECT"] = "CONNECT";
-    HTTPMethod["DELETE"] = "DELETE";
-    HTTPMethod["TRACE"] = "TRACE";
-    HTTPMethod["POST"] = "POST";
-    HTTPMethod["PUT"] = "PUT";
-})(HTTPMethod || (HTTPMethod = {}));
+export var HttpMethod;
+(function (HttpMethod) {
+    HttpMethod["ALL"] = "ALL";
+    HttpMethod["GET"] = "GET";
+    HttpMethod["HEAD"] = "HEAD";
+    HttpMethod["PATCH"] = "PATCH";
+    HttpMethod["OPTIONS"] = "OPTIONS";
+    HttpMethod["CONNECT"] = "CONNECT";
+    HttpMethod["DELETE"] = "DELETE";
+    HttpMethod["TRACE"] = "TRACE";
+    HttpMethod["POST"] = "POST";
+    HttpMethod["PUT"] = "PUT";
+})(HttpMethod || (HttpMethod = {}));

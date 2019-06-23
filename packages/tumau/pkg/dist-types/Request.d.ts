@@ -1,10 +1,10 @@
 /// <reference types="node" />
-import { IncomingMessage } from 'http';
-import { HTTPMethod } from './HTTPMethod';
+import { IncomingMessage, IncomingHttpHeaders } from 'http';
+import { HttpMethod } from './HttpMethod';
 import { ParsedUrlQuery } from 'querystring';
 export interface Request {
     req: IncomingMessage;
-    method: HTTPMethod;
+    method: HttpMethod;
     query: null | ParsedUrlQuery;
     body: object;
     url: string;
@@ -13,6 +13,7 @@ export interface Request {
     path: string;
     pathname: string;
     rawQuery: null | string;
+    headers: IncomingHttpHeaders;
 }
 export interface ParsedUrl {
     _raw: string;

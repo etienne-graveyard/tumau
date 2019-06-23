@@ -1,12 +1,13 @@
 import { parse as parseQueryString } from 'querystring';
+import { notNill } from './utils';
 export const Request = {
     create: createRequest,
     parseUrl,
 };
 async function createRequest(req) {
-    const url = req.url; // never null because IncomingMessage come from http.Server
+    const url = notNill(req.url); // never null because IncomingMessage come from http.Server
     const parsed = parseUrl(url);
-    const method = req.method;
+    const method = notNill(req.method);
     // const route = router.find(method, parsed.pathname);
     // const notFound = route.middlewares.length === 0;
     const request = {
@@ -20,6 +21,7 @@ async function createRequest(req) {
         query: parsed.query ? parseQueryString(parsed.query) : null,
         search: parsed.search,
         body: {},
+        headers: req.headers,
     };
     return request;
 }

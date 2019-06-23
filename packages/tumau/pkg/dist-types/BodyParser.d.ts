@@ -2,5 +2,8 @@ import { Middleware } from './Middleware';
 export declare const BodyParser: {
     create: typeof createBodyParser;
 };
-declare function createBodyParser(): Middleware;
+interface Options {
+    limit?: number;
+}
+declare function createBodyParser(options?: Options): Middleware;
 export {};
