@@ -1,48 +1,37 @@
-import { HTTPMethod, Middleware, Context } from '../../tumau/pkg/dist-types';
+import { Middleware, Context } from '@tumau/core';
 import { RouterContext } from './RouterContext';
 interface ParseResult {
-    keys: Array<string>;
+    keys: string[];
     regexp: RegExp;
 }
 export declare type RouterMiddleware = Middleware<RouterContext>;
-export declare type RouterMiddlewares = Array<RouterMiddleware>;
+export declare type RouterMiddlewares = RouterMiddleware[];
 interface Options {
     onNotFound?: RouterMiddleware;
 }
 export declare type Router = Middleware<Context | RouterContext>;
 declare const ROUTE_TOKEN: unique symbol;
 export interface Route {
-    keys: Array<string>;
+    [ROUTE_TOKEN]: true;
+    keys: string[];
     regexp: RegExp;
     pattern: string;
-    method: HTTPMethod;
     exact: boolean;
     middleware: RouterMiddleware;
-    [ROUTE_TOKEN]: true;
 }
-export declare type Params = {
+export interface Params {
     [key: string]: string;
-};
+}
 export interface FindResult {
     params: Params;
     route: Route;
+    index: number;
 }
 export declare const Router: {
     parseRoute: typeof parseRoute;
     create: typeof createRouter;
-    use: (route: string, middleware: Middleware<RouterContext>) => Route;
-    add: (method: HTTPMethod, route: string, middleware: Middleware<RouterContext>) => Route;
-    all: (route: string, middleware: Middleware<RouterContext>) => Route;
-    get: (route: string, middleware: Middleware<RouterContext>) => Route;
-    head: (route: string, middleware: Middleware<RouterContext>) => Route;
-    patch: (route: string, middleware: Middleware<RouterContext>) => Route;
-    options: (route: string, middleware: Middleware<RouterContext>) => Route;
-    connect: (route: string, middleware: Middleware<RouterContext>) => Route;
-    delete: (route: string, middleware: Middleware<RouterContext>) => Route;
-    trace: (route: string, middleware: Middleware<RouterContext>) => Route;
-    post: (route: string, middleware: Middleware<RouterContext>) => Route;
-    put: (route: string, middleware: Middleware<RouterContext>) => Route;
+    createRoute: (route: string, middleware: Middleware<RouterContext>) => Route;
 };
 declare function parseRoute(str: string, exact?: boolean): ParseResult;
-declare function createRouter(routes: Array<Route>, options?: Options): Router;
+declare function createRouter(routes: Route[], options?: Options): Router;
 export {};

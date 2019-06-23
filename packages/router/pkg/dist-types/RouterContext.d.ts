@@ -1,4 +1,4 @@
-import { Context, Response } from '../../tumau/pkg/dist-types';
+import { Context, Response } from '@tumau/core';
 import { RouterRequest } from './RouterRequest';
 export interface RouterContext extends Context<RouterRequest, Response> {
 }

@@ -1,4 +1,4 @@
-import { Request } from '../../tumau/pkg/dist-types';
+import { Request } from '@tumau/core';
 import { Params, RouterMiddleware, FindResult } from './Router';
 export interface RouterRequest extends Request {
     params: Params;

@@ -16,5 +16,6 @@ async function createRouterRequest(request, find, noMatch) {
     return routerRequest;
 }
 function isRouterRequest(request) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return !!request.middleware;
 }

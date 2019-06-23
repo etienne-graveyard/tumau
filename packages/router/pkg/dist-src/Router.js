@@ -1,46 +1,31 @@
-import http from 'http';
-import { HTTPMethod } from '../../tumau/pkg/dist-types';
+import { HttpErrors } from '@tumau/core';
 import { RouterRequest } from './RouterRequest';
 import { RouterContext } from './RouterContext';
+import { notNill } from './utils';
 const ROUTE_TOKEN = Symbol('ROUTE_TOKEN');
 export const Router = {
     parseRoute,
     create: createRouter,
-    use: (route, middleware) => createRoute(HTTPMethod.ALL, route, false, middleware),
-    add: (method, route, middleware) => createRoute(method, route, true, middleware),
-    all: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    get: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    head: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    patch: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    options: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    connect: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    delete: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    trace: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    post: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
-    put: (route, middleware) => createRoute(HTTPMethod.ALL, route, true, middleware),
+    createRoute: (route, middleware) => createRoute(route, true, middleware),
 };
-function createRoute(method, route, exact, middleware) {
+function createRoute(route, exact, middleware) {
     const { keys, regexp } = parseRoute(route, exact);
     return {
         [ROUTE_TOKEN]: true,
         keys,
-        method,
         pattern: route,
         regexp,
         exact,
         middleware,
     };
 }
-async function defaultOnNotFound(ctx) {
-    return ctx.response.send({
-        code: 404,
-        json: {
-            message: http.STATUS_CODES[404],
-        },
-    });
+async function defaultOnNotFound() {
+    throw new HttpErrors.NotFound();
 }
 function parseRoute(str, exact = true) {
-    var c, o, tmp, ext, keys = [], pattern = '', arr = str.split('/');
+    var c, o, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    tmp, ext, keys = [], pattern = '', arr = str.split('/');
     arr[0] || arr.shift();
     while ((tmp = arr.shift())) {
         c = tmp[0];
@@ -68,45 +53,52 @@ function parseRoute(str, exact = true) {
 function createRouter(routes, options = {}) {
     const onNotFound = options.onNotFound || defaultOnNotFound;
     const router = async (ctx, next) => {
-        const findResult = find(ctx.request);
-        const routerRequest = await RouterRequest.create(ctx.request, findResult, onNotFound);
-        const routerCtx = await RouterContext.create(ctx, routerRequest);
-        return routerRequest.middleware(routerCtx, next);
+        async function handleNext(startIndex) {
+            const findResult = find(startIndex, ctx.request);
+            const routerRequest = await RouterRequest.create(ctx.request, findResult, onNotFound);
+            const routerCtx = await RouterContext.create(ctx, routerRequest);
+            return routerRequest.middleware(routerCtx, () => {
+                if (findResult) {
+                    return handleNext(findResult.index + 1);
+                }
+                return next();
+            });
+        }
+        return handleNext(0);
     };
     return router;
-    function find(request) {
-        const method = request.method;
+    function find(startIndex, request) {
         const parent = RouterRequest.isRouterRequest(request) ? request.parentRoutePattern : null;
         const routesWithParent = parent
-            ? routes.map(route => createRoute(route.method, parent + route.pattern, route.exact, route.middleware))
+            ? routes.map((route) => createRoute(parent + route.pattern, route.exact, route.middleware))
             : routes;
-        let isHEAD = method === HTTPMethod.HEAD;
-        return routesWithParent.reduce((found, route) => {
+        const searchArray = routesWithParent.slice(startIndex);
+        return searchArray.reduce((found, route, index) => {
             if (found) {
                 return found;
             }
-            if (route.method === HTTPMethod.ALL || route.method === method || (isHEAD && route.method === HTTPMethod.GET)) {
-                const isDynamicRoute = route.keys.length > 0;
-                if (isDynamicRoute) {
-                    const matches = route.regexp.exec(request.pathname);
-                    if (matches === null) {
-                        return false;
-                    }
-                    const params = {};
-                    route.keys.forEach((key, index) => {
-                        params[key] = matches[index];
-                    });
-                    return {
-                        params,
-                        route,
-                    };
+            const isDynamicRoute = route.keys.length > 0;
+            if (isDynamicRoute) {
+                const matches = route.regexp.exec(request.pathname);
+                if (matches === null) {
+                    return false;
                 }
-                else if (route.regexp.test(request.pathname)) {
-                    return {
-                        params: {},
-                        route,
-                    };
-                }
+                const params = {};
+                route.keys.forEach((key, index) => {
+                    params[key] = notNill(matches)[index];
+                });
+                return {
+                    params,
+                    route,
+                    index,
+                };
+            }
+            else if (route.regexp.test(request.pathname)) {
+                return {
+                    params: {},
+                    route,
+                    index,
+                };
             }
             return false;
         }, false);
