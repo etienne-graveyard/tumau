@@ -14,11 +14,12 @@
   "module": "dist/core.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsdx build --target node",
+    "build": "rimraf ./build && tsdx build --target node",
     "start": "tsdx watch --target node",
     "test": "tsdx test"
   },
   "devDependencies": {
+    "rimraf": "^2.6.3",
     "tsdx": "^0.7.2"
   },
   "publishConfig": {
