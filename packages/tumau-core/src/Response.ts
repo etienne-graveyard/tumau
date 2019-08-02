@@ -1,11 +1,11 @@
-import http, { OutgoingHttpHeaders } from 'http';
+import { OutgoingHttpHeaders, ServerResponse } from 'http';
 import { HttpStatus, HttpStatusCode } from './HttpStatus';
 import { Context } from './Context';
 import { HttpMethod } from './HttpMethod';
 import { HttpHeaders, ContentType } from './HttpHeaders';
 
 export interface Response {
-  res: http.ServerResponse;
+  res: ServerResponse;
   create(options?: SendOptions, config?: { force?: boolean }): void;
   clearBody(): void;
   sent: boolean;
@@ -28,7 +28,7 @@ interface SendData {
   headers: OutgoingHttpHeaders;
 }
 
-async function createResponse(res: http.ServerResponse): Promise<Response> {
+async function createResponse(res: ServerResponse): Promise<Response> {
   let responseData: SendData | null = null;
 
   const response: Response = {

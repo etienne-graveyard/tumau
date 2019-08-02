@@ -92,3 +92,8 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/macos
+
+
+# Rollup
+.rts2_cache_*
+
