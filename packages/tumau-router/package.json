@@ -1,6 +1,6 @@
 {
   "name": "@tumau/router",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "description": "Router for @tumau/core",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
