@@ -1,16 +1,30 @@
 {
-  "name": "root",
+  "name": "tumau",
   "private": true,
-  "scripts": {
-    "build": "lerna run build",
-    "publish": "lerna publish from-package --contents pkg",
-    "version": "lerna run build"
-  },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
-  "devDependencies": {},
-  "dependencies": {
-    "lerna": "^3.15.0"
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "scripts": {
+    "build": "lerna run build --stream"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "eslint": "^5.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.0.2",
+    "lerna": "^3.16.4",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
+    "typescript": "^3.5.3"
   }
 }

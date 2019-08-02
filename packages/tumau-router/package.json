@@ -1,0 +1,43 @@
+{
+  "name": "@tumau/router",
+  "version": "1.0.0-alpha.8",
+  "description": "Router for @tumau/core",
+  "main": "index.js",
+  "scripts": {
+    "build": "pika-pack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:etienne-dldc/tumau.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-ts-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ]
+    ]
+  },
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@tumau/core": "^1.0.0-alpha.8"
+  },
+  "devDependencies": {
+    "@pika/pack": "^0.4.0",
+    "@pika/plugin-build-node": "^0.5.1",
+    "@pika/plugin-build-types": "^0.5.1",
+    "@pika/plugin-ts-standard-pkg": "^0.5.1",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {},
+  "gitHead": "1d4b418dbc20e628c8b67644460cd128bcb922ec"
+}

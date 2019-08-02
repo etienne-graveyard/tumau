@@ -1,0 +1,40 @@
+{
+  "name": "@tumau/core",
+  "version": "1.0.0-alpha.8",
+  "description": "A Zero dependency node HTTP server written in Typescript",
+  "main": "pkg/dist-node/index.js",
+  "types": "pkg/dist-types/index.d.ts",
+  "scripts": {
+    "build": "pika-pack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:etienne-dldc/tumau.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-ts-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ]
+    ]
+  },
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@pika/pack": "^0.4.0",
+    "@pika/plugin-build-node": "^0.5.1",
+    "@pika/plugin-build-types": "^0.5.1",
+    "@pika/plugin-ts-standard-pkg": "^0.5.1",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {}
+}
