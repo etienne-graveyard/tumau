@@ -1,6 +1,6 @@
 {
   "name": "@tumau/core",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-alpha.9",
   "description": "A Zero dependency node HTTP server written in Typescript",
   "repository": {
     "type": "git",
@@ -18,7 +18,6 @@
     "start": "tsdx watch --target node",
     "test": "tsdx test"
   },
-  "dependencies": {},
   "devDependencies": {
     "tsdx": "^0.7.2"
   },
