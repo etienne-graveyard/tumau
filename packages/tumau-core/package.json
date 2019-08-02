@@ -14,7 +14,7 @@
   "module": "dist/core.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "rimraf ./build && tsdx build --target node",
+    "build": "rimraf ./dist && tsdx build --target node",
     "start": "tsdx watch --target node",
     "test": "tsdx test"
   },
