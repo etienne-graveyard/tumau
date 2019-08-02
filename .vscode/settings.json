@@ -1,0 +1,6 @@
+{
+  "files.exclude": {
+    "**/.rts2_cache_cjs": true,
+    "**/.rts2_cache_esm": true
+  }
+}
