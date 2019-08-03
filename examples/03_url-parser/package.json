@@ -1,5 +1,5 @@
 {
-  "name": "@tumau/example-request",
+  "name": "@tumau/example-router",
   "version": "1.0.0-alpha.12",
   "main": "index.js",
   "license": "MIT",

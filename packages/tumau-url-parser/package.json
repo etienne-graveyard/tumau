@@ -1,14 +1,14 @@
 {
-  "name": "@tumau/router",
+  "name": "@tumau/url-parser",
   "version": "1.0.0-alpha.12",
-  "description": "Router for @tumau/core",
+  "description": "Url parser for @tumau/core",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "files": [
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/router.esm.js",
+  "module": "dist/url-parser.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf ./dist && tsdx build --target node",
@@ -20,7 +20,6 @@
     "tsdx": "^0.7.2"
   },
   "dependencies": {
-    "@tumau/url-parser": "^1.0.0-alpha.12",
     "@tumau/core": "^1.0.0-alpha.8"
   },
   "publishConfig": {

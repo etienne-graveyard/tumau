@@ -1,11 +1,10 @@
-import http from 'http';
-import { Middleware } from './Middleware';
+import http, { OutgoingHttpHeaders } from 'http';
+import { Middleware, Result } from './Middleware';
 import { Request } from './Request';
 import { Response } from './Response';
-import { Context } from './Context';
-import { BodyParser } from './BodyParser';
-import { HttpErrors } from './HttpErrors';
+import { BaseContext } from './BaseContext';
 import { HttpStatus } from './HttpStatus';
+import { HttpMethod } from './HttpMethod';
 
 export interface Server {
   httpServer: http.Server;
@@ -14,21 +13,18 @@ export interface Server {
 
 interface Options {
   httpServer?: http.Server;
-  onError?: (err: {}, ctx: Context) => void;
 }
 
 export const Server = {
   create: createServer,
 };
 
-function createServer(mainMiddleware: Middleware, options: Options = {}): Server {
-  const onError = options.onError || defaultOnError;
+function createServer<Ctx extends BaseContext>(
+  createInitialCtx: (ctx: BaseContext) => Ctx,
+  mainMiddleware: Middleware<Ctx>,
+  options: Options = {}
+): Server {
   const httpServer: http.Server = options.httpServer || http.createServer();
-
-  const rootMiddleware = Middleware.compose(
-    BodyParser.create(),
-    mainMiddleware
-  );
 
   const server: Server = {
     httpServer,
@@ -43,60 +39,55 @@ function createServer(mainMiddleware: Middleware, options: Options = {}): Server
     return server;
   }
 
-  function defaultOnError(error: {}, ctx: Context): void {
-    if (error instanceof HttpErrors.HttpError) {
-      ctx.response.create(
-        {
-          code: error.code,
-          json: {
-            code: error.code,
-            message: error.message,
-          },
-        },
-        { force: true }
-      );
-      return;
-    }
-    const message = error instanceof Error ? error.message : HttpStatus.getMessage(500);
-    ctx.response.create(
-      {
-        code: 500,
-        json: {
-          code: 500,
-          message,
-        },
-      },
-      { force: true }
-    );
-    return;
-  }
-
   async function handler(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const request = await Request.create(req);
-    const response = await Response.create(res);
-    const ctx = await Context.create(request, response);
+    const baseCtx = await BaseContext.create(request, res);
+    const ctx = createInitialCtx(baseCtx);
 
     return Promise.resolve(
-      rootMiddleware(
+      mainMiddleware(
         ctx,
-        async (): Promise<void> => {
-          return defaultOnError({ code: 500, message: 'Server did not respond' }, ctx);
+        async (ctx): Promise<Result<Ctx>> => {
+          return { ctx, response: null };
         }
       )
     )
-      .catch((err): void => {
-        return onError(err, ctx);
-      })
-      .then((): void => {
-        if (response.sent === false) {
-          defaultOnError({ code: 500, message: 'Server did not respond' }, ctx);
+      .then(({ response, ctx }): void => {
+        if (response === null) {
+          throw new Error('Server did not respond !');
         }
-        response.__send(ctx);
+        sendResponse(response, ctx);
       })
       .catch((err): void => {
         // fatal
         console.error(err);
-        ctx.response.res.end();
+        res.end();
       });
+  }
+
+  function sendResponse(response: Response, ctx: Ctx): void {
+    if (ctx.res.finished) {
+      throw new Error('Response finished ?');
+    }
+    if (ctx.res.headersSent) {
+      throw new Error('Header already sent !');
+    }
+    const headers: OutgoingHttpHeaders = {
+      ...response.headers,
+    };
+
+    const isEmpty =
+      HttpStatus.isEmpty(response.code) ||
+      ctx.request.method === HttpMethod.HEAD ||
+      ctx.request.method === HttpMethod.OPTIONS;
+
+    const bodyStr = response.body;
+
+    ctx.res.writeHead(response.code, headers);
+
+    if (isEmpty) {
+      return ctx.res.end();
+    }
+    return ctx.res.end(bodyStr);
   }
 }

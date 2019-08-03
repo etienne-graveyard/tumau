@@ -1,20 +1,26 @@
 import { IncomingMessage } from 'http';
 import { StringDecoder } from 'string_decoder';
-import { Middleware } from './Middleware';
-import { HttpMethod } from './HttpMethod';
-import { HttpHeaders, ContentType, ContentEncoding } from './HttpHeaders';
-import { HttpErrors } from './HttpErrors';
-
-export const BodyParser = {
-  create: createBodyParser,
-};
+import {
+  Middleware,
+  Result,
+  HttpMethod,
+  HttpHeaders,
+  ContentType,
+  ContentEncoding,
+  HttpErrors,
+  BaseContext,
+} from '@tumau/core';
 
 interface Options {
   // limit in byte
   limit?: number;
 }
 
-function createBodyParser(options: Options = {}): Middleware {
+export interface BodyParseCtx extends BaseContext {
+  body?: object | null;
+}
+
+export function BodyParser<Ctx extends BodyParseCtx>(options: Options = {}): Middleware<Ctx> {
   const _1mb = 1024 * 1024 * 1024;
   const { limit = _1mb } = options;
 
@@ -22,14 +28,14 @@ function createBodyParser(options: Options = {}): Middleware {
   // http://www.rfc-editor.org/rfc/rfc7159.txt
   const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
 
-  return async (ctx, next): Promise<void> => {
+  return async (ctx, next): Promise<Result<Ctx>> => {
     const headers = ctx.request.headers;
     if (
       ctx.request.method === HttpMethod.GET ||
       ctx.request.method === HttpMethod.DELETE ||
       ctx.request.method === HttpMethod.OPTIONS
     ) {
-      return next();
+      return next(ctx);
     }
     const lengthStr = headers[HttpHeaders.ContentLength];
     if (lengthStr === undefined || Array.isArray(lengthStr)) {
@@ -41,7 +47,7 @@ function createBodyParser(options: Options = {}): Middleware {
       throw new HttpErrors.LengthRequired();
     }
     if (length === 0) {
-      return next();
+      return next(ctx);
     }
     const type = headers[HttpHeaders.ContentType];
     if (type !== ContentType.Json) {
@@ -55,8 +61,10 @@ function createBodyParser(options: Options = {}): Middleware {
       throw new HttpErrors.PayloadTooLarge();
     }
     const body = await parseBody(ctx.request.req, length, limit);
-    ctx.request.body = body;
-    return next();
+    return next({
+      ...ctx,
+      body,
+    });
   };
 
   async function parseBody(req: IncomingMessage, length: number, limit: number): Promise<object> {
