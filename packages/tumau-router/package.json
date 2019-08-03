@@ -1,6 +1,6 @@
 {
   "name": "@tumau/router",
-  "version": "1.0.0-alpha.12",
+  "version": "1.0.0-alpha.13",
   "description": "Router for @tumau/core",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
@@ -20,8 +20,8 @@
     "tsdx": "^0.7.2"
   },
   "dependencies": {
-    "@tumau/url-parser": "^1.0.0-alpha.12",
-    "@tumau/core": "^1.0.0-alpha.8"
+    "@tumau/core": "^1.0.0-alpha.13",
+    "@tumau/url-parser": "^1.0.0-alpha.13"
   },
   "publishConfig": {
     "access": "public"
