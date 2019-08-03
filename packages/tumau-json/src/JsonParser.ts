@@ -16,11 +16,11 @@ interface Options {
   limit?: number;
 }
 
-export interface BodyParseCtx extends BaseContext {
+export interface JsonParserCtx extends BaseContext {
   body?: object | null;
 }
 
-export function BodyParser<Ctx extends BodyParseCtx>(options: Options = {}): Middleware<Ctx> {
+export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Middleware<Ctx> {
   const _1mb = 1024 * 1024 * 1024;
   const { limit = _1mb } = options;
 
