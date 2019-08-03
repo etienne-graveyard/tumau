@@ -8,7 +8,8 @@
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
-    "build": "lerna run build --stream"
+    "build": "lerna run build --stream",
+    "pub": "lerna publish"
   },
   "husky": {
     "hooks": {
