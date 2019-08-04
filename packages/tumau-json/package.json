@@ -1,6 +1,6 @@
 {
   "name": "@tumau/json",
-  "version": "1.0.0-alpha.14",
+  "version": "1.0.0-alpha.15",
   "description": "JSON parser and Response for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "test": "tsdx test"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.14"
+    "@tumau/core": "^1.0.0-alpha.15"
   },
   "devDependencies": {
     "rimraf": "^2.6.3",
