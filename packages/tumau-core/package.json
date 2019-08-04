@@ -2,6 +2,12 @@
   "name": "@tumau/core",
   "version": "1.0.0-alpha.15",
   "description": "A Zero dependency node HTTP server written in Typescript",
+  "keywords": [
+    "node",
+    "server",
+    "ts",
+    "zero-deps"
+  ],
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",

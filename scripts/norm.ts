@@ -20,7 +20,6 @@ async function normPackageJson() {
       pkg[key] = rootPkg[key];
     }
   });
-
   await saveFile(pkgPath, JSON.stringify(sortPackageJson(pkg)));
   return pkg;
 }

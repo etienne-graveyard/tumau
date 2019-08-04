@@ -5,6 +5,12 @@
     "packages/*",
     "examples/*"
   ],
+  "keywords": [
+    "node",
+    "server",
+    "zero-deps",
+    "ts"
+  ],
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
