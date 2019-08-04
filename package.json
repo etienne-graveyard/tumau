@@ -9,7 +9,7 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
     "build": "lerna run build --stream",
-    "pub": "lerna publish"
+    "pub": "yarn build && lerna publish"
   },
   "husky": {
     "hooks": {
