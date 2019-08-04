@@ -2,6 +2,7 @@
   "name": "@tumau/router",
   "version": "1.0.0-alpha.14",
   "description": "Router for @tumau/core",
+  "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "files": [
@@ -15,13 +16,13 @@
     "start": "tsdx watch --target node",
     "test": "tsdx test"
   },
-  "devDependencies": {
-    "rimraf": "^2.6.3",
-    "tsdx": "^0.7.2"
-  },
   "dependencies": {
     "@tumau/core": "^1.0.0-alpha.14",
     "@tumau/url-parser": "^1.0.0-alpha.14"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.3",
+    "tsdx": "^0.7.2"
   },
   "publishConfig": {
     "access": "public"

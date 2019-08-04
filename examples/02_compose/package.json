@@ -1,9 +1,11 @@
 {
   "name": "@tumau/example-compose",
   "version": "1.0.0-alpha.14",
-  "main": "index.js",
-  "license": "MIT",
   "private": true,
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "main": "index.js",
   "scripts": {
     "start": "ts-node ./index.ts"
   },

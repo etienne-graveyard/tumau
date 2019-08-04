@@ -1,5 +1,6 @@
-import * as fse from 'fs-extra';
+import fse from 'fs-extra';
 import { saveFile } from './saveFile';
+import sortPackageJson from 'sort-package-json';
 
 async function run() {
   console.log('Norm in ' + process.env.LERNA_PACKAGE_NAME);
@@ -16,7 +17,7 @@ async function run() {
     }
   });
 
-  await saveFile(pkgPath, JSON.stringify(pkg));
+  await saveFile(pkgPath, JSON.stringify(sortPackageJson(pkg)));
 }
 
 run();
