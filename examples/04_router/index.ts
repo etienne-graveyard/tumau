@@ -1,5 +1,5 @@
 import { Server, BaseContext, Response, Middleware } from '@tumau/core';
-import { Router, RouterCtx } from '@tumau/router';
+import { Router, RouterCtx, Route } from '@tumau/router';
 
 interface Ctx extends BaseContext, RouterCtx {}
 
@@ -29,20 +29,26 @@ const render = (content: string) => `
 const server = Server.create<Ctx>(
   ctx => ctx,
   Middleware.compose(
-    Router.create([
-      Router.createRouteGroup(
+    Router([
+      Route.GET('/', ctx => {
+        return {
+          ctx,
+          response: Response.create({ body: render('Home') }),
+        };
+      }),
+      Route.namespace(
         '/foo',
-        Router.create([
-          Router.createRoute('/bar', ctx => {
+        Router([
+          Route.GET('/bar', ctx => {
             return {
               ctx,
               response: Response.create({ body: render('Baaaaar') }),
             };
           }),
-          Router.createRoute(null, ctx => ({ ctx, response: Response.create({ body: render('foo Not found') }) })),
+          Route.GET(null, ctx => ({ ctx, response: Response.create({ body: render('foo Not found') }) })),
         ])
       ),
-      Router.createRoute('/search', ctx => {
+      Route.GET('/search', ctx => {
         const searchQuery = ctx.parsedUrl && ctx.parsedUrl.query && ctx.parsedUrl.query.q;
         if (searchQuery) {
           return {
@@ -56,11 +62,11 @@ const server = Server.create<Ctx>(
           response: null,
         };
       }),
-      Router.createRoute('/next/*?', (ctx, next) => {
+      Route.GET('/next/*?', (ctx, next) => {
         // calling next in a route call the middleware after the route
         return next(ctx);
       }),
-      Router.createRoute(null, ctx => ({ ctx, response: Response.create({ body: render('Not found') }) })),
+      Route.GET(null, ctx => ({ ctx, response: Response.create({ body: render('Not found') }) })),
     ]),
     ctx => {
       const pattern = ctx.router && ctx.router.pattern;

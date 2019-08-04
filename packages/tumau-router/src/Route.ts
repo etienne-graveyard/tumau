@@ -32,6 +32,8 @@ export const Route = {
   DELETE: withMethod(HttpMethod.DELETE),
   PATCH: withMethod(HttpMethod.PATCH),
   all: withMethod(HttpMethod.PATCH),
+  namespace: <Ctx extends RouterCtx>(route: string | null, middleware: Middleware<Ctx>) =>
+    createRoute({ method: null, route, exact: false }, middleware),
 };
 
 interface RouteOptions {
@@ -41,7 +43,7 @@ interface RouteOptions {
 }
 
 function createRoute<Ctx extends RouterCtx>(options: RouteOptions, middleware: Middleware<Ctx>): Route<Ctx> {
-  const { exact = false, method = null, route = null } = options;
+  const { exact = true, method = null, route = null } = options;
   const pattern = route === null ? '/*?' : route;
   return {
     [ROUTE_TOKEN]: true,
