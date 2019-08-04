@@ -1,1 +1,3 @@
-export { FindResult, Router, Route, RouterCtx } from './Router';
+export { Router } from './Router';
+export { Route, FindResult } from './Route';
+export { RouterCtx, Params } from './RouterCtx';
