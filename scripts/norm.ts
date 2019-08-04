@@ -1,13 +1,22 @@
 import * as fse from 'fs-extra';
+import { saveFile } from './saveFile';
 
 async function run() {
-  console.log('Norm in ' + process.env.LERNA_PACKAGE_NAME + ' (' + process.env.INIT_CWD + ')');
-  console.log(process.env.PWD + '/package.json');
+  console.log('Norm in ' + process.env.LERNA_PACKAGE_NAME);
 
-  const pkgStr = await fse.readFile(process.env.PWD + '/package.json');
-  const pkg = JSON.parse(pkgStr.toString());
+  const pkgPath = process.env.PWD + '/package.json';
 
-  console.log(pkg);
+  const pkg = JSON.parse((await fse.readFile(pkgPath)).toString());
+  const rootPkg = JSON.parse((await fse.readFile(process.env.LERNA_ROOT_PATH + '/package.json')).toString());
+
+  const keysToCopy = ['author', 'license', 'homepage', 'bugs', 'repository'];
+  keysToCopy.forEach(key => {
+    if (rootPkg[key]) {
+      pkg[key] = rootPkg[key];
+    }
+  });
+
+  await saveFile(pkgPath, JSON.stringify(pkg));
 }
 
 run();
