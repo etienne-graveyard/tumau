@@ -1,21 +1,15 @@
 import { Server, BaseContext, Response, Middleware } from '@tumau/core';
-import {} from '@tumau/router';
+import { UrlParserCtx, UrlParser } from '@tumau/url-parser';
 
 interface Ctx extends BaseContext, UrlParserCtx {}
 
-const createInititalContext = (ctx: BaseContext): Ctx => ctx;
-
 const main: Middleware<Ctx> = ctx => {
-  return {
-    ctx,
-    response: Response.create({
-      body: JSON.stringify(ctx.parsedUrl),
-    }),
-  };
+  return Response.create({
+    body: JSON.stringify(ctx.parsedUrl),
+  });
 };
 
 const server = Server.create<Ctx>(
-  createInititalContext,
   Middleware.compose(
     UrlParser(),
     main

@@ -1,13 +1,15 @@
-import { Response, HttpStatusCode, HttpHeaders, ContentType } from '@tumau/core';
+import { Response, UnmarkResponse, HttpStatusCode, HttpHeaders, ContentType } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
 
 export const JsonResponse = {
   create: createJsonResponse,
 };
 
-export interface JsonResponse extends Response {
+export interface UnmarkJsonResponse extends UnmarkResponse {
   json: object;
 }
+
+export type JsonResponse = Response<UnmarkJsonResponse>;
 
 interface Options {
   json: object;
@@ -20,7 +22,7 @@ function createJsonResponse(options: Options): JsonResponse {
 
   const body = JSON.stringify(json);
 
-  const response: JsonResponse = {
+  const response: JsonResponse = Response.fromObject<UnmarkJsonResponse>({
     code,
     headers: {
       ...headers,
@@ -30,7 +32,7 @@ function createJsonResponse(options: Options): JsonResponse {
     },
     body,
     json,
-  };
+  });
 
   return response;
 }

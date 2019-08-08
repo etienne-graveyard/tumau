@@ -14,12 +14,7 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 import { Server, Response } from '@tumau/core';
 
 const server = Server.create(ctx => {
-  return {
-    ctx,
-    response: Response.create({
-      body: 'Hello World !',
-    }),
-  };
+  return Response.withText(`Hello World ! (from ${ctx.request.url})`);
 });
 
 server.listen(3002, () => {

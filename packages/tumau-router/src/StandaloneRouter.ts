@@ -20,25 +20,6 @@ export function StandaloneRouter<Ctx extends RouterCtx>(routes: Routes<Ctx>): Mi
     }
     // all matching routes
     const matchingRoutesAllMethods = Route.find(flatRoutes, notNill(ctx.parsedUrl).pathname);
-    // null === all methods are allowed !
-    // const allowedMethods = matchingRoutesAllMethods.reduce<Array<HttpMethod> | null>((acc, findResult) => {
-    //   if (acc === null || findResult.route.method === null) {
-    //     return null;
-    //   }
-    //   if (Array.isArray(findResult.route.method)) {
-    //     acc.push(...findResult.route.method);
-    //   } else {
-    //     acc.push(findResult.route.method);
-    //   }
-    //   return acc;
-    // }, null);
-    // console.log(allowedMethods);
-
-    // const ctxWithMethods: Ctx = {
-    //   ...ctx,
-    //   routerAllowedMethods: allowedMethods,
-    // };
-
     const requestMethod = ctx.request.method;
 
     const matchingRoutes = matchingRoutesAllMethods.filter(findResult => {
@@ -75,12 +56,13 @@ export function StandaloneRouter<Ctx extends RouterCtx>(routes: Routes<Ctx>): Mi
       }
 
       // found a match, run it's middleware
-      const result = await findResult.route.middleware(
+      const res = await findResult.route.middleware(
         nextCtx,
         (ctx: RouterCtx): Promise<Result<Ctx>> => {
           return next(ctx as any);
         }
       );
+      const result = Middleware.resolveResult(nextCtx, res);
 
       // If the match did not return a response handle the next match
       if (result.response === null) {

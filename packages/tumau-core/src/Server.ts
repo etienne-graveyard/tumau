@@ -1,5 +1,5 @@
 import http, { OutgoingHttpHeaders } from 'http';
-import { Middleware, Result } from './Middleware';
+import { Middleware, ResultResolved } from './Middleware';
 import { Request } from './Request';
 import { Response } from './Response';
 import { BaseContext } from './BaseContext';
@@ -48,11 +48,12 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
     return Promise.resolve(
       mainMiddleware(
         ctx,
-        async (ctx): Promise<Result<Ctx>> => {
-          return { ctx, response: null };
+        async (): Promise<ResultResolved<Ctx>> => {
+          return Middleware.resolveResult(ctx, null);
         }
       )
     )
+      .then(res => Middleware.resolveResult(ctx, res))
       .then(({ response, ctx }): void => {
         if (response === null) {
           throw new Error('Server did not respond !');

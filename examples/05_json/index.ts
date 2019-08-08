@@ -4,20 +4,13 @@ import { JsonParserCtx, JsonParser, JsonResponse } from '@tumau/json';
 interface Ctx extends BaseContext, JsonParserCtx {}
 
 const server = Server.create<Ctx>(
-  ctx => ctx,
   Middleware.compose(
     JsonParser(),
     ctx => {
       if (ctx.body) {
-        return {
-          ctx,
-          response: JsonResponse.create({ json: { you: '<- are here !', received: ctx.body } }),
-        };
+        return JsonResponse.create({ json: { you: '<- are here !', received: ctx.body } });
       }
-      return {
-        ctx,
-        response: JsonResponse.create({ json: { you: '<- are here !' } }),
-      };
+      return JsonResponse.create({ json: { you: '<- are here !' } });
     }
   )
 );
