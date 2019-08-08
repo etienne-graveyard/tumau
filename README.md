@@ -91,3 +91,54 @@ const myMiddleware = async (ctx, next) => {
   return response;
 };
 ```
+
+### `next`
+
+The `next` function is always async (it return a Promise) and return an object with two keys:
+
+- `ctx`: the context returned by the middlware
+- `response`: the response returned by the middleware or null
+
+### Return type of a middleware
+
+A middleware can return
+
+- `null`,
+- A valid `Response`
+- A object with `ctx` and `response` where `response` can be `null`
+- A Promise of any of the three above
+
+### Some examples
+
+```js
+// Return a response, ignore next middleware
+const middleware = () => Response.withText('Hello');
+
+// Return a response if the next middleware did not
+const middleware = async (ctx, next) => {
+  const { response } = await next(ctx);
+  if (response === null) {
+    return Response.withText('Not found');
+  }
+  return response;
+};
+
+// Return whatever the next middleware return but add a key to the context
+const middleware = (ctx, next) => {
+  const nextCtx = {
+    ...ctx,
+    receivedAt: new Date(),
+  };
+  return next(nextCtx);
+};
+
+// Add something to the context on the way up
+const middleware = async (ctx, next) => {
+  const result = await next(ctx);
+  const nextCtx = {
+    ...result.ctx,
+    receivedAt: new Date(),
+  };
+  return { response: result.response, ctx: nextCtx };
+};
+```
