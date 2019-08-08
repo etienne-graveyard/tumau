@@ -7,8 +7,8 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node ./index.ts",
-    "dev": "ts-node-dev ./index.ts"
+    "dev": "ts-node-dev ./index.ts",
+    "start": "ts-node ./index.ts"
   },
   "dependencies": {
     "@tumau/core": "^1.0.0-alpha.15",
