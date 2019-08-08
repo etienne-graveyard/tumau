@@ -59,14 +59,35 @@ A middleware can stop the chain and return a response. In that case the middlewa
 
 ## The context (ctx)
 
-In tumau the context a an object passed between middleware to share data between them. The context is also part of the response.
+In tumau the context a an object passed between middleware to share data between them.
 
-**Note**: It is recomended not to mutate the context but instead to create a copy before changing something and then pass this new object to the next middleware.
+**Note**: It is recomended **NOT** to mutate the context but instead to create a copy before changing something and then pass this new object to the next middleware.
 
 ### For TypeScript users
 
-The type of the context is defined for all the middleware. This make the typings simpler because the type system does not care about the order in which middleware are called. But it also mean that some part of the context might not be there yet !
+The type of the context is defined for the entire app (all the middleware). This make the typings simpler because the type system does not care about the order in which middleware are called. But it also mean that some part of the context might not be there yet !
 
 ## Middleware
 
-A middleare is a function:
+A middleare is a function that:
+
+- receive a context from the previous middleware
+- receive a `next` function that will execute the next middleware
+- can return a response
+
+<p align="center">
+  <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-3.png" width="597">
+</p>
+
+```js
+const myMiddleware = async (ctx, next) => {
+  // 1. Context from previous middleware
+  console.log(ctx);
+  // 2. We call `next` to call the next middleware
+  const response = await next(ctx);
+  // 3. The next middleware return a result ({ response, ctx })
+  console.log(response);
+  // 4. We return something, in that case we return the result from the next middleware
+  return response;
+};
+```
