@@ -1,17 +1,19 @@
 import { parse as parseQueryString, ParsedUrlQuery } from 'querystring';
 import { BaseContext, Middleware } from '@tumau/core';
 
+export interface ParsedUrl {
+  query: null | ParsedUrlQuery;
+  body: object;
+  // parsed url
+  search: null | string;
+  href: string;
+  path: string;
+  pathname: string;
+  rawQuery: null | string;
+}
+
 export interface UrlParserCtx extends BaseContext {
-  parsedUrl?: {
-    query: null | ParsedUrlQuery;
-    body: object;
-    // parsed url
-    search: null | string;
-    href: string;
-    path: string;
-    pathname: string;
-    rawQuery: null | string;
-  };
+  parsedUrl?: ParsedUrl;
 }
 
 export function UrlParser<Ctx extends UrlParserCtx>(): Middleware<Ctx> {
@@ -31,7 +33,7 @@ export function UrlParser<Ctx extends UrlParserCtx>(): Middleware<Ctx> {
   };
 }
 
-export interface ParsedUrl {
+export interface ParsedUrlObj {
   query: null | string;
   search: null | string;
   href: string;
@@ -39,8 +41,8 @@ export interface ParsedUrl {
   pathname: string;
 }
 
-function parseUrl(url: string): ParsedUrl {
-  const obj: ParsedUrl = {
+function parseUrl(url: string): ParsedUrlObj {
+  const obj: ParsedUrlObj = {
     query: null,
     search: null,
     href: url,

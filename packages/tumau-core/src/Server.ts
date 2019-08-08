@@ -11,7 +11,9 @@ export interface Server {
   listen(port: number, listeningListener?: () => void): Server;
 }
 
-interface Options {
+interface Options<Ctx extends BaseContext> {
+  mainMiddleware: Middleware<Ctx>;
+  createInitialCtx?: (ctx: BaseContext) => Ctx;
   httpServer?: http.Server;
 }
 
@@ -19,11 +21,10 @@ export const Server = {
   create: createServer,
 };
 
-function createServer<Ctx extends BaseContext>(
-  createInitialCtx: (ctx: BaseContext) => Ctx,
-  mainMiddleware: Middleware<Ctx>,
-  options: Options = {}
-): Server {
+function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<Ctx>): Server {
+  const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
+  const { mainMiddleware, createInitialCtx = (ctx: BaseContext) => ctx as any } = options;
+
   const httpServer: http.Server = options.httpServer || http.createServer();
 
   const server: Server = {
@@ -83,7 +84,12 @@ function createServer<Ctx extends BaseContext>(
 
     const bodyStr = response.body;
 
-    ctx.res.writeHead(response.code, headers);
+    let code = response.code;
+    if (code === 200 && isEmpty) {
+      code = 204;
+    }
+
+    ctx.res.writeHead(code, headers);
 
     if (isEmpty) {
       return ctx.res.end();

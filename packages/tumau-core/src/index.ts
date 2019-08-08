@@ -1,7 +1,7 @@
 export { BaseContext } from './BaseContext';
 export { HttpErrors } from './HttpErrors';
 export { HttpHeaders, ContentEncoding, ContentType } from './HttpHeaders';
-export { HttpMethod } from './HttpMethod';
+export { HttpMethod, ALL_HTTP_METHODS } from './HttpMethod';
 export { HttpStatus, HttpStatusCode, HttpStatusMessage } from './HttpStatus';
 export { Middleware, Middlewares, Next, Result } from './Middleware';
 export { Request } from './Request';

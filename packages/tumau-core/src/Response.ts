@@ -9,6 +9,7 @@ export interface Response {
 
 export const Response = {
   create: createResponse,
+  withText: (text: string) => createResponse({ body: text }),
 };
 
 interface SendOptions {
