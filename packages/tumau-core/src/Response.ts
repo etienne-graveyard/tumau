@@ -1,5 +1,6 @@
 import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
+import { HttpError } from './HttpErrors';
 
 const IS_RESPONSE_TOKEN = Symbol('IS_RESPONSE_TOKEN');
 
@@ -18,6 +19,7 @@ export const Response = {
   withText: (text: string) => createResponse({ body: text }),
   isResponse,
   fromObject: markResponse,
+  fromError: createFromError,
 };
 
 interface SendOptions {
@@ -29,6 +31,16 @@ interface SendOptions {
 function markResponse<Res extends UnmarkResponse>(res: Res): Response<Res> {
   (res as any)[IS_RESPONSE_TOKEN] = true;
   return res as any;
+}
+
+function createFromError<Err extends Error>(err: Err): Response {
+  if (err instanceof HttpError) {
+    return createResponse({
+      code: err.code,
+      body: err.message,
+    });
+  }
+  return createFromError(new HttpError(500, err.message));
 }
 
 function createResponse(options: SendOptions = {}): Response {

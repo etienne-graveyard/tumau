@@ -1,7 +1,8 @@
-import { Server, Response } from '@tumau/core';
+import { Server } from '@tumau/core';
 
-const server = Server.create(ctx => {
-  return Response.withText(`Hello World ! (from ${ctx.request.url})`);
+const server = Server.create(() => {
+  throw 42;
+  return null;
 });
 
 server.listen(3002, () => {

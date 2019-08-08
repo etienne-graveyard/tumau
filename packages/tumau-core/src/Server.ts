@@ -1,10 +1,11 @@
 import http, { OutgoingHttpHeaders } from 'http';
-import { Middleware, ResultResolved } from './Middleware';
+import { Middleware } from './Middleware';
 import { Request } from './Request';
 import { Response } from './Response';
 import { BaseContext } from './BaseContext';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
+import { HttpErrors } from './HttpErrors';
 
 export interface Server {
   httpServer: http.Server;
@@ -45,20 +46,23 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
     const baseCtx = await BaseContext.create(request, res);
     const ctx = createInitialCtx(baseCtx);
 
-    return Promise.resolve(
-      mainMiddleware(
-        ctx,
-        async (): Promise<ResultResolved<Ctx>> => {
-          return Middleware.resolveResult(ctx, null);
-        }
-      )
-    )
+    const wrappedMiddleware: Middleware<Ctx> = async (ctx, next) => {
+      return mainMiddleware(ctx, next);
+    };
+
+    return Promise.resolve(wrappedMiddleware(ctx, async () => Middleware.resolveResult(ctx, null)))
       .then(res => Middleware.resolveResult(ctx, res))
-      .then(({ response, ctx }): void => {
+      .then(({ response }): void => {
         if (response === null) {
-          throw new Error('Server did not respond !');
+          throw new HttpErrors.ServerDidNotRespond();
         }
-        sendResponse(response, ctx);
+        sendResponse(response, res, request);
+      })
+      .catch((err): void => {
+        if (err instanceof Error) {
+          return sendResponse(Response.fromError(err), res, request);
+        }
+        return sendResponse(Response.fromError(new HttpErrors.HttpError(500)), res, request);
       })
       .catch((err): void => {
         // fatal
@@ -67,11 +71,11 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       });
   }
 
-  function sendResponse(response: Response, ctx: Ctx): void {
-    if (ctx.res.finished) {
+  function sendResponse(response: Response, res: http.ServerResponse, request: Request): void {
+    if (res.finished) {
       throw new Error('Response finished ?');
     }
-    if (ctx.res.headersSent) {
+    if (res.headersSent) {
       throw new Error('Header already sent !');
     }
     const headers: OutgoingHttpHeaders = {
@@ -79,9 +83,7 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
     };
 
     const isEmpty =
-      HttpStatus.isEmpty(response.code) ||
-      ctx.request.method === HttpMethod.HEAD ||
-      ctx.request.method === HttpMethod.OPTIONS;
+      HttpStatus.isEmpty(response.code) || request.method === HttpMethod.HEAD || request.method === HttpMethod.OPTIONS;
 
     const bodyStr = response.body;
 
@@ -90,11 +92,11 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       code = 204;
     }
 
-    ctx.res.writeHead(code, headers);
+    res.writeHead(code, headers);
 
     if (isEmpty) {
-      return ctx.res.end();
+      return res.end();
     }
-    return ctx.res.end(bodyStr);
+    return res.end(bodyStr);
   }
 }

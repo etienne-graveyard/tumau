@@ -1,6 +1,6 @@
 import { HttpStatusCode, HttpStatusMessage, HttpStatus } from './HttpStatus';
 
-class HttpError extends Error {
+export class HttpError extends Error {
   public message: HttpStatusMessage;
   public code: HttpStatusCode;
 
@@ -46,6 +46,12 @@ class BadRequest extends HttpError {
   }
 }
 
+class ServerDidNotRespond extends HttpError {
+  public constructor() {
+    super(500, `${HttpStatus.getMessage(500)}: Server did not respond`);
+  }
+}
+
 export const HttpErrors = {
   HttpError,
   LengthRequired,
@@ -53,4 +59,5 @@ export const HttpErrors = {
   PayloadTooLarge,
   BadRequest,
   NotFound,
+  ServerDidNotRespond,
 };

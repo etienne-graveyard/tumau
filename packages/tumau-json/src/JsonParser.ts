@@ -17,7 +17,7 @@ interface Options {
 }
 
 export interface JsonParserCtx extends BaseContext {
-  body?: object | null;
+  jsonBody?: object | null;
 }
 
 export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Middleware<Ctx> {
@@ -51,7 +51,7 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
     }
     const type = headers[HttpHeaders.ContentType];
     if (type !== ContentType.Json) {
-      throw new HttpErrors.NotAcceptable('Only application/json is accepeted');
+      return next(ctx);
     }
     const encoding = headers[HttpHeaders.ContentEncoding] || ContentEncoding.Identity;
     if (encoding !== ContentEncoding.Identity) {
@@ -60,10 +60,10 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
     if (length > limit) {
       throw new HttpErrors.PayloadTooLarge();
     }
-    const body = await parseBody(ctx.request.req, length, limit);
+    const jsonBody = await parseBody(ctx.request.req, length, limit);
     return next({
       ...ctx,
-      body,
+      jsonBody,
     });
   };
 

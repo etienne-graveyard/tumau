@@ -142,3 +142,38 @@ const middleware = async (ctx, next) => {
   return { response: result.response, ctx: nextCtx };
 };
 ```
+
+## TypeScript Example
+
+```ts
+import { Server, BaseContext, Response, Middleware } from '@tumau/core';
+import { UrlParserCtx, UrlParser } from '@tumau/url-parser';
+
+// Define the type of the Context of your app, you can add your own properties
+interface Ctx extends UrlParserCtx {}
+
+const main: Middleware<Ctx> = ctx => {
+  return Response.create({
+    body: JSON.stringify(ctx.parsedUrl),
+  });
+};
+
+const server = Server.create<Ctx>(
+  Middleware.compose(
+    UrlParser(),
+    main
+  )
+);
+
+server.listen(3002, () => {
+  console.log(`Server is up at http://localhost:3002/foo?bar=hey `);
+});
+```
+
+## API
+
+### ``
+
+## What does "Tumau" means
+
+[According to Google Traduction](https://translate.google.com/?source=osdd#view=home&op=translate&sl=en&tl=mi&text=server) it is the translation of "server" in Maori but I'm not sure which definition it apply to. Anyway I thought it would make a cool name and it was not used on NPM so...
