@@ -1,12 +1,12 @@
 import { RouterCtx } from './RouterCtx';
-import { Middleware, Result, HttpMethod, Response, ALL_HTTP_METHODS } from '@tumau/core';
+import { Middleware, HttpMethod, Response, ALL_HTTP_METHODS, ResultSync } from '@tumau/core';
 import { Routes, Route } from './Route';
 import { notNill } from './utils';
 
 export function AllowedMethods<Ctx extends RouterCtx>(routes: Routes<Ctx>): Middleware<Ctx> {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (ctx, next): Promise<Result<Ctx>> => {
+  return async (ctx, next): Promise<ResultSync<Ctx>> => {
     if (ctx.request.method !== HttpMethod.OPTIONS) {
       return next(ctx);
     }
@@ -39,7 +39,7 @@ export function AllowedMethods<Ctx extends RouterCtx>(routes: Routes<Ctx>): Midd
     }
     const methods = result.ctx.routerAllowedMethods || ALL_HTTP_METHODS;
     const allowHeaderContent = Array.from(methods.values()).join(',');
-    let response = result.response || Response.create({ code: 204 });
+    let response = result.response || new Response({ code: 204 });
     response = {
       ...response,
       headers: {

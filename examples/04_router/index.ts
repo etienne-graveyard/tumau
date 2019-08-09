@@ -13,6 +13,10 @@ const render = (content: string) => `
     <title>Document</title>
   </head>
   <body>
+    <a href="/">/</a><br />
+    <a href="/group/1">/group/1</a><br />
+    <a href="/group/2">/group/2</a><br />
+    <a href="/group/3">/group/3</a><br />
     <a href="/foo">/foo</a><br />
     <a href="/foo/">/foo/</a><br />
     <a href="/foo/bar">/foo/bar</a><br />
@@ -26,12 +30,28 @@ const render = (content: string) => `
 </html>
 `;
 
+const logRoute: Middleware<Ctx> = (ctx, next) => {
+  console.log(ctx.parsedUrl && ctx.parsedUrl.pathname);
+  return next(ctx);
+};
+
 const ROUTES: Routes<Ctx> = [
-  Route.GET('/', () => {
+  Route.GET('/', logRoute, () => {
     return Response.withText(render('Home'));
   }),
+  Route.create({ pattern: '/group', exact: false }, logRoute, [
+    Route.GET('/1', () => {
+      return Response.withText(render('Group 1'));
+    }),
+    Route.GET('/2', () => {
+      return Response.withText(render('Group 1'));
+    }),
+    Route.GET('/3', () => {
+      return Response.withText(render('Group 1'));
+    }),
+  ]),
   Route.namespace('/foo', [
-    Route.GET('/bar', () => {
+    Route.GET('/bar', logRoute, () => {
       return Response.withText(render('Baaaaar'));
     }),
     Route.GET(null, () => Response.withText(render('foo Not found'))),

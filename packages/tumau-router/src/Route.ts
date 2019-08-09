@@ -10,7 +10,16 @@ export interface Route<Ctx extends RouterCtx> {
   [ROUTE_TOKEN]: true;
   pattern: string | null;
   exact: boolean;
-  middleware: Middleware<Ctx> | null;
+  middleware: Array<Middleware<Ctx>>;
+  method: Method;
+  children: Array<Route<Ctx>>;
+}
+
+export interface RouteResolved<Ctx extends RouterCtx> {
+  [ROUTE_TOKEN]: true;
+  pattern: string | null;
+  exact: boolean;
+  middleware: null | Middleware<Ctx>;
   method: Method;
   children: Array<Route<Ctx>>;
 }
@@ -19,15 +28,17 @@ export type Routes<Ctx extends RouterCtx> = Array<Route<Ctx>>;
 
 export interface FindResult<Ctx extends RouterCtx> {
   params: Params;
-  route: Route<Ctx>;
+  route: RouteResolved<Ctx>;
   index: number;
 }
 
-const withMethod = (method: Method) => <Ctx extends RouterCtx>(pattern: string | null, middleware: Middleware<Ctx>) =>
-  createRoute({ method, pattern }, middleware);
+const withMethod = (method: Method) => <Ctx extends RouterCtx>(
+  pattern: string | null,
+  ...middleware: Array<Middleware<Ctx>>
+) => createRoute({ method, pattern }, middleware);
 
 export const Route = {
-  flatten: flattenRoutes,
+  flatten: flattenAllRoutes,
   create: createRoute,
   find,
   GET: withMethod(HttpMethod.GET),
@@ -48,7 +59,7 @@ interface RouteOptions {
 
 function createRoute<Ctx extends RouterCtx>(
   options: RouteOptions,
-  middleware: Middleware<Ctx> | null,
+  middleware: null | Middleware<Ctx> | Array<Middleware<Ctx>>,
   children: Routes<Ctx> = []
 ): Route<Ctx> {
   const { exact = true, method = null, pattern = null } = options;
@@ -56,13 +67,25 @@ function createRoute<Ctx extends RouterCtx>(
     [ROUTE_TOKEN]: true,
     pattern,
     exact,
-    middleware,
+    middleware: resolveMiddleware(middleware),
     method,
     children,
   };
 }
 
-function find<Ctx extends RouterCtx>(routes: Array<Route<Ctx>>, pathname: string): Array<FindResult<Ctx>> {
+function resolveMiddleware<Ctx extends RouterCtx>(
+  middleware: null | Middleware<Ctx> | Array<Middleware<Ctx>>
+): Array<Middleware<Ctx>> {
+  if (middleware === null) {
+    return [];
+  }
+  if (Array.isArray(middleware)) {
+    return middleware;
+  }
+  return [middleware];
+}
+
+function find<Ctx extends RouterCtx>(routes: Array<RouteResolved<Ctx>>, pathname: string): Array<FindResult<Ctx>> {
   return routes
     .map((route, index): FindResult<Ctx> | false => {
       if (route.pattern === null) {
@@ -102,10 +125,20 @@ function find<Ctx extends RouterCtx>(routes: Array<Route<Ctx>>, pathname: string
     });
 }
 
+function flattenAllRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Array<RouteResolved<Ctx>> {
+  const flat = flattenRoutes(routes);
+  return flat.map(route => {
+    return {
+      ...route,
+      middleware: route.middleware.length === 1 ? route.middleware[0] : Middleware.compose(...route.middleware),
+    };
+  });
+}
+
 /**
  * Flatten routes
  */
-function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Routes<Ctx> {
+function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Array<Route<Ctx>> {
   function flattenSingle(route: Route<Ctx>): Routes<Ctx> {
     if (route.children.length === 0) {
       return [route];
@@ -114,19 +147,11 @@ function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Routes<Ctx> 
     return flattenRoutes(
       route.children
         .map((childRoute): Route<Ctx> | null => {
-          const middlewares = [childRoute.middleware, parentMiddleware].filter(
-            (v: Middleware<Ctx> | null): v is Middleware<Ctx> => v !== null
-          );
-          const middleware =
-            middlewares.length === 0
-              ? null
-              : middlewares.length === 1
-              ? middlewares[0]
-              : Middleware.compose(...middlewares);
+          const middlewares = [...parentMiddleware, ...childRoute.middleware];
           const patterns = [route.pattern, childRoute.pattern];
           if (childRoute.pattern && route.exact) {
             console.warn(
-              `Error: ${route.pattern} is expected to be exact but its children ${childRoute.pattern} has a pattern, teh child pattern will be ignored`
+              `Error: ${route.pattern} is expected to be exact but its children ${childRoute.pattern} has a pattern, the child pattern will be ignored`
             );
             patterns[1] = null;
           }
@@ -137,7 +162,7 @@ function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Routes<Ctx> 
               `Error: in ${route.pattern} > ${route.pattern} the Method ${m} is not allowed by parent. It will be ignored !`
             );
           });
-          return createRoute({ pattern, exact, method }, middleware, childRoute.children);
+          return createRoute({ pattern, exact, method }, middlewares, childRoute.children);
         })
         .filter((r: Route<Ctx> | null): r is Route<Ctx> => r !== null)
     );
@@ -149,7 +174,7 @@ function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Routes<Ctx> 
       return acc;
     }, [])
     .filter(route => {
-      if (route.middleware === null) {
+      if (route.middleware.length === 0) {
         console.warn(`Route ${route.pattern} has no middleware, it will be ignored`);
         return false;
       }

@@ -1,4 +1,4 @@
-import { Middleware, Result } from '@tumau/core';
+import { Middleware, Result, ResultSync } from '@tumau/core';
 import { RouterCtx } from './RouterCtx';
 import { Route, Routes } from './Route';
 import { notNill } from './utils';
@@ -9,7 +9,7 @@ import { notNill } from './utils';
 export function StandaloneRouter<Ctx extends RouterCtx>(routes: Routes<Ctx>): Middleware<Ctx> {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (ctx, next): Promise<Result<Ctx>> => {
+  return async (ctx, next): Promise<ResultSync<Ctx>> => {
     if (ctx.router) {
       console.warn(
         [
@@ -56,12 +56,9 @@ export function StandaloneRouter<Ctx extends RouterCtx>(routes: Routes<Ctx>): Mi
       }
 
       // found a match, run it's middleware
-      const res = await findResult.route.middleware(
-        nextCtx,
-        (ctx: RouterCtx): Promise<Result<Ctx>> => {
-          return next(ctx as any);
-        }
-      );
+      const res = await findResult.route.middleware(nextCtx, (ctx: RouterCtx) => {
+        return next(ctx as any);
+      });
       const result = Middleware.resolveResult(nextCtx, res);
 
       // If the match did not return a response handle the next match
