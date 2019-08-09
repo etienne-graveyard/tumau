@@ -1,4 +1,4 @@
-# @tumau/example-json
+# @tumau/example-error
 
 ## Tumau
 
