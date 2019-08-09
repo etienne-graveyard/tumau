@@ -10,6 +10,14 @@ export class HttpError extends Error {
     this.message = message || HttpStatus.getMessage(code);
     Object.setPrototypeOf(this, new.target.prototype);
   }
+
+  public static LengthRequired: typeof LengthRequired;
+  public static NotAcceptable: typeof NotAcceptable;
+  public static PayloadTooLarge: typeof PayloadTooLarge;
+  public static BadRequest: typeof BadRequest;
+  public static NotFound: typeof NotFound;
+  public static ServerDidNotRespond: typeof ServerDidNotRespond;
+  public static Internal: typeof Internal;
 }
 
 class LengthRequired extends HttpError {
@@ -52,12 +60,16 @@ class ServerDidNotRespond extends HttpError {
   }
 }
 
-export const HttpErrors = {
-  HttpError,
-  LengthRequired,
-  NotAcceptable,
-  PayloadTooLarge,
-  BadRequest,
-  NotFound,
-  ServerDidNotRespond,
-};
+class Internal extends HttpError {
+  public constructor(message: string = '') {
+    super(500, `${HttpStatus.getMessage(500)}: ${message}`);
+  }
+}
+
+HttpError.LengthRequired = LengthRequired;
+HttpError.NotAcceptable = NotAcceptable;
+HttpError.PayloadTooLarge = PayloadTooLarge;
+HttpError.BadRequest = BadRequest;
+HttpError.NotFound = NotFound;
+HttpError.ServerDidNotRespond = ServerDidNotRespond;
+HttpError.Internal = Internal;

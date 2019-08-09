@@ -7,8 +7,8 @@ const server = Server.create<Ctx>(
   Middleware.compose(
     JsonParser(),
     ctx => {
-      if (ctx.body) {
-        return JsonResponse.create({ json: { you: '<- are here !', received: ctx.body } });
+      if (ctx.jsonBody) {
+        return JsonResponse.create({ json: { you: '<- are here !', received: ctx.jsonBody } });
       }
       return JsonResponse.create({ json: { you: '<- are here !' } });
     }

@@ -6,11 +6,16 @@ export interface ResultResolved<Ctx extends BaseContext> {
   response: Response | null;
 }
 
-export type Result<Ctx extends BaseContext> = null | Response | ResultResolved<Ctx>;
+export type ResultSync<Ctx extends BaseContext> = null | Response | ResultResolved<Ctx>;
+
+export type Result<Ctx extends BaseContext> = null | Response | ResultResolved<Ctx> | Promise<ResultSync<Ctx>>;
 
 export type Next<Ctx extends BaseContext> = (nextCtx: Ctx) => Promise<ResultResolved<Ctx>>;
 
-export type Middleware<Ctx extends BaseContext> = (ctx: Ctx, next: Next<Ctx>) => Promise<Result<Ctx>> | Result<Ctx>;
+export type Middleware<Ctx extends BaseContext> = (
+  ctx: Ctx,
+  next: Next<Ctx>
+) => null | Response | ResultResolved<Ctx> | Promise<ResultSync<Ctx>>;
 
 export type Middlewares<Ctx extends BaseContext> = Array<Middleware<Ctx>>;
 
@@ -19,7 +24,10 @@ export const Middleware = {
   resolveResult,
 };
 
-function resolveResult<Ctx extends BaseContext>(prevCtx: Ctx, result: Result<Ctx>): ResultResolved<Ctx> {
+function resolveResult<Ctx extends BaseContext>(
+  prevCtx: Ctx,
+  result: null | Response | ResultResolved<Ctx>
+): ResultResolved<Ctx> {
   if (result === null) {
     return { ctx: prevCtx, response: null };
   }
@@ -47,8 +55,8 @@ function compose<Ctx extends BaseContext>(...middlewares: Middlewares<Ctx>): Mid
         throw new Error('what ?');
       }
       try {
-        const result = fn(tmpCtx, dispatch.bind(null, i + 1));
-        const res = await Promise.resolve(result);
+        const result: Result<Ctx> = fn(tmpCtx, dispatch.bind(null, i + 1));
+        const res = await Promise.resolve<null | Response | ResultResolved<Ctx>>(result);
         return resolveResult(tmpCtx, res);
       } catch (err) {
         return Promise.reject(err);

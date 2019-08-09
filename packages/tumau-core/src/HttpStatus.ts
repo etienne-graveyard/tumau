@@ -85,7 +85,6 @@ export const HttpStatus = {
     return ALL_STATUS[code];
   },
   get: getStatus,
-  NotFound: getStatus(404),
   isEmpty(code: HttpStatusCode): boolean {
     return code < 200 || [204, 205, 304].indexOf(code) >= 0;
   },

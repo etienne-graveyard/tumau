@@ -1,61 +1,43 @@
 import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
-import { HttpError } from './HttpErrors';
+import { HttpError } from './HttpError';
 
-const IS_RESPONSE_TOKEN = Symbol('IS_RESPONSE_TOKEN');
-
-export interface UnmarkResponse {
-  code: HttpStatusCode;
-  body: string | null;
-  headers: OutgoingHttpHeaders;
-}
-
-export type Response<Res extends UnmarkResponse = UnmarkResponse> = UnmarkResponse & {
-  [IS_RESPONSE_TOKEN]: true;
-};
-
-export const Response = {
-  create: createResponse,
-  withText: (text: string) => createResponse({ body: text }),
-  isResponse,
-  fromObject: markResponse,
-  fromError: createFromError,
-};
-
-interface SendOptions {
+interface CreateResponseOptions {
   code?: HttpStatusCode;
   body?: string | null;
   headers?: OutgoingHttpHeaders;
 }
 
-function markResponse<Res extends UnmarkResponse>(res: Res): Response<Res> {
-  (res as any)[IS_RESPONSE_TOKEN] = true;
-  return res as any;
-}
+export class Response {
+  public code: HttpStatusCode;
+  public body: string | null;
+  public headers: OutgoingHttpHeaders;
 
-function createFromError<Err extends Error>(err: Err): Response {
-  if (err instanceof HttpError) {
-    return createResponse({
-      code: err.code,
-      body: err.message,
-    });
+  public constructor(options: CreateResponseOptions = {}) {
+    const { code = 200, headers = {}, body = null } = options;
+    this.code = code;
+    this.body = body;
+    this.headers = headers;
   }
-  return createFromError(new HttpError(500, err.message));
-}
 
-function createResponse(options: SendOptions = {}): Response {
-  const { code = 200, headers = {}, body = null } = options;
+  public static withText(text: string) {
+    return new Response({ body: text });
+  }
 
-  const response: Response = {
-    [IS_RESPONSE_TOKEN]: true,
-    code,
-    headers,
-    body,
-  };
+  public static isResponse(maybe: any): maybe is Response {
+    return maybe && maybe instanceof Response;
+  }
 
-  return response;
-}
-
-function isResponse(maybe: any): maybe is Response {
-  return maybe && maybe[IS_RESPONSE_TOKEN] === true;
+  public static fromError(err: any): Response {
+    if (err instanceof HttpError) {
+      return new Response({
+        code: err.code,
+        body: err.message,
+      });
+    }
+    if (err instanceof Error) {
+      return new Response(new HttpError.Internal(err.message));
+    }
+    return new Response(new HttpError.Internal(String(err)));
+  }
 }

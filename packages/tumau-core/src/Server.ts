@@ -5,7 +5,7 @@ import { Response } from './Response';
 import { BaseContext } from './BaseContext';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
-import { HttpErrors } from './HttpErrors';
+import { HttpError } from './HttpError';
 
 export interface Server {
   httpServer: http.Server;
@@ -54,7 +54,7 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       .then(res => Middleware.resolveResult(ctx, res))
       .then(({ response }): void => {
         if (response === null) {
-          throw new HttpErrors.ServerDidNotRespond();
+          throw new HttpError.ServerDidNotRespond();
         }
         sendResponse(response, res, request);
       })
@@ -62,7 +62,7 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
         if (err instanceof Error) {
           return sendResponse(Response.fromError(err), res, request);
         }
-        return sendResponse(Response.fromError(new HttpErrors.HttpError(500)), res, request);
+        return sendResponse(Response.fromError(new HttpError(500)), res, request);
       })
       .catch((err): void => {
         // fatal

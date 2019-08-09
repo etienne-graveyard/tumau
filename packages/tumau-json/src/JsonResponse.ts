@@ -1,15 +1,5 @@
-import { Response, UnmarkResponse, HttpStatusCode, HttpHeaders, ContentType } from '@tumau/core';
+import { Response, HttpStatusCode, HttpHeaders, ContentType, HttpError } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
-
-export const JsonResponse = {
-  create: createJsonResponse,
-};
-
-export interface UnmarkJsonResponse extends UnmarkResponse {
-  json: object;
-}
-
-export type JsonResponse = Response<UnmarkJsonResponse>;
 
 interface Options {
   json: object;
@@ -17,22 +7,35 @@ interface Options {
   headers?: OutgoingHttpHeaders;
 }
 
-function createJsonResponse(options: Options): JsonResponse {
-  const { code = 200, headers = {}, json } = options;
+export class JsonResponse extends Response {
+  public json: object;
 
-  const body = JSON.stringify(json);
-
-  const response: JsonResponse = Response.fromObject<UnmarkJsonResponse>({
-    code,
-    headers: {
+  public constructor(options: Options) {
+    const { code = 200, headers = {}, json } = options;
+    const body = JSON.stringify(json);
+    const outHeaders: OutgoingHttpHeaders = {
       ...headers,
       [HttpHeaders.ContentType]: ContentType.Json,
       [HttpHeaders.ContentEncoding]: ContentType.Json,
       [HttpHeaders.ContentLength]: body.length,
-    },
-    body,
-    json,
-  });
+    };
+    super({ code, headers: outHeaders, body });
+    this.json = json;
+  }
 
-  return response;
+  public static fromError(err: any): JsonResponse {
+    if (err instanceof HttpError) {
+      return new JsonResponse({
+        code: err.code,
+        json: {
+          code: err.code,
+          message: err.message,
+        },
+      });
+    }
+    if (err instanceof Error) {
+      return JsonResponse.fromError(new HttpError.Internal(err.message));
+    }
+    return JsonResponse.fromError(new HttpError.Internal(String(err.message)));
+  }
 }

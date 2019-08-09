@@ -2,13 +2,13 @@ import { IncomingMessage } from 'http';
 import { StringDecoder } from 'string_decoder';
 import {
   Middleware,
-  Result,
   HttpMethod,
   HttpHeaders,
   ContentType,
   ContentEncoding,
-  HttpErrors,
+  HttpError,
   BaseContext,
+  ResultSync,
 } from '@tumau/core';
 
 interface Options {
@@ -28,7 +28,7 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
   // http://www.rfc-editor.org/rfc/rfc7159.txt
   const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
 
-  return async (ctx, next): Promise<Result<Ctx>> => {
+  return async (ctx, next): Promise<ResultSync<Ctx>> => {
     const headers = ctx.request.headers;
     if (
       ctx.request.method === HttpMethod.GET ||
@@ -39,12 +39,12 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
     }
     const lengthStr = headers[HttpHeaders.ContentLength];
     if (lengthStr === undefined || Array.isArray(lengthStr)) {
-      throw new HttpErrors.LengthRequired();
+      throw new HttpError.LengthRequired();
     }
 
     const length = parseInt(lengthStr, 10);
     if (Number.isNaN(length)) {
-      throw new HttpErrors.LengthRequired();
+      throw new HttpError.LengthRequired();
     }
     if (length === 0) {
       return next(ctx);
@@ -55,10 +55,10 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
     }
     const encoding = headers[HttpHeaders.ContentEncoding] || ContentEncoding.Identity;
     if (encoding !== ContentEncoding.Identity) {
-      throw new HttpErrors.NotAcceptable(`${encoding} not supported`);
+      throw new HttpError.NotAcceptable(`${encoding} not supported`);
     }
     if (length > limit) {
-      throw new HttpErrors.PayloadTooLarge();
+      throw new HttpError.PayloadTooLarge();
     }
     const jsonBody = await parseBody(ctx.request.req, length, limit);
     return next({
@@ -136,7 +136,7 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
         }
         received += chunk.length;
         if (received > limit) {
-          done(new HttpErrors.PayloadTooLarge());
+          done(new HttpError.PayloadTooLarge());
         } else {
           buffer += decoder.write(chunk);
         }
@@ -151,7 +151,7 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
         }
 
         if (received !== length) {
-          done(new HttpErrors.HttpError(400, 'Request size did not match content length'));
+          done(new HttpError(400, 'Request size did not match content length'));
         } else {
           var string = buffer + decoder.end();
           done(null, string);
