@@ -88,6 +88,9 @@ export const HttpStatus = {
   isEmpty(code: HttpStatusCode): boolean {
     return code < 200 || [204, 205, 304].indexOf(code) >= 0;
   },
+  isError(code: HttpStatusCode): boolean {
+    return code >= 400;
+  },
 };
 
 // status code to message map

@@ -256,6 +256,8 @@ The context is an object with the following properties:
   - `headers`: The headers received (`IncomingHttpHeaders`)
 - `res`: The response as provided by NodeJS (`http.ServerResponse`). You probably don't need to use this as Tumau will send the response.
 
+**Note**: Your context will likely have more properties added by middlewares. You can also add your own properties either in a middleware or by using the `createInitialCtx` option on `Server.create`.
+
 ### `Response`
 
 A valid Response must inherit from the `Response` class.
@@ -298,6 +300,29 @@ The `Response` has has 3 main properties used to send the response:
 - `maybe`: (`any`) the value to test
 
 **returns** a `true` is `maybe` inherit `Response`, `false` otherwise
+
+### `HttpError`
+
+> A class extending `Error` that represent an HTTP error
+
+#### `new HttpError(code, message)`
+
+- `code`: the HTTP code of the error (must be 4xx or 5xx)
+- `message`: (`optional`) the message of the error, if not provided Tumau will use the default message corresponding to the code
+
+#### `new HttpError.LengthRequired()`
+
+#### `new HttpError.NotAcceptable(message)`
+
+#### `new HttpError.PayloadTooLarge()`
+
+#### `new HttpError.BadRequest(message)`
+
+#### `new HttpError.NotFound()`
+
+#### `new HttpError.ServerDidNotRespond()`
+
+#### `new HttpError.Internal(message)`
 
 ## What does "Tumau" means
 

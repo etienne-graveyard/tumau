@@ -6,7 +6,17 @@ export class HttpError extends Error {
 
   public constructor(code: HttpStatusCode, message?: string) {
     super(`HttpError`);
-    this.code = code;
+    if (HttpStatus.isError(code) === false) {
+      console.error(
+        [
+          `You passed a non error HTTP code to HttpError (${code}). Tumau will use a 500 code instead.`,
+          `If you want to interupt the flow with a non-error response you can \`throw new Response()\``,
+        ].join('\n')
+      );
+      this.code = 500;
+    } else {
+      this.code = code;
+    }
     this.message = message || HttpStatus.getMessage(code);
     Object.setPrototypeOf(this, new.target.prototype);
   }

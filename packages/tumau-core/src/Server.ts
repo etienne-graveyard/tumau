@@ -62,6 +62,10 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
         sendResponse(response, res, request);
       })
       .catch((err): void => {
+        // we allow to throw new Response()
+        if (err instanceof Response) {
+          return sendResponse(err, res, request);
+        }
         if (err instanceof Error) {
           return sendResponse(Response.fromError(err), res, request);
         }
