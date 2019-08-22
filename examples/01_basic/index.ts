@@ -1,7 +1,6 @@
 import { Server } from '@tumau/core';
 
 const server = Server.create(() => {
-  throw 42;
   return null;
 });
 

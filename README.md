@@ -24,7 +24,7 @@ server.listen(3002, () => {
 
 ## Benefits over Express/Koa/Other
 
-- Written in Typescript (strong yet easy to use types)
+- Written in Typescript (strong yet easy-to-use types)
 - Zero-dependency (easy to audit)
 - Simple to extends (using middleware)
 - Minimal (contains only the bare minimum)
@@ -96,7 +96,7 @@ const myMiddleware = async (ctx, next) => {
 
 The `next` function is always async (it return a Promise) and return an object with two keys:
 
-- `ctx`: the context returned by the middlware
+- `ctx`: the context returned by the middleware
 - `response`: the response returned by the middleware or null
 
 ### Return type of a middleware
@@ -123,7 +123,8 @@ const middleware = async (ctx, next) => {
   return response;
 };
 
-// Return whatever the next middleware return but add a key to the context
+// Add a key to the context before calling the next middleware
+// return whatever the next middleware return
 const middleware = (ctx, next) => {
   const nextCtx = {
     ...ctx,
@@ -137,7 +138,7 @@ const middleware = async (ctx, next) => {
   const result = await next(ctx);
   const nextCtx = {
     ...result.ctx,
-    receivedAt: new Date(),
+    responseSendAt: new Date(),
   };
   return { response: result.response, ctx: nextCtx };
 };
@@ -170,9 +171,33 @@ server.listen(3002, () => {
 });
 ```
 
+## Initializing the Context & Providing your own HTTP server
+
+The `Server.create` function accept a object as parameter.
+
+- `mainMiddleware`: (`required`) the main middleware of your app
+- `createInitialCtx`: (`optional`) a function used to initialize the Context object. This function will receive the base Context as parameter
+- `httpServer`: (`optional`) a instance of `http.Server`. If ommited, a server will be created (`http.createServer()`)
+
 ## API
 
-### ``
+### `Server.create`
+
+```ts
+// return type of Server.create
+interface Server {
+  httpServer: http.Server;
+  listen(port: number, listeningListener?: () => void): Server;
+}
+
+interface Options<Ctx extends BaseContext> {
+  mainMiddleware: Middleware<Ctx>;
+  createInitialCtx?: (ctx: BaseContext) => Ctx;
+  httpServer?: http.Server;
+}
+
+function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<Ctx>): Server;
+```
 
 ## What does "Tumau" means
 
