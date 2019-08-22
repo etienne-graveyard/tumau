@@ -191,9 +191,9 @@ server.listen(3002, () => {
 
 ## API
 
-### `Server`
+### Server
 
-#### `Server.create(opts)`
+#### Server.create(opts)
 
 - `opts`: the main middleware or an object
 
@@ -210,9 +210,11 @@ If `opts` is an object it accepts the following properties:
   - `port` (`number required`) the port to listen on
   - `listener`: (`function optional`) a function executed once the server is up
 
-### `Middleware`
+### Middleware
 
-#### `async (ctx, next) => Result`
+#### Signature
+
+`async (ctx, next) => Result`
 
 A middleware is a function that can be `async`, it receive the following arguments
 
@@ -223,7 +225,7 @@ A middleware is a function that can be `async`, it receive the following argumen
 
 If the returned value is a object `ctx` is required while `response` can be either `null` or a `Response`
 
-#### `Middleware.compose(...middlewares)`
+#### Middleware.compose(...middlewares)
 
 > Compose a list of middleware together
 
@@ -233,7 +235,7 @@ If the returned value is a object `ctx` is required while `response` can be eith
 
 **Note**: if a middleware does not call `next` then it will stop the chain the the following middleware will not be called.
 
-#### `Middleware.resolveResult(result)`
+#### Middleware.resolveResult(result)
 
 > Convert the returned value of a middleware into an object { ctx, response }
 
@@ -243,7 +245,7 @@ If the returned value is a object `ctx` is required while `response` can be eith
 
 **Note**: You probably don't need to use this function as it is already called by `Middleware.compose` on the result of the `next()` call.
 
-### `Context`
+### Context
 
 > The base context passed to the `mainMiddleware`
 
@@ -258,7 +260,7 @@ The context is an object with the following properties:
 
 **Note**: Your context will likely have more properties added by middlewares. You can also add your own properties either in a middleware or by using the `createInitialCtx` option on `Server.create`.
 
-### `Response`
+### Response
 
 A valid Response must inherit from the `Response` class.
 
@@ -268,7 +270,7 @@ The `Response` has has 3 main properties used to send the response:
 - `body`: (`string or null`) the body of the response
 - `headers`: headers to send with the response (type: `OutgoingHttpHeaders`)
 
-#### `new Response(options)`
+#### new Response(options)
 
 - `options` must be an object with the following properties
   - `code`: (`optional`): the HTTP code of the response (default `200`)
@@ -277,7 +279,7 @@ The `Response` has has 3 main properties used to send the response:
 
 **returns** a `Response` instance
 
-#### `Response.withText(text)`
+#### Response.withText(text)
 
 > Create a 200 response
 
@@ -285,7 +287,7 @@ The `Response` has has 3 main properties used to send the response:
 
 **returns** a `Response` instance
 
-#### `Response.fromError(err)`
+#### Response.fromError(err)
 
 > Create a response from an error
 
@@ -293,7 +295,7 @@ The `Response` has has 3 main properties used to send the response:
 
 **returns** a `Response` instance
 
-#### `Response.isResponse(maybe)`
+#### Response.isResponse(maybe)
 
 > Test if something is a valid Response
 
@@ -301,30 +303,30 @@ The `Response` has has 3 main properties used to send the response:
 
 **returns** a `true` is `maybe` inherit `Response`, `false` otherwise
 
-### `HttpError`
+### HttpError
 
 > A class extending `Error` that represent an HTTP error
 
-#### `new HttpError(code, message)`
+#### new HttpError(code, message)
 
 - `code`: the HTTP code of the error (must be 4xx or 5xx)
 - `message`: (`optional`) the message of the error, if not provided Tumau will use the default message corresponding to the code
 
-#### `new HttpError.LengthRequired()`
+#### new HttpError.LengthRequired()
 
-#### `new HttpError.NotAcceptable(message)`
+#### new HttpError.NotAcceptable(message)
 
-#### `new HttpError.PayloadTooLarge()`
+#### new HttpError.PayloadTooLarge()
 
-#### `new HttpError.BadRequest(message)`
+#### new HttpError.BadRequest(message)
 
-#### `new HttpError.NotFound()`
+#### new HttpError.NotFound()
 
-#### `new HttpError.ServerDidNotRespond()`
+#### new HttpError.ServerDidNotRespond()
 
-#### `new HttpError.Internal(message)`
+#### new HttpError.Internal(message)
 
-### `HttpMethod`
+### HttpMethod
 
 ```ts
 enum HttpMethod {
@@ -338,7 +340,7 @@ enum HttpMethod {
 }
 ```
 
-### `HttpStatus`
+### HttpStatus
 
 #### HttpStatus.getMessage(code)
 
@@ -346,7 +348,7 @@ enum HttpMethod {
 
 #### HttpStatus.isEmpty(code)
 
-#### `HttpStatus.isError(code)`
+#### HttpStatus.isError(code)
 
 ## What does "Tumau" means
 
