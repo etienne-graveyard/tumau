@@ -6,7 +6,7 @@
 
 > A Zero dependency node HTTP server written in Typescript
 
-Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with zero external dependencies and fully written in TypeScript.
+Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with zero external dependencies and written in TypeScript.
 
 ## Gist
 
@@ -45,13 +45,13 @@ Take a look at:
 
 ## Overview
 
-Like many other server, Tumau is based on middleware. A middleware is like a layer the request has to go though. At some point a response is created by one of the middleware and the response has to travel back to the outside (go through every layer in the opposite order) to be send.
+Like many other server, Tumau is based on middleware. A middleware is like a layer the request has to go though. At some point a response is created by one of the middleware and the response has to travel back to the outside (go through every layer in the opposite order) to be sent.
 
 <p align="center">
   <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-1.png" width="597">
 </p>
 
-A middleware can stop the chain and return a response. In that case the middleware under it will not be called !
+A middleware can stop the chain and return a response. In that case the next middleware will not be called !
 
 <p align="center">
   <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-2.png" width="597">
@@ -61,7 +61,7 @@ A middleware can stop the chain and return a response. In that case the middlewa
 
 In tumau the context a an object passed between middleware to share data between them.
 
-**Note**: It is recomended **NOT** to mutate the context but instead to create a copy before changing something and then pass this new object to the next middleware.
+**Note**: You should **NOT** mutate the context but rather create a copy where changes can be performed. This changed copy is passed to the next middleware.
 
 ### For TypeScript users
 
@@ -71,8 +71,8 @@ The type of the context is defined for the entire app (all the middleware). This
 
 A middleare is a function that:
 
-- receive a context from the previous middleware
-- receive a `next` function that will execute the next middleware
+- receives a context from the previous middleware
+- receives a `next` function that will execute the next middleware
 - can return a response
 
 <p align="center">
