@@ -144,6 +144,24 @@ const middleware = async (ctx, next) => {
 };
 ```
 
+### Conbining multiple Middlewares
+
+The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `Middleware.compose`:
+
+```js
+import { Middleware } from '@tumau/core';
+
+const composed = Middleware.compose(
+  logger,
+  cors,
+  main
+);
+
+const server = Server.create(composed);
+```
+
+**Note**: Middlewares are executed in the order they are passed to `compose`. In the example above: `logger`, then `cors`, then `main` (then the reverse order on the way up).
+
 ## TypeScript Example
 
 ```ts
