@@ -1,6 +1,6 @@
 {
   "name": "@tumau/router",
-  "version": "1.0.0-alpha.17",
+  "version": "1.0.0-alpha.18",
   "description": "Router for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -17,8 +17,8 @@
     "test": "tsdx test"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.17",
-    "@tumau/url-parser": "^1.0.0-alpha.17"
+    "@tumau/core": "^1.0.0-alpha.18",
+    "@tumau/url-parser": "^1.0.0-alpha.18"
   },
   "devDependencies": {
     "rimraf": "^2.6.3",

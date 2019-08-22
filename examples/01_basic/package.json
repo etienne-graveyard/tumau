@@ -1,6 +1,6 @@
 {
   "name": "@tumau/example-basic",
-  "version": "1.0.0-alpha.17",
+  "version": "1.0.0-alpha.18",
   "private": true,
   "description": "Basic example of @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
@@ -12,7 +12,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.17"
+    "@tumau/core": "^1.0.0-alpha.18"
   },
   "devDependencies": {
     "ts-node": "^8.3.0",
