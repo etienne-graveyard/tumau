@@ -256,6 +256,49 @@ The context is an object with the following properties:
   - `headers`: The headers received (`IncomingHttpHeaders`)
 - `res`: The response as provided by NodeJS (`http.ServerResponse`). You probably don't need to use this as Tumau will send the response.
 
+### `Response`
+
+A valid Response must inherit from the `Response` class.
+
+The `Response` has has 3 main properties used to send the response:
+
+- `code`: The HTTP code of the response
+- `body`: (`string or null`) the body of the response
+- `headers`: headers to send with the response (type: `OutgoingHttpHeaders`)
+
+#### `new Response(options)`
+
+- `options` must be an object with the following properties
+  - `code`: (`optional`): the HTTP code of the response (default `200`)
+  - `body`: (`optional`, `string or null`) the body of the response (default `null`)
+  - `headers`: (`optional`) headers to send with the response (default `{}`)
+
+**returns** a `Response` instance
+
+#### `Response.withText(text)`
+
+> Create a 200 response
+
+- `text`: (`string`, `required`) the text of the response
+
+**returns** a `Response` instance
+
+#### `Response.fromError(err)`
+
+> Create a response from an error
+
+- `err`: (`any`) the error to handle. If `err` is an instance of `HttpError` it will create a Response with the correct HTTP code and message otherwise it create an `500` Response.
+
+**returns** a `Response` instance
+
+#### `Response.isResponse(maybe)`
+
+> Test if something is a valid Response
+
+- `maybe`: (`any`) the value to test
+
+**returns** a `true` is `maybe` inherit `Response`, `false` otherwise
+
 ## What does "Tumau" means
 
 [According to Google Traduction](https://translate.google.com/?source=osdd#view=home&op=translate&sl=en&tl=mi&text=server) it is the translation of "server" in Maori but I'm not sure which definition it apply to. Anyway I thought it would make a cool name and it was not used on NPM so...

@@ -56,6 +56,9 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
         if (response === null) {
           throw new HttpError.ServerDidNotRespond();
         }
+        if (response instanceof Response === false) {
+          throw new HttpError.Internal(`The returned response is not valid (does not inherit the Response class)`);
+        }
         sendResponse(response, res, request);
       })
       .catch((err): void => {
