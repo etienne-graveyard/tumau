@@ -324,6 +324,30 @@ The `Response` has has 3 main properties used to send the response:
 
 #### `new HttpError.Internal(message)`
 
+### `HttpMethod`
+
+```ts
+enum HttpMethod {
+  GET = 'GET',
+  HEAD = 'HEAD',
+  PATCH = 'PATCH',
+  OPTIONS = 'OPTIONS',
+  DELETE = 'DELETE',
+  POST = 'POST',
+  PUT = 'PUT',
+}
+```
+
+### `HttpStatus`
+
+#### HttpStatus.getMessage(code)
+
+#### HttpStatus.get(code)
+
+#### HttpStatus.isEmpty(code)
+
+#### `HttpStatus.isError(code)`
+
 ## What does "Tumau" means
 
 [According to Google Traduction](https://translate.google.com/?source=osdd#view=home&op=translate&sl=en&tl=mi&text=server) it is the translation of "server" in Maori but I'm not sure which definition it apply to. Anyway I thought it would make a cool name and it was not used on NPM so...
