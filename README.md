@@ -189,33 +189,72 @@ server.listen(3002, () => {
 });
 ```
 
-## Initializing the Context & Providing your own HTTP server
+## API
 
-The `Server.create` function accept a object as parameter.
+### `Server`
+
+#### `Server.create(opts)`
+
+- `opts`: the main middleware or an object
+
+If `opts` is an object it accepts the following properties:
 
 - `mainMiddleware`: (`required`) the main middleware of your app
 - `createInitialCtx`: (`optional`) a function used to initialize the Context object. This function will receive the base Context as parameter
 - `httpServer`: (`optional`) a instance of `http.Server`. If ommited, a server will be created (`http.createServer()`)
 
-## API
+**return**: A `Server` object with the following properties:
 
-### `Server.create`
+- `httpServer`: The `http.Server` used by Tumau (either passed as option or created by Tumau)
+- `listen(port, listener)`: A function that start the server on a given port
+  - `port` (`number required`) the port to listen on
+  - `listener`: (`function optional`) a function executed once the server is up
 
-```ts
-// return type of Server.create
-interface Server {
-  httpServer: http.Server;
-  listen(port: number, listeningListener?: () => void): Server;
-}
+### `Middleware`
 
-interface Options<Ctx extends BaseContext> {
-  mainMiddleware: Middleware<Ctx>;
-  createInitialCtx?: (ctx: BaseContext) => Ctx;
-  httpServer?: http.Server;
-}
+#### `async (ctx, next) => Result`
 
-function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<Ctx>): Server;
-```
+A middleware is a function that can be `async`, it receive the following arguments
+
+- `ctx`: The context of the app (see `Context`)
+- `next`: A function that return a Promise of the resolved result of the next middleware (`{ ctx, response }`).
+
+**returns**: `null` or a `Response` or an object `{ ctx, response }` or a Promise of on of these.
+
+If the returned value is a object `ctx` is required while `response` can be either `null` or a `Response`
+
+#### `Middleware.compose(...middlewares)`
+
+> Compose a list of middleware together
+
+- `...middlewares` middlewares to compose together
+
+**returns**: a middleware that will run the given middlewares on fater the order.
+
+**Note**: if a middleware does not call `next` then it will stop the chain the the following middleware will not be called.
+
+#### `Middleware.resolveResult(result)`
+
+> Convert the returned value of a middleware into an object { ctx, response }
+
+- `result` any returned value of a middleware (`null` or a `Response` or an object `{ ctx, response }`)
+
+**returns**: an object `{ ctx, response }` where response can be null.
+
+**Note**: You probably don't need to use this function as it is already called by `Middleware.compose` on the result of the `next()` call.
+
+### `Context`
+
+> The base context passed to the `mainMiddleware`
+
+The context is an object with the following properties:
+
+- `request`: A request object with
+  - `req`: The request received from the NodeJS server (`IncomingMessage`)
+  - `method`: The method of the request (`GET`, `POST`, `PUT`...)
+  - `url`: The url of the request (`/user/paul?foo=bar`)
+  - `headers`: The headers received (`IncomingHttpHeaders`)
+- `res`: The response as provided by NodeJS (`http.ServerResponse`). You probably don't need to use this as Tumau will send the response.
 
 ## What does "Tumau" means
 
