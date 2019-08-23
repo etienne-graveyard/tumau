@@ -8,9 +8,9 @@ const server = Server.create<Ctx>(
     JsonParser(),
     ctx => {
       if (ctx.jsonBody) {
-        return JsonResponse.create({ json: { you: '<- are here !', received: ctx.jsonBody } });
+        return JsonResponse.with({ you: '<- are here !', received: ctx.jsonBody });
       }
-      return JsonResponse.create({ json: { you: '<- are here !' } });
+      return JsonResponse.with({ you: '<- are here !' });
     }
   )
 );

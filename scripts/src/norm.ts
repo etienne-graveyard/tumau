@@ -1,6 +1,6 @@
-import fse from 'fs-extra';
-import { saveFile } from './saveFile';
-import sortPackageJson from 'sort-package-json';
+import * as fse from 'fs-extra';
+import { saveFile } from './utils/saveFile';
+import * as sortPackageJson from 'sort-package-json';
 
 norm();
 
@@ -20,7 +20,7 @@ async function normPackageJson() {
       pkg[key] = rootPkg[key];
     }
   });
-  await saveFile(pkgPath, JSON.stringify(sortPackageJson(pkg)));
+  await saveFile(pkgPath, JSON.stringify((sortPackageJson as any)(pkg)));
   return pkg;
 }
 

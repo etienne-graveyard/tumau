@@ -189,6 +189,14 @@ server.listen(3002, () => {
 });
 ```
 
+## Performance
+
+> Is it fast ?
+
+I'm no expert in benchmarking but from [my attempt to measure it](https://github.com/etienne-dldc/tumau/benchmarks) it's a bit faster than Koa and Express but not as fast as [fastify](https://github.com/fastify/fastify).
+
+You can run the benchmark yourself by running `yarn benchmark` in the root folder of the monorepo. Fell free to add more framework or more complex cases !
+
 ## API
 
 ### Server

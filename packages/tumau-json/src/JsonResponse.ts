@@ -23,6 +23,10 @@ export class JsonResponse extends Response {
     this.json = json;
   }
 
+  public static with(json: object): JsonResponse {
+    return new JsonResponse({ json });
+  }
+
   public static fromError(err: any): JsonResponse {
     if (err instanceof HttpError) {
       return new JsonResponse({
