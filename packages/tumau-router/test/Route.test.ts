@@ -9,7 +9,16 @@ describe('flatten', () => {
     const flat = Route.flatten([route]);
     expect(Array.isArray(flat)).toBeTruthy();
     expect(flat.length).toBe(1);
-    expect(flat[0]).toEqual(route);
+    expect(flat[0]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [],
+        "exact": true,
+        "method": "GET",
+        "middleware": [Function],
+        "pattern": "/foo",
+        Symbol(ROUTE_TOKEN): true,
+      }
+    `);
   });
 
   it('flatten a namespace', () => {

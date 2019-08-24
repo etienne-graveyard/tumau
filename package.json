@@ -5,7 +5,8 @@
     "packages/*",
     "examples/*",
     "benchmarks",
-    "scripts"
+    "scripts",
+    "tests"
   ],
   "keywords": [
     "node",
@@ -17,6 +18,7 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
     "build": "lerna run build --stream",
+    "test": "lerna run test --stream",
     "norm": "lerna exec --stream -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
     "pub": "yarn build && lerna publish"

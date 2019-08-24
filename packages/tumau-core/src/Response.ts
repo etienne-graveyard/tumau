@@ -1,6 +1,7 @@
 import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
+import { HttpHeaders } from './HttpHeaders';
 
 interface CreateResponseOptions {
   code?: HttpStatusCode;
@@ -21,7 +22,7 @@ export class Response {
   }
 
   public static withText(text: string) {
-    return new Response({ body: text });
+    return new Response({ body: text, headers: { [HttpHeaders.ContentLength]: text.length } });
   }
 
   public static isResponse(maybe: any): maybe is Response {

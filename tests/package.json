@@ -1,0 +1,23 @@
+{
+  "name": "tests",
+  "version": "1.0.0-alpha.18",
+  "private": true,
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "main": "index.js",
+  "dependencies": {
+    "@tumau/core": "^1.0.0-alpha.18",
+    "@tumau/json": "^1.0.0-alpha.18",
+    "@tumau/router": "^1.0.0-alpha.18"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2"
+  }
+}

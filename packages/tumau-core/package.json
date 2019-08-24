@@ -19,8 +19,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf ./dist && tsdx build --target node",
-    "start": "tsdx watch --target node",
-    "test": "tsdx test"
+    "start": "tsdx watch --target node"
   },
   "devDependencies": {
     "rimraf": "^2.6.3",
