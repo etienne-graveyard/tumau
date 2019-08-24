@@ -9,6 +9,11 @@ export const HttpHeaders = {
 
 export const ContentType = {
   Json: 'application/json',
+  Text: 'text/plain',
+};
+
+export const ContentTypeCharset = {
+  Utf8: 'charset=utf-8',
 };
 
 export const ContentEncoding = {

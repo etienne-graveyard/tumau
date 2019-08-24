@@ -1,7 +1,7 @@
 import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
-import { HttpHeaders } from './HttpHeaders';
+import { HttpHeaders, ContentType, ContentTypeCharset } from './HttpHeaders';
 
 interface CreateResponseOptions {
   code?: HttpStatusCode;
@@ -22,7 +22,13 @@ export class Response {
   }
 
   public static withText(text: string) {
-    return new Response({ body: text, headers: { [HttpHeaders.ContentLength]: text.length } });
+    return new Response({
+      body: text,
+      headers: {
+        [HttpHeaders.ContentLength]: text.length,
+        [HttpHeaders.ContentType]: [ContentType.Text, ContentTypeCharset.Utf8].join('; '),
+      },
+    });
   }
 
   public static isResponse(maybe: any): maybe is Response {

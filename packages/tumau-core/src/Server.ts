@@ -6,6 +6,7 @@ import { BaseContext } from './BaseContext';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
 import { HttpError } from './HttpError';
+import { HttpHeaders } from './HttpHeaders';
 
 export interface Server {
   httpServer: http.Server;
@@ -91,6 +92,19 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
 
     const isEmpty =
       HttpStatus.isEmpty(response.code) || request.method === HttpMethod.HEAD || request.method === HttpMethod.OPTIONS;
+
+    if (isEmpty) {
+      // remove content related header
+      if (headers[HttpHeaders.ContentType]) {
+        delete headers[HttpHeaders.ContentType];
+      }
+      if (headers[HttpHeaders.ContentLength]) {
+        delete headers[HttpHeaders.ContentLength];
+      }
+      if (headers[HttpHeaders.ContentEncoding]) {
+        delete headers[HttpHeaders.ContentEncoding];
+      }
+    }
 
     const bodyStr = response.body;
 
