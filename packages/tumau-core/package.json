@@ -22,8 +22,8 @@
     "start": "tsdx watch --target node"
   },
   "devDependencies": {
-    "rimraf": "^2.6.3",
-    "tsdx": "^0.7.2"
+    "rimraf": "^3.0.0",
+    "tsdx": "^0.8.0"
   },
   "publishConfig": {
     "access": "public"
