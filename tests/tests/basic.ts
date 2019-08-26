@@ -2,8 +2,7 @@ import { Server, Response, HttpMethod } from '@tumau/core';
 import { runTumauRequest, runKoaRequest } from '../utils/runRequest';
 import { Request } from '../utils/Request';
 import { BodyResponse } from '../utils/BodyResponse';
-import koa = require('koa');
-// import koa from 'koa';
+import koa from 'koa';
 
 describe('Server', () => {
   test('create a Server without crashing', () => {
