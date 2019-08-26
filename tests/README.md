@@ -1,4 +1,4 @@
-# @tumau/example-router (private)
+# tests (private)
 
 ## Tumau
 

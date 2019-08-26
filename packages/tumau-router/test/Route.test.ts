@@ -1,4 +1,4 @@
-import { Route } from '../src/Route';
+import { Route } from '../src';
 import { Middleware } from '@tumau/core';
 
 const noop: Middleware<any> = ctx => ({ ctx, response: null });

@@ -31,7 +31,7 @@ async function normReadme(pkg: any) {
   const local = fse.existsSync(readmeLocalPath) ? (await fse.readFile(readmeLocalPath)).toString() : null;
   const template = (await fse.readFile(readmeTemplatePath)).toString();
   const result = [
-    `# ${process.env.LERNA_PACKAGE_NAME}`,
+    `# ${process.env.LERNA_PACKAGE_NAME}${pkg.private === true ? ' (private)' : ''}`,
     ...(pkg.description ? [``, `> ${pkg.description}`] : []),
     ``,
     template,
