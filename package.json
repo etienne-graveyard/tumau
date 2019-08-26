@@ -21,7 +21,8 @@
     "test": "lerna run test --stream",
     "norm": "lerna exec --stream -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
-    "pub": "yarn build && lerna publish"
+    "pub": "yarn build && lerna publish",
+    "lint": "eslint ."
   },
   "husky": {
     "hooks": {
@@ -30,9 +31,9 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
-    "eslint": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-react": "^7.14.3",
     "husky": "^3.0.4",
