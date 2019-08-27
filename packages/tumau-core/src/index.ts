@@ -5,5 +5,5 @@ export { HttpMethod, ALL_HTTP_METHODS } from './HttpMethod';
 export { HttpStatus, HttpStatusCode, HttpStatusMessage } from './HttpStatus';
 export { Middleware, Middlewares, Next, Result, ResultSync } from './Middleware';
 export { Request } from './Request';
-export { Response } from './Response';
+export { Response, Body } from './Response';
 export { Server } from './Server';

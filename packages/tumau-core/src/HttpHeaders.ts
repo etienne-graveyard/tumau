@@ -1,16 +1,17 @@
 export const HttpHeaders = {
-  ContentLength: 'content-length',
-  ContentType: 'content-type',
-  ContentEncoding: 'content-encoding',
-  AccessControlAllowOrigin: 'access-control-allow-origin',
-  AccessControlAllowHeaders: 'access-control-allow-headers',
-  Origin: 'origin',
+  ContentLength: 'content-length' as const,
+  ContentType: 'content-type' as const,
+  ContentEncoding: 'content-encoding' as const,
+  AcceptEncoding: 'accept-encoding' as const,
+  AccessControlAllowOrigin: 'access-control-allow-origin' as const,
+  AccessControlAllowHeaders: 'access-control-allow-headers' as const,
+  Origin: 'origin' as const,
 };
 
 export const ContentType = {
-  Json: 'application/json',
-  Text: 'text/plain',
-  Html: 'text/html',
+  Json: 'application/json' as const,
+  Text: 'text/plain' as const,
+  Html: 'text/html' as const,
 };
 
 export const ContentTypeCharset = {
@@ -18,8 +19,8 @@ export const ContentTypeCharset = {
 };
 
 export const ContentEncoding = {
-  Identity: 'identity',
-  Brotli: 'br',
-  Deflate: 'deflate',
-  Gzip: 'gzip',
+  Identity: 'identity' as const,
+  Brotli: 'br' as const,
+  Deflate: 'deflate' as const,
+  Gzip: 'gzip' as const,
 };

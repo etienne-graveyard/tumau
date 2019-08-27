@@ -2,17 +2,19 @@ import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
 import { HttpHeaders, ContentType, ContentTypeCharset } from './HttpHeaders';
-import { ReadStream } from 'fs';
+import { Readable } from 'stream';
+
+export type Body = Readable | string | null;
 
 interface CreateResponseOptions {
   code?: HttpStatusCode;
-  body?: ReadStream | string | null;
+  body?: Body;
   headers?: OutgoingHttpHeaders;
 }
 
 export class Response {
   public code: HttpStatusCode;
-  public body: ReadStream | string | null;
+  public body: Body;
   public headers: OutgoingHttpHeaders;
 
   public constructor(options: CreateResponseOptions = {}) {
@@ -32,7 +34,7 @@ export class Response {
     });
   }
 
-  public static withStream(stream: ReadStream, size: number) {
+  public static withStream(stream: Readable, size: number) {
     return new Response({
       body: stream,
       headers: {
