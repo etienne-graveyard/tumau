@@ -10,6 +10,7 @@ export const HttpHeaders = {
 export const ContentType = {
   Json: 'application/json',
   Text: 'text/plain',
+  Html: 'text/html',
 };
 
 export const ContentTypeCharset = {
@@ -18,4 +19,7 @@ export const ContentTypeCharset = {
 
 export const ContentEncoding = {
   Identity: 'identity',
+  Brotli: 'br',
+  Deflate: 'deflate',
+  Gzip: 'gzip',
 };

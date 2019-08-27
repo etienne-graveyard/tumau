@@ -1,0 +1,28 @@
+{
+  "name": "@tumau/compress",
+  "version": "1.0.0-alpha.18",
+  "description": "Compress middleware (gzip, deflate & brotli) for @tumau/core",
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/json.esm.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf ./dist && tsdx build --target node",
+    "start": "tsdx watch --target node"
+  },
+  "dependencies": {
+    "@tumau/core": "^1.0.0-alpha.18"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.0",
+    "tsdx": "^0.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

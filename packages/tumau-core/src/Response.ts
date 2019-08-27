@@ -2,16 +2,17 @@ import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
 import { HttpHeaders, ContentType, ContentTypeCharset } from './HttpHeaders';
+import { ReadStream } from 'fs';
 
 interface CreateResponseOptions {
   code?: HttpStatusCode;
-  body?: string | null;
+  body?: ReadStream | string | null;
   headers?: OutgoingHttpHeaders;
 }
 
 export class Response {
   public code: HttpStatusCode;
-  public body: string | null;
+  public body: ReadStream | string | null;
   public headers: OutgoingHttpHeaders;
 
   public constructor(options: CreateResponseOptions = {}) {
@@ -31,6 +32,15 @@ export class Response {
     });
   }
 
+  public static withStream(stream: ReadStream, size: number) {
+    return new Response({
+      body: stream,
+      headers: {
+        [HttpHeaders.ContentLength]: size,
+      },
+    });
+  }
+
   public static isResponse(maybe: any): maybe is Response {
     return maybe && maybe instanceof Response;
   }
@@ -43,8 +53,8 @@ export class Response {
       });
     }
     if (err instanceof Error) {
-      return new Response(new HttpError.Internal(err.message));
+      return Response.fromError(new HttpError.Internal(err.message));
     }
-    return new Response(new HttpError.Internal(String(err)));
+    return Response.fromError(new HttpError.Internal(String(err)));
   }
 }

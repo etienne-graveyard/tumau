@@ -7,6 +7,7 @@ import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
 import { HttpError } from './HttpError';
 import { HttpHeaders } from './HttpHeaders';
+import { isWritableStream } from './utils';
 
 export interface Server {
   httpServer: http.Server;
@@ -63,14 +64,13 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
         sendResponse(response, res, request);
       })
       .catch((err): void => {
-        // we allow to throw new Response()
-        if (err instanceof Response) {
-          return sendResponse(err, res, request);
+        const errorResponse = Response.fromError(err);
+        if (res.headersSent) {
+          console.error(errorResponse);
+          res.end(`Error ${errorResponse.code}: ${errorResponse.body}`);
+          return;
         }
-        if (err instanceof Error) {
-          return sendResponse(Response.fromError(err), res, request);
-        }
-        return sendResponse(Response.fromError(new HttpError(500)), res, request);
+        return sendResponse(err, res, request);
       })
       .catch((err): void => {
         // fatal
@@ -106,7 +106,7 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       }
     }
 
-    const bodyStr = response.body;
+    const body = response.body;
 
     let code = response.code;
     if (code === 200 && isEmpty) {
@@ -118,6 +118,17 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
     if (isEmpty) {
       return res.end();
     }
-    return res.end(bodyStr);
+    // send body
+    if (body === null) {
+      return res.end();
+    }
+    if (typeof body === 'string') {
+      return res.end(body);
+    }
+    if (isWritableStream(body)) {
+      body.pipe(res);
+      return;
+    }
+    throw new Error(`Invalid body`);
   }
 }

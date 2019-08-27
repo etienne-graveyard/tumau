@@ -153,8 +153,8 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
         if (received !== length) {
           done(new HttpError(400, 'Request size did not match content length'));
         } else {
-          var string = buffer + decoder.end();
-          done(null, string);
+          const output = buffer + decoder.end();
+          done(null, output);
         }
       }
 
