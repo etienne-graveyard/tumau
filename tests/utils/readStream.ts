@@ -1,9 +1,9 @@
-import { IncomingMessage } from 'http';
 import { StringDecoder } from 'string_decoder';
+import { Readable } from 'stream';
 
 const _1mb = 1024 * 1024 * 1024;
 
-export function readStream(res: IncomingMessage, limit: number = _1mb): Promise<string> {
+export function readStream(res: Readable, limit: number = _1mb): Promise<string> {
   return new Promise<string>((resolve, reject): void => {
     let complete = false;
     let sync = true;

@@ -1,11 +1,17 @@
 import { Middleware, ResultSync, HttpHeaders, ContentEncoding } from '@tumau/core';
 import { CompressCtx, Encoding } from './CompressCtx';
-import { toArray } from './utils';
 import { CompressResponse } from './CompressResponse';
 
 export function Compress<Ctx extends CompressCtx>(): Middleware<Ctx> {
   return async (ctx, next): Promise<ResultSync<Ctx>> => {
-    const acceptedEncoding = toArray(ctx.request.headers[HttpHeaders.AcceptEncoding] || ContentEncoding.Identity);
+    const acceptedEncodingHeader = ctx.request.headers[HttpHeaders.AcceptEncoding];
+    const acceptedEncoding =
+      typeof acceptedEncodingHeader === 'string'
+        ? acceptedEncodingHeader.split(/, ?/)
+        : Array.isArray(acceptedEncodingHeader)
+        ? acceptedEncodingHeader
+        : ContentEncoding.Identity;
+
     const nextCtx: Ctx = {
       ...ctx,
       compress: {
@@ -20,6 +26,7 @@ export function Compress<Ctx extends CompressCtx>(): Middleware<Ctx> {
       return { response, ctx: endCtx };
     }
     const endAccepted = endCtx.compress ? endCtx.compress.acceptedEncoding : acceptedEncoding;
+
     const usedEncoding: Array<Encoding> = (() => {
       if (endAccepted.indexOf(ContentEncoding.Brotli) >= 0) {
         return [ContentEncoding.Brotli];

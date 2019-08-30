@@ -14,6 +14,11 @@ export class CompressResponse extends Response {
       ...originalResponse.headers,
       [HttpHeaders.ContentEncoding]: encodings,
     };
+
+    // remove content length beacause we no longer know the size of the body
+    // (unless we compress first, then send it but that would be quite bad)
+    delete headers[HttpHeaders.ContentLength];
+
     super({
       body,
       code: originalResponse.code,

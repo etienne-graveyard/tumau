@@ -1,40 +1,73 @@
 import { IncomingMessage } from 'http';
 import { readStream } from './readStream';
 import { HttpHeaders, ContentEncoding } from '@tumau/core';
+import { Encoding } from '@tumau/compress';
+import { Readable } from 'stream';
+import zlib from 'zlib';
 
 export const BodyResponse = {
   asText,
   isEmpty,
+  fromGzip,
 };
+
+async function fromGzip(res: IncomingMessage): Promise<string> {
+  return readStream(encodeBodyWithEncoding(res, ContentEncoding.Gzip));
+}
 
 async function asText(res: IncomingMessage): Promise<string> {
   const _1mb = 1024 * 1024 * 1024;
   const limit = _1mb;
 
-  const lengthStr = res.headers[HttpHeaders.ContentLength];
-  if (lengthStr === undefined || Array.isArray(lengthStr)) {
-    throw new Error('LengthRequired');
-  }
-  const length = parseInt(lengthStr, 10);
-  if (Number.isNaN(length)) {
-    throw new Error('LengthRequired');
-  }
+  const length = (() => {
+    const lengthStr = res.headers[HttpHeaders.ContentLength];
+    if (lengthStr === undefined || Array.isArray(lengthStr)) {
+      return null;
+    }
+    const length = parseInt(lengthStr, 10);
+    if (Number.isNaN(length)) {
+      return null;
+    }
+    return length;
+  })();
+
   if (length === 0) {
     return Promise.resolve('');
   }
 
-  const encoding = res.headers[HttpHeaders.ContentEncoding] || ContentEncoding.Identity;
-  if (encoding !== ContentEncoding.Identity) {
-    throw new Error(`NotAcceptable: ${encoding} not supported`);
-  }
-  if (length > limit) {
-    throw new Error('PayloadTooLarge');
-  }
-  const str = await readStream(res, limit);
-  if (str.length !== length) {
+  const encodingHeader = res.headers[HttpHeaders.ContentEncoding];
+  const encoding: Array<Encoding> =
+    typeof encodingHeader === 'string'
+      ? (encodingHeader.split(/, ?/) as any)
+      : Array.isArray(encodingHeader)
+      ? encodingHeader
+      : [ContentEncoding.Identity];
+
+  const decoded = decodeBodyWithEncodings(res, encoding);
+  const str = await readStream(decoded, limit);
+  if (length !== null && str.length !== length) {
     throw new Error('Content length did not match header');
   }
   return str;
+}
+
+function decodeBodyWithEncodings(body: Readable, encodings: Array<Encoding>): Readable {
+  return encodings.reduce<Readable>((body, encoding) => {
+    return encodeBodyWithEncoding(body, encoding);
+  }, body);
+}
+
+function encodeBodyWithEncoding(body: Readable, encoding: Encoding): Readable {
+  if (encoding === ContentEncoding.Brotli) {
+    return body.pipe(zlib.createBrotliDecompress());
+  }
+  if (encoding === ContentEncoding.Gzip) {
+    return body.pipe(zlib.createGunzip());
+  }
+  if (encoding === ContentEncoding.Deflate) {
+    return body.pipe(zlib.createInflate());
+  }
+  return body;
 }
 
 async function isEmpty(res: IncomingMessage): Promise<boolean> {
