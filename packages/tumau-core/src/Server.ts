@@ -129,6 +129,7 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       body.pipe(res);
       return;
     }
+    console.log(body);
     throw new Error(`Invalid body`);
   }
 }
