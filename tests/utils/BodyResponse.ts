@@ -9,10 +9,20 @@ export const BodyResponse = {
   asText,
   isEmpty,
   fromGzip,
+  fromBrotli,
+  fromDeflate,
 };
 
 async function fromGzip(res: IncomingMessage): Promise<string> {
-  return readStream(encodeBodyWithEncoding(res, ContentEncoding.Gzip));
+  return readStream(decodeBodyWithEncoding(res, ContentEncoding.Gzip));
+}
+
+async function fromBrotli(res: IncomingMessage): Promise<string> {
+  return readStream(decodeBodyWithEncoding(res, ContentEncoding.Brotli));
+}
+
+async function fromDeflate(res: IncomingMessage): Promise<string> {
+  return readStream(decodeBodyWithEncoding(res, ContentEncoding.Deflate));
 }
 
 async function asText(res: IncomingMessage): Promise<string> {
@@ -53,11 +63,11 @@ async function asText(res: IncomingMessage): Promise<string> {
 
 function decodeBodyWithEncodings(body: Readable, encodings: Array<Encoding>): Readable {
   return encodings.reduce<Readable>((body, encoding) => {
-    return encodeBodyWithEncoding(body, encoding);
+    return decodeBodyWithEncoding(body, encoding);
   }, body);
 }
 
-function encodeBodyWithEncoding(body: Readable, encoding: Encoding): Readable {
+function decodeBodyWithEncoding(body: Readable, encoding: Encoding): Readable {
   if (encoding === ContentEncoding.Brotli) {
     return body.pipe(zlib.createBrotliDecompress());
   }
