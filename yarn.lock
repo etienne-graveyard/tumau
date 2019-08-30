@@ -2699,24 +2699,25 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-autocannon@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/autocannon/-/autocannon-4.0.0.tgz#91fd719f4ccb037ce4c8f9a10aadbd46eb86fe0a"
-  integrity sha512-wJw/hYh9SF9aYebuxFoIqQQbxdD4win+1AVMZ5w3J1TSDjs9vjxnP+JthOFzpO0A0Lr32WepD/bdE5v/BRY1mw==
+autocannon@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/autocannon/-/autocannon-4.1.0.tgz#3ac3243ae70a44c73d54563ba6dfccd1f2ebc872"
+  integrity sha512-G7VsaeNq0RL1hRLrdJY/9vd5/WcJ+vau5xBbEeJ4LZ/aUWz8n1M7HzfNCbUmmfI105g3J22kZPSnJVhdFFwP2A==
   dependencies:
     chalk "^2.4.2"
     cli-table3 "^0.5.1"
+    clone "^2.1.2"
     color-support "^1.1.1"
     cross-argv "^1.0.0"
     has-async-hooks "^1.0.0"
     hdr-histogram-js "^1.1.4"
     hdr-histogram-percentiles-obj "^2.0.0"
-    http-parser-js "^0.5.0"
+    http-parser-js "^0.5.1"
     hyperid "^2.0.2"
     manage-path "^2.0.0"
     minimist "^1.2.0"
     on-net-listen "^1.1.1"
-    pretty-bytes "^5.1.0"
+    pretty-bytes "^5.3.0"
     progress "^2.0.3"
     reinterval "^1.1.0"
     retimer "^2.0.0"
@@ -3420,6 +3421,11 @@ clone@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
+
+clone@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
+  integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
 
 co@^4.6.0:
   version "4.6.0"
@@ -5465,7 +5471,7 @@ http-errors@^1.6.3, http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
-http-parser-js@^0.5.0:
+http-parser-js@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/http-parser-js/-/http-parser-js-0.5.1.tgz#6b197a6226ccb96e52c32e8f0973b5dd923e1ba0"
   integrity sha512-klJydAEoXHWYRtOoDwtNVIF6xrYCMTHnG8hu8uASFCmj9qNZ9R3kWeZ7NgqLctY9QRkvsNoqOmN6Lw2qZmGgVQ==
@@ -8577,7 +8583,7 @@ prettier@^1.18.2:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.18.2.tgz#6823e7c5900017b4bd3acf46fe9ac4b4d7bda9ea"
   integrity sha512-OeHeMc0JhFE9idD4ZdtNibzY0+TPHSpSSb9h8FqtP+YnoZZ1sl8Vc9b1sasjfymH3SonAF4QcA2+mzHPhMvIiw==
 
-pretty-bytes@^5.1.0:
+pretty-bytes@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.3.0.tgz#f2849e27db79fb4d6cfe24764fc4134f165989f2"
   integrity sha512-hjGrh+P926p4R4WbaB6OckyRtO0F0/lQBiT+0gnxjV+5kjPBrfVBFCsCLbMqVQeydvIoouYTCmmEURiH3R1Bdg==
@@ -10533,10 +10539,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.5.3:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
-  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
+typescript@^3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.2.tgz#105b0f1934119dde543ac8eb71af3a91009efe54"
+  integrity sha512-lmQ4L+J6mnu3xweP8+rOrUwzmN+MRAj7TgtJtDaXE5PMyX2kCrklhg3rvOsOIfNeAWMQWO2F1GPc1kMD2vLAfw==
 
 uglify-js@^3.1.4:
   version "3.6.0"
