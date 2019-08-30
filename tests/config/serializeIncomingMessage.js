@@ -11,10 +11,10 @@ function formatHeaderName(name) {
 
 module.exports = {
   print(val) {
-    const stotedHeaders = Object.keys(val.headers).sort();
+    const sortedHeaders = Object.keys(val.headers).sort();
     return [
       `HTTP/1.1 ${val.statusCode}${val.statusMessage ? ' ' + val.statusMessage : ''}`,
-      ...stotedHeaders.map(key => {
+      ...sortedHeaders.map(key => {
         const isDate = key.toLowerCase() === 'date';
         // hide date to match every time
         const value = isDate ? `Xxx, XX Xxx XXXX XX:XX:XX GMT` : val.headers[key];
