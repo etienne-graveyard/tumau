@@ -15,7 +15,7 @@ export const ContentType = {
 };
 
 export const ContentTypeCharset = {
-  Utf8: 'charset=utf-8',
+  Utf8: 'charset=utf-8' as const,
 };
 
 export const ContentEncoding = {
