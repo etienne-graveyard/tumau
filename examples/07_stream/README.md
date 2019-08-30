@@ -1,4 +1,4 @@
-# @tumau/example-error (private)
+# @tumau/example-stream (private)
 
 ## Tumau
 
