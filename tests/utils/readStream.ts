@@ -72,7 +72,7 @@ export function readStream(res: Readable, limit: number = _1mb): Promise<string>
       if (err) {
         return done(err);
       }
-      var string = buffer + decoder.end();
+      const string = buffer + decoder.end();
       done(null, string);
     }
 

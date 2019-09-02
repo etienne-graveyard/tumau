@@ -23,19 +23,28 @@ async function runRequest(server: http.Server, request: Request): Promise<http.I
   const addr = await ensureServerIsListening(server);
   return new Promise(resolve => {
     const url = addr + request.path;
-    http
-      .request(
-        url,
-        {
-          method: request.method,
-          headers: request.headers,
-        },
-        res => {
-          server.close();
-          resolve(res);
-        }
-      )
-      .end();
+    const req = http.request(
+      url,
+      {
+        method: request.method,
+        headers: request.headers,
+      },
+      res => {
+        server.close();
+        resolve(res);
+      }
+    );
+    if (typeof request.body === 'string') {
+      req.write(request.body);
+      req.end();
+      return;
+    }
+    if (request.body === null) {
+      req.end();
+      return;
+    }
+    // stream
+    request.body.pipe(req);
   });
 }
 

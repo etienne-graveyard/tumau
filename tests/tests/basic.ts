@@ -1,4 +1,4 @@
-import { Server, Response, HttpMethod } from '@tumau/core';
+import { Server, Response, HttpMethod, HttpError } from '@tumau/core';
 import { runTumauRequest, runKoaRequest } from '../utils/runRequest';
 import { Request } from '../utils/Request';
 import { BodyResponse } from '../utils/BodyResponse';
@@ -93,5 +93,19 @@ describe('Server', () => {
       Content-Type: text/plain; charset=utf-8
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
+  });
+
+  test('throw return an error', async () => {
+    const app = Server.create(() => {
+      throw new HttpError.NotFound();
+    });
+    const res = await runTumauRequest(app, new Request());
+    expect(res).toMatchInlineSnapshot(`
+      HTTP/1.1 404 Not Found
+      Connection: close
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+      Transfer-Encoding: chunked
+    `);
+    expect(await BodyResponse.asText(res)).toEqual('Not Found');
   });
 });

@@ -54,13 +54,9 @@ function compose<Ctx extends BaseContext>(...middlewares: Middlewares<Ctx>): Mid
       if (!fn) {
         throw new Error('what ?');
       }
-      try {
-        const result: Result<Ctx> = fn(tmpCtx, dispatch.bind(null, i + 1));
-        const res = await Promise.resolve<null | Response | ResultResolved<Ctx>>(result);
-        return resolveResult(tmpCtx, res);
-      } catch (err) {
-        return Promise.reject(err);
-      }
+      const result: Result<Ctx> = fn(tmpCtx, dispatch.bind(null, i + 1));
+      const res = await Promise.resolve<null | Response | ResultResolved<Ctx>>(result);
+      return resolveResult(tmpCtx, res);
     }
   };
 }

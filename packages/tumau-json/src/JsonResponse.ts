@@ -16,7 +16,6 @@ export class JsonResponse extends Response {
     const outHeaders: OutgoingHttpHeaders = {
       ...headers,
       [HttpHeaders.ContentType]: ContentType.Json,
-      [HttpHeaders.ContentEncoding]: ContentType.Json,
       [HttpHeaders.ContentLength]: body.length,
     };
     super({ code, headers: outHeaders, body });

@@ -11,6 +11,7 @@ export const BodyResponse = {
   fromGzip,
   fromBrotli,
   fromDeflate,
+  fromJson,
 };
 
 async function fromGzip(res: IncomingMessage): Promise<string> {
@@ -23,6 +24,10 @@ async function fromBrotli(res: IncomingMessage): Promise<string> {
 
 async function fromDeflate(res: IncomingMessage): Promise<string> {
   return readStream(decodeBodyWithEncoding(res, ContentEncoding.Deflate));
+}
+
+async function fromJson(res: IncomingMessage): Promise<object> {
+  return JSON.parse(await asText(res));
 }
 
 async function asText(res: IncomingMessage): Promise<string> {

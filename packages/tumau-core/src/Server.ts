@@ -66,11 +66,10 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       .catch((err): void => {
         const errorResponse = Response.fromError(err);
         if (res.headersSent) {
-          console.error(errorResponse);
           res.end(`Error ${errorResponse.code}: ${errorResponse.body}`);
           return;
         }
-        return sendResponse(err, res, request);
+        return sendResponse(errorResponse, res, request);
       })
       .catch((err): void => {
         // fatal
@@ -119,7 +118,7 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       return res.end();
     }
     // send body
-    if (body === null) {
+    if (body === null || body === undefined) {
       return res.end();
     }
     if (typeof body === 'string') {
@@ -129,7 +128,6 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
       body.pipe(res);
       return;
     }
-    console.log(body);
     throw new Error(`Invalid body`);
   }
 }
