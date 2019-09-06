@@ -59,4 +59,21 @@ export class Response {
     }
     return Response.fromError(new HttpError.Internal(String(err)));
   }
+
+  public static extends(originalResponse: Response, overrides: CreateResponseOptions = {}): ExtendedResponse {
+    return new ExtendedResponse(originalResponse, overrides);
+  }
+}
+
+export class ExtendedResponse extends Response {
+  constructor(public originalResponse: Response, overrides: CreateResponseOptions = {}) {
+    super({
+      body: overrides.body || originalResponse.body,
+      code: overrides.code || originalResponse.code,
+      headers: {
+        ...originalResponse.headers,
+        ...(overrides.headers || {}),
+      },
+    });
+  }
 }
