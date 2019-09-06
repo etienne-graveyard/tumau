@@ -5,9 +5,10 @@ import { Response } from './Response';
 import { BaseContext } from './BaseContext';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
-import { HttpError } from './HttpError';
 import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
+import { HandleErrors } from './HandleErrors';
+import { HandleInvalidResponse } from './HandleInvalidResponse';
 
 export interface Server {
   httpServer: http.Server;
@@ -16,6 +17,7 @@ export interface Server {
 
 interface Options<Ctx extends BaseContext> {
   mainMiddleware: Middleware<Ctx>;
+  handleErrors?: boolean;
   createInitialCtx?: (ctx: BaseContext) => Ctx;
   httpServer?: http.Server;
 }
@@ -26,7 +28,7 @@ export const Server = {
 
 function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<Ctx>): Server {
   const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
-  const { mainMiddleware, createInitialCtx = (ctx: BaseContext) => ctx as any } = options;
+  const { mainMiddleware, createInitialCtx = ((ctx: BaseContext) => ctx) as any, handleErrors = true } = options;
 
   const httpServer: http.Server = options.httpServer || http.createServer();
 
@@ -48,43 +50,46 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
     const baseCtx = await BaseContext.create(request, res);
     const ctx = createInitialCtx(baseCtx);
 
-    const wrappedMiddleware: Middleware<Ctx> = async (ctx, next) => {
-      return mainMiddleware(ctx, next);
-    };
+    const wrappedMiddleware: Middleware<Ctx> = handleErrors
+      ? Middleware.compose<Ctx>(
+          HandleErrors(),
+          HandleInvalidResponse(),
+          mainMiddleware
+        )
+      : mainMiddleware;
 
     return Promise.resolve(wrappedMiddleware(ctx, async () => Middleware.resolveResult(ctx, null)))
       .then(res => Middleware.resolveResult(ctx, res))
-      .then(({ response }): void => {
-        if (response === null) {
-          throw new HttpError.ServerDidNotRespond();
-        }
-        if (response instanceof Response === false) {
-          throw new HttpError.Internal(`The returned response is not valid (does not inherit the Response class)`);
-        }
-        sendResponse(response, res, request);
-      })
-      .catch((err): void => {
-        const errorResponse = Response.fromError(err);
-        if (res.headersSent) {
-          res.end(`Error ${errorResponse.code}: ${errorResponse.body}`);
-          return;
-        }
-        return sendResponse(errorResponse, res, request);
+      .then(result => {
+        sendResponseAny(result.response, res, request);
       })
       .catch((err): void => {
         // fatal
         console.error(err);
-        res.end();
+        if (!res.finished) {
+          res.end();
+        }
       });
   }
 
-  function sendResponse(response: Response, res: http.ServerResponse, request: Request): void {
+  function sendResponseAny(response: any, res: http.ServerResponse, request: Request): void {
     if (res.finished) {
       throw new Error('Response finished ?');
     }
     if (res.headersSent) {
       throw new Error('Header already sent !');
     }
+    if (response === null) {
+      throw new Error('Response is null');
+    }
+    if (response instanceof Response === false) {
+      throw new Error('The returned response is not valid (does not inherit the Response class)');
+    }
+
+    return sendResponse(response, res, request);
+  }
+
+  function sendResponse(response: Response, res: http.ServerResponse, request: Request): void {
     const headers: OutgoingHttpHeaders = {
       ...response.headers,
     };

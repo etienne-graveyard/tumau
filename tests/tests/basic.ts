@@ -95,7 +95,7 @@ describe('Server', () => {
     `);
   });
 
-  test('throw return an error', async () => {
+  test('throw HttpError return an error', async () => {
     const app = Server.create(() => {
       throw new HttpError.NotFound();
     });
@@ -107,5 +107,19 @@ describe('Server', () => {
       Transfer-Encoding: chunked
     `);
     expect(await BodyResponse.asText(res)).toEqual('Not Found');
+  });
+
+  test('throw return an error', async () => {
+    const app = Server.create(() => {
+      throw new Error('Opps');
+    });
+    const res = await runTumauRequest(app, new Request());
+    expect(res).toMatchInlineSnapshot(`
+      HTTP/1.1 500 Internal Server Error
+      Connection: close
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+      Transfer-Encoding: chunked
+    `);
+    expect(await BodyResponse.asText(res)).toEqual('Internal Server Error: Opps');
   });
 });

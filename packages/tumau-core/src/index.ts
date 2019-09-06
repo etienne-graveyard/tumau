@@ -7,3 +7,5 @@ export { Middleware, Middlewares, Next, Result, ResultSync } from './Middleware'
 export { Request } from './Request';
 export { Response, Body } from './Response';
 export { Server } from './Server';
+export { HandleInvalidResponse } from './HandleInvalidResponse';
+export { HandleErrors } from './HandleErrors';
