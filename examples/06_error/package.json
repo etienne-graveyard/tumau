@@ -1,6 +1,6 @@
 {
   "name": "@tumau/example-error",
-  "version": "1.0.0-alpha.20",
+  "version": "1.0.0-alpha.21",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,9 +11,9 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.20",
-    "@tumau/json": "^1.0.0-alpha.20",
-    "@tumau/router": "^1.0.0-alpha.20"
+    "@tumau/core": "^1.0.0-alpha.21",
+    "@tumau/json": "^1.0.0-alpha.21",
+    "@tumau/router": "^1.0.0-alpha.21"
   },
   "devDependencies": {
     "ts-node": "^8.3.0",
