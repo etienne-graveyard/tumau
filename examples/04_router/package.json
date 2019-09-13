@@ -1,6 +1,6 @@
 {
   "name": "@tumau/example-url-parser",
-  "version": "1.0.0-alpha.21",
+  "version": "1.0.0-alpha.22",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,9 +11,9 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.21",
-    "@tumau/router": "^1.0.0-alpha.21",
-    "@tumau/url-parser": "^1.0.0-alpha.21"
+    "@tumau/core": "^1.0.0-alpha.22",
+    "@tumau/router": "^1.0.0-alpha.22",
+    "@tumau/url-parser": "^1.0.0-alpha.22"
   },
   "devDependencies": {
     "ts-node": "^8.3.0",
