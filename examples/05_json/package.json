@@ -1,6 +1,6 @@
 {
   "name": "@tumau/example-json",
-  "version": "1.0.0-alpha.22",
+  "version": "1.0.0-alpha.23",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -10,8 +10,8 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.22",
-    "@tumau/json": "^1.0.0-alpha.22"
+    "@tumau/core": "^1.0.0-alpha.23",
+    "@tumau/json": "^1.0.0-alpha.23"
   },
   "devDependencies": {
     "ts-node": "^8.3.0"
