@@ -3,8 +3,7 @@ import { Router, RouterCtx, Route, Routes } from '@tumau/router';
 
 interface Ctx extends BaseContext, RouterCtx {}
 
-const render = (content: string) => `
-<!DOCTYPE html>
+const render = (content: string) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -27,8 +26,7 @@ const render = (content: string) => `
     <a href="/next/demo">/next/demo</a><br />
     <p>${content}</p>
   </body>
-</html>
-`;
+</html>`;
 
 const logRoute: Middleware<Ctx> = (ctx, next) => {
   console.log(ctx.parsedUrl && ctx.parsedUrl.pathname);
@@ -37,33 +35,33 @@ const logRoute: Middleware<Ctx> = (ctx, next) => {
 
 const ROUTES: Routes<Ctx> = [
   Route.GET('/', logRoute, () => {
-    return Response.withText(render('Home'));
+    return Response.withHtml(render('Home'));
   }),
   Route.create({ pattern: '/group', exact: false }, logRoute, [
     Route.GET('/1', () => {
-      return Response.withText(render('Group 1'));
+      return Response.withHtml(render('Group 1'));
     }),
     Route.GET('/2', () => {
-      return Response.withText(render('Group 1'));
+      return Response.withHtml(render('Group 1'));
     }),
     Route.GET('/3', () => {
-      return Response.withText(render('Group 1'));
+      return Response.withHtml(render('Group 1'));
     }),
   ]),
   Route.namespace('/foo', [
     Route.GET('/bar', logRoute, () => {
-      return Response.withText(render('Baaaaar'));
+      return Response.withHtml(render('Baaaaar'));
     }),
-    Route.GET(null, () => Response.withText(render('foo Not found'))),
-    Route.POST(null, () => Response.withText(render('foo Not found'))),
+    Route.GET(null, () => Response.withHtml(render('foo Not found'))),
+    Route.POST(null, () => Response.withHtml(render('foo Not found'))),
     Route.create({ method: [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT] }, () =>
-      Response.withText(render('foo Not found'))
+      Response.withHtml(render('foo Not found'))
     ),
   ]),
   Route.GET('/search', ctx => {
     const searchQuery = ctx.parsedUrl && ctx.parsedUrl.query && ctx.parsedUrl.query.q;
     if (searchQuery) {
-      return Response.withText(render(`Search page for "${searchQuery}"`));
+      return Response.withHtml(render(`Search page for "${searchQuery}"`));
     }
     // oops not a real match (return no response === act like this the route didn't match in the first place)
     return null;
@@ -72,7 +70,7 @@ const ROUTES: Routes<Ctx> = [
     // calling next in a route call the middleware after the route
     return next(ctx);
   }),
-  Route.GET(null, () => Response.withText(render('Not found'))),
+  Route.GET(null, () => Response.withHtml(render('Not found'))),
   Route.create({ pattern: '/all' }, () => null),
 ];
 
@@ -84,7 +82,7 @@ const server = Server.create<Ctx>(
       const pattern = ctx.router && ctx.router.pattern;
       const params = ctx.router && ctx.router.params && ctx.router.params.wild;
 
-      return Response.withText(render(`Next was called on ${pattern} with ${params}`));
+      return Response.withHtml(render(`Next was called on ${pattern} with ${params}`));
     }
   )
 );

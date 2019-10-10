@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs"
+    "module": "commonjs",
+    "noImplicitAny": false
   },
-  "include": ["src"],
+  "include": ["index.ts"],
   "exclude": ["node_modules"]
 }

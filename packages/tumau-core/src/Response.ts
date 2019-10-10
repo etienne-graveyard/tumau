@@ -34,6 +34,16 @@ export class Response {
     });
   }
 
+  public static withHtml(html: string) {
+    return new Response({
+      body: html,
+      headers: {
+        [HttpHeaders.ContentLength]: html.length,
+        [HttpHeaders.ContentType]: [ContentType.Html, ContentTypeCharset.Utf8].join('; '),
+      },
+    });
+  }
+
   public static withStream(stream: Readable, size: number) {
     return new Response({
       body: stream,
