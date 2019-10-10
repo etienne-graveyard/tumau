@@ -1,4 +1,4 @@
-# @tumau/example-content-encoding (private)
+# @tumau/redirect (private)
 
 ## Tumau
 
