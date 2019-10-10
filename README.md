@@ -94,7 +94,8 @@ const myMiddleware = async (ctx, next) => {
 
 ### `next`
 
-The `next` function is always async (it return a Promise) and return an object with two keys:
+The `next` function is always async (it return a Promise).
+It take one parameter: the `Context` and return a Promise of an object with two keys:
 
 - `ctx`: the context returned by the middleware
 - `response`: the response returned by the middleware or null
