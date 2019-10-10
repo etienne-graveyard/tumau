@@ -5,6 +5,7 @@ export const HttpHeaders = {
   AcceptEncoding: 'accept-encoding' as const,
   AccessControlAllowOrigin: 'access-control-allow-origin' as const,
   AccessControlAllowHeaders: 'access-control-allow-headers' as const,
+  Location: 'location' as const,
   Origin: 'origin' as const,
 };
 

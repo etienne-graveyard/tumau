@@ -44,6 +44,15 @@ export class Response {
     });
   }
 
+  public static redirect(to: string, permanent: boolean = false) {
+    return new Response({
+      code: permanent ? 301 : 302,
+      headers: {
+        [HttpHeaders.Location]: to,
+      },
+    });
+  }
+
   public static withStream(stream: Readable, size: number) {
     return new Response({
       body: stream,
