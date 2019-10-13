@@ -3,6 +3,6 @@
   "compilerOptions": {
     "module": "commonjs"
   },
-  "include": ["src"],
+  "include": ["index.ts"],
   "exclude": ["node_modules"]
 }
