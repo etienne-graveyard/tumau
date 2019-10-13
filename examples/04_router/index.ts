@@ -38,8 +38,9 @@ const ROUTES: Routes<Ctx> = [
     return Response.withHtml(render('Home'));
   }),
   Route.create({ pattern: '/group', exact: false }, logRoute, [
-    Route.GET('/1', () => {
-      return Response.withHtml(render('Group 1'));
+    Route.GET('/1', async () => {
+      return null;
+      // return Response.withHtml(render('Group 1'));
     }),
     Route.GET('/2', () => {
       return Response.withHtml(render('Group 1'));
@@ -48,6 +49,10 @@ const ROUTES: Routes<Ctx> = [
       return Response.withHtml(render('Group 1'));
     }),
   ]),
+  Route.GET('/group/1', async (ctx, next) => {
+    await next(ctx);
+    return Response.withHtml(render('Yayyyy'));
+  }),
   Route.namespace('/foo', [
     Route.GET('/bar', logRoute, () => {
       return Response.withHtml(render('Baaaaar'));
@@ -63,7 +68,7 @@ const ROUTES: Routes<Ctx> = [
     if (searchQuery) {
       return Response.withHtml(render(`Search page for "${searchQuery}"`));
     }
-    // oops not a real match (return no response === act like this the route didn't match in the first place)
+    // oops not a real match (return no response => act like this the route didn't match in the first place)
     return null;
   }),
   Route.GET('/next/*?', (ctx, next) => {
