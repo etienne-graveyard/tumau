@@ -4,9 +4,7 @@ import { UrlParserCtx, UrlParser } from '@tumau/url-parser';
 interface Ctx extends BaseContext, UrlParserCtx {}
 
 const main: Middleware<Ctx> = ctx => {
-  return Response.create({
-    body: JSON.stringify(ctx.parsedUrl),
-  });
+  return Response.withText(JSON.stringify(ctx.parsedUrl));
 };
 
 const server = Server.create<Ctx>(
