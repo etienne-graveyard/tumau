@@ -11,7 +11,7 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 ## Gist
 
 ```ts
-import { Server, Response, RequestContext } from '@tumau/core';
+import { Server, Response, RequestContext } from 'tumau';
 
 const server = Server.create(ctx => {
   const request = ctx.get(RequestContext);
@@ -33,16 +33,22 @@ server.listen(3002, () => {
 ## Install
 
 ```bash
-$ npm install @tumau/core
+# npm
+npm install tumau
+
+# yarn
+yarn add tumau
 ```
 
-## What about routing, json & other ?
+## Packages
 
-Take a look at:
+The `tumau` package is a proxi for different packages:
 
+- [`@tumau/core`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-core)
 - [`@tumau/url-parser`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-url-parser) for parsing url (pathname, query...)
 - [`@tumau/router`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-router) for routing (it uses `@tumau/url-parser` for url parsing)
 - [`@tumau/json`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-json) for parsing / sending JSON
+- [`@tumau/compress`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-compress) for Brotli / GZip / Deflate compression
 
 ## Overview
 
@@ -63,7 +69,7 @@ A middleware can stop the chain and return a response. In that case the next mid
 In tumau the context a way to share data between middleware.
 
 ```js
-import { Context, Server, Middleware } from '@tumau/core';
+import { Context, Server, Middleware } from 'tumau';
 
 // first let's create a context
 const NumContext = Context.create(7); // 7 is the default value (optionnal)
@@ -183,7 +189,7 @@ const middleware = (ctx, next) => {
 The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `Middleware.compose`:
 
 ```js
-import { Middleware } from '@tumau/core';
+import { Middleware } from 'tumau';
 
 const composed = Middleware.compose(
   logger,
@@ -196,7 +202,7 @@ const server = Server.create(composed);
 
 **Note**: Middlewares are executed in the order they are passed to `compose`. In the example above: `logger`, then `cors`, then `main` (then the reverse order on the way up).
 
-## TypeScript Example
+## More Examples
 
 Take a look a the [Examples](./tree/master/examples) folder !
 
