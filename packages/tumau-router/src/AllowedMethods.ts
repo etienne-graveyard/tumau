@@ -1,4 +1,4 @@
-import { Middleware, HttpMethod, Response, ALL_HTTP_METHODS, RequestContext } from '@tumau/core';
+import { Middleware, HttpMethod, Response, RequestContext } from '@tumau/core';
 import { Routes, Route } from './Route';
 import { UrlParserContext } from '@tumau/url-parser';
 import { RouterAllowedMethodsContext } from './RouterContext';
@@ -28,8 +28,8 @@ export function AllowedMethods(routes: Routes): Middleware {
       return acc;
     }, new Set<HttpMethod>());
 
-    const result = await next(ctx.set(RouterAllowedMethodsContext.provide(allowedMethods)));
-    const methods = allowedMethods || ALL_HTTP_METHODS;
+    const methods = allowedMethods || HttpMethod.__ALL;
+    const result = await next(ctx.set(RouterAllowedMethodsContext.provide(methods)));
     const allowHeaderContent = Array.from(methods.values()).join(',');
     let response = result || new Response({ code: 204 });
     response = {

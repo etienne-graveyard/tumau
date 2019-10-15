@@ -1,0 +1,20 @@
+{
+  "name": "@tumau-example/router",
+  "version": "1.0.0-alpha.24",
+  "private": true,
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev ./index.ts",
+    "start": "ts-node ./index.ts"
+  },
+  "dependencies": {
+    "tumau": "^1.0.0-alpha.24"
+  },
+  "devDependencies": {
+    "ts-node": "^8.3.0",
+    "ts-node-dev": "^1.0.0-pre.42"
+  }
+}

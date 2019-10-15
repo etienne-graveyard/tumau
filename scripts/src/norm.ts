@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as fse from 'fs-extra';
 import { saveFile } from './utils/saveFile';
 import * as sortPackageJson from 'sort-package-json';
@@ -20,6 +21,14 @@ async function normPackageJson() {
       pkg[key] = rootPkg[key];
     }
   });
+  const examplesFolder = path.resolve(process.env.LERNA_ROOT_PATH || '', 'examples');
+  const isExample = pkgPath.startsWith(examplesFolder + '/');
+  if (isExample) {
+    const folder = path.basename(path.dirname(pkgPath));
+    const packageName = `@tumau-example/${folder}`;
+    pkg.name = packageName;
+  }
+
   await saveFile(pkgPath, JSON.stringify((sortPackageJson as any)(pkg)));
   return pkg;
 }

@@ -21,6 +21,13 @@
     "build": "rimraf ./dist && tsdx build --target node",
     "start": "tsdx watch --target node"
   },
+  "dependencies": {
+    "@tumau/compress": "^1.0.0-alpha.24",
+    "@tumau/core": "^1.0.0-alpha.24",
+    "@tumau/json": "^1.0.0-alpha.24",
+    "@tumau/router": "^1.0.0-alpha.24",
+    "@tumau/url-parser": "^1.0.0-alpha.24"
+  },
   "devDependencies": {
     "rimraf": "^3.0.0",
     "tsdx": "^0.9.2"

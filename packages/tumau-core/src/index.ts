@@ -1,6 +1,6 @@
 export { HttpError } from './HttpError';
 export { HttpHeaders, ContentEncoding, ContentType } from './HttpHeaders';
-export { HttpMethod, ALL_HTTP_METHODS } from './HttpMethod';
+export { HttpMethod } from './HttpMethod';
 export { HttpStatus, HttpStatusCode, HttpStatusMessage } from './HttpStatus';
 export { Middleware, Middlewares, Result, ResultSync } from './Middleware';
 export { Request } from './Request';
