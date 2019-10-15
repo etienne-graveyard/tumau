@@ -1,41 +1,39 @@
 import { Middleware, HttpMethod } from '@tumau/core';
-import { RouterCtx, Params } from './RouterCtx';
+import { Params } from './RouterContext';
 import { RouteToRegexp } from './RouteToRegexp';
 
 const ROUTE_TOKEN = Symbol('ROUTE_TOKEN');
 
 type Method = null | HttpMethod | Array<HttpMethod>;
 
-export interface Route<Ctx extends RouterCtx> {
+export interface Route {
   [ROUTE_TOKEN]: true;
   pattern: string | null;
   exact: boolean;
-  middleware: Array<Middleware<Ctx>>;
+  middleware: Array<Middleware>;
   method: Method;
-  children: Array<Route<Ctx>>;
+  children: Array<Route>;
 }
 
-export interface RouteResolved<Ctx extends RouterCtx> {
+export interface RouteResolved {
   [ROUTE_TOKEN]: true;
   pattern: string | null;
   exact: boolean;
-  middleware: null | Middleware<Ctx>;
+  middleware: null | Middleware;
   method: Method;
-  children: Array<Route<Ctx>>;
+  children: Array<Route>;
 }
 
-export type Routes<Ctx extends RouterCtx> = Array<Route<Ctx>>;
+export type Routes = Array<Route>;
 
-export interface FindResult<Ctx extends RouterCtx> {
+export interface FindResult {
   params: Params;
-  route: RouteResolved<Ctx>;
+  route: RouteResolved;
   index: number;
 }
 
-const withMethod = (method: Method) => <Ctx extends RouterCtx>(
-  pattern: string | null,
-  ...middleware: Array<Middleware<Ctx>>
-) => createRoute({ method, pattern }, middleware);
+const withMethod = (method: Method) => (pattern: string | null, ...middleware: Array<Middleware>) =>
+  createRoute({ method, pattern }, middleware);
 
 export const Route = {
   flatten: flattenAllRoutes,
@@ -47,7 +45,7 @@ export const Route = {
   DELETE: withMethod(HttpMethod.DELETE),
   PATCH: withMethod(HttpMethod.PATCH),
   all: withMethod(HttpMethod.PATCH),
-  namespace: <Ctx extends RouterCtx>(pattern: string | null, routes: Routes<Ctx>) =>
+  namespace: (pattern: string | null, routes: Routes) =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
 };
 
@@ -57,11 +55,11 @@ interface RouteOptions {
   exact?: boolean;
 }
 
-function createRoute<Ctx extends RouterCtx>(
+function createRoute(
   options: RouteOptions,
-  middleware: null | Middleware<Ctx> | Array<Middleware<Ctx>>,
-  children: Routes<Ctx> = []
-): Route<Ctx> {
+  middleware: null | Middleware | Array<Middleware>,
+  children: Routes = []
+): Route {
   const { exact = true, method = null, pattern = null } = options;
   return {
     [ROUTE_TOKEN]: true,
@@ -73,9 +71,7 @@ function createRoute<Ctx extends RouterCtx>(
   };
 }
 
-function resolveMiddleware<Ctx extends RouterCtx>(
-  middleware: null | Middleware<Ctx> | Array<Middleware<Ctx>>
-): Array<Middleware<Ctx>> {
+function resolveMiddleware(middleware: null | Middleware | Array<Middleware>): Array<Middleware> {
   if (middleware === null) {
     return [];
   }
@@ -85,9 +81,9 @@ function resolveMiddleware<Ctx extends RouterCtx>(
   return [middleware];
 }
 
-function find<Ctx extends RouterCtx>(routes: Array<RouteResolved<Ctx>>, pathname: string): Array<FindResult<Ctx>> {
+function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult> {
   return routes
-    .map((route, index): FindResult<Ctx> | false => {
+    .map((route, index): FindResult | false => {
       if (route.pattern === null) {
         return {
           params: {},
@@ -120,12 +116,12 @@ function find<Ctx extends RouterCtx>(routes: Array<RouteResolved<Ctx>>, pathname
       }
       return false;
     })
-    .filter((result: FindResult<Ctx> | false): result is FindResult<Ctx> => {
+    .filter((result: FindResult | false): result is FindResult => {
       return result !== false;
     });
 }
 
-function flattenAllRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Array<RouteResolved<Ctx>> {
+function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
   const flat = flattenRoutes(routes);
   return flat.map(route => {
     return {
@@ -138,15 +134,15 @@ function flattenAllRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Array<Rou
 /**
  * Flatten routes
  */
-function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Array<Route<Ctx>> {
-  function flattenSingle(route: Route<Ctx>): Routes<Ctx> {
+function flattenRoutes(routes: Routes): Array<Route> {
+  function flattenSingle(route: Route): Routes {
     if (route.children.length === 0) {
       return [route];
     }
     const parentMiddleware = route.middleware;
     return flattenRoutes(
       route.children
-        .map((childRoute): Route<Ctx> | null => {
+        .map((childRoute): Route | null => {
           const middlewares = [...parentMiddleware, ...childRoute.middleware];
           const patterns = [route.pattern, childRoute.pattern];
           if (childRoute.pattern && route.exact) {
@@ -164,12 +160,12 @@ function flattenRoutes<Ctx extends RouterCtx>(routes: Routes<Ctx>): Array<Route<
           });
           return createRoute({ pattern, exact, method }, middlewares, childRoute.children);
         })
-        .filter((r: Route<Ctx> | null): r is Route<Ctx> => r !== null)
+        .filter((r: Route | null): r is Route => r !== null)
     );
   }
 
   return routes
-    .reduce<Routes<Ctx>>((acc, route) => {
+    .reduce<Routes>((acc, route) => {
       acc.push(...flattenSingle(route));
       return acc;
     }, [])

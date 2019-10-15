@@ -1,7 +1,6 @@
-import { Server, BaseContext, Response, Middleware, HttpMethod } from '@tumau/core';
-import { Router, RouterCtx, Route, Routes } from '@tumau/router';
-
-interface Ctx extends BaseContext, RouterCtx {}
+import { Server, Response, Middleware, HttpMethod } from '@tumau/core';
+import { Router, Route, Routes, RouterContext } from '@tumau/router';
+import { UrlParserContext } from '@tumau/url-parser';
 
 const render = (content: string) => `<!DOCTYPE html>
 <html lang="en">
@@ -15,7 +14,7 @@ const render = (content: string) => `<!DOCTYPE html>
     <a href="/">/</a><br />
     <a href="/group/1">/group/1</a><br />
     <a href="/group/2">/group/2</a><br />
-    <a href="/group/3">/group/3</a><br />
+    <a href="/group/skip">/group/skip</a><br />
     <a href="/foo">/foo</a><br />
     <a href="/foo/">/foo/</a><br />
     <a href="/foo/bar">/foo/bar</a><br />
@@ -28,43 +27,45 @@ const render = (content: string) => `<!DOCTYPE html>
   </body>
 </html>`;
 
-const logRoute: Middleware<Ctx> = (ctx, next) => {
-  console.log(ctx.parsedUrl && ctx.parsedUrl.pathname);
+const logRoute: Middleware = (ctx, next) => {
+  const parsedUrl = ctx.get(UrlParserContext);
+  console.log(parsedUrl && parsedUrl.pathname);
   return next(ctx);
 };
 
-const ROUTES: Routes<Ctx> = [
+const ROUTES: Routes = [
   Route.GET('/', logRoute, () => {
     return Response.withHtml(render('Home'));
   }),
   Route.create({ pattern: '/group', exact: false }, logRoute, [
-    Route.GET('/1', async () => {
+    Route.GET('/skip', async () => {
+      // return null will skip the route
       return null;
-      // return Response.withHtml(render('Group 1'));
+    }),
+    Route.GET('/1', () => {
+      return Response.withHtml(render('Group 1'));
     }),
     Route.GET('/2', () => {
-      return Response.withHtml(render('Group 1'));
-    }),
-    Route.GET('/3', () => {
-      return Response.withHtml(render('Group 1'));
+      return Response.withHtml(render('Group 2'));
     }),
   ]),
-  Route.GET('/group/1', async (ctx, next) => {
+  Route.GET('/group/skip', async (ctx, next) => {
     await next(ctx);
-    return Response.withHtml(render('Yayyyy'));
+    return Response.withHtml(render('Group skiped !'));
   }),
   Route.namespace('/foo', [
     Route.GET('/bar', logRoute, () => {
       return Response.withHtml(render('Baaaaar'));
     }),
-    Route.GET(null, () => Response.withHtml(render('foo Not found'))),
-    Route.POST(null, () => Response.withHtml(render('foo Not found'))),
+    Route.GET(null, () => Response.withHtml(render('GET on /foo Not found'))),
+    Route.POST(null, () => Response.withHtml(render('POST on /foo Not found'))),
     Route.create({ method: [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT] }, () =>
       Response.withHtml(render('foo Not found'))
     ),
   ]),
   Route.GET('/search', ctx => {
-    const searchQuery = ctx.parsedUrl && ctx.parsedUrl.query && ctx.parsedUrl.query.q;
+    const parsedUrl = ctx.getOrThrow(UrlParserContext);
+    const searchQuery = parsedUrl && parsedUrl.query && parsedUrl.query.q;
     if (searchQuery) {
       return Response.withHtml(render(`Search page for "${searchQuery}"`));
     }
@@ -79,13 +80,14 @@ const ROUTES: Routes<Ctx> = [
   Route.create({ pattern: '/all' }, () => null),
 ];
 
-const server = Server.create<Ctx>(
+const server = Server.create(
   Middleware.compose(
     Router(ROUTES),
     // this middleware is executed if next is called inside a route middleware
     ctx => {
-      const pattern = ctx.router && ctx.router.pattern;
-      const params = ctx.router && ctx.router.params && ctx.router.params.wild;
+      const router = ctx.get(RouterContext);
+      const pattern = router && router.pattern;
+      const params = router && router.params && router.params.wild;
 
       return Response.withHtml(render(`Next was called on ${pattern} with ${params}`));
     }

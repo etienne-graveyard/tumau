@@ -1,9 +1,7 @@
-import { Server, BaseContext, Middleware, HttpError } from '@tumau/core';
-import { JsonParserCtx, JsonPackage } from '@tumau/json';
+import { Server, Middleware, HttpError } from '@tumau/core';
+import { JsonPackage } from '@tumau/json';
 
-interface Ctx extends BaseContext, JsonParserCtx {}
-
-const server = Server.create<Ctx>(
+const server = Server.create(
   Middleware.compose(
     JsonPackage(),
     () => {

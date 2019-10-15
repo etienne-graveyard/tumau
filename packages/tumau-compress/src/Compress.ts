@@ -1,52 +1,57 @@
-import { Middleware, ResultSync, HttpHeaders, ContentEncoding } from '@tumau/core';
-import { CompressCtx, Encoding } from './CompressCtx';
+import { Middleware, HttpHeaders, ContentEncoding, ResultSync, RequestContext } from '@tumau/core';
+import { CompressContext, Encoding } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 
-export function Compress<Ctx extends CompressCtx>(): Middleware<Ctx> {
-  return async (ctx, next): Promise<ResultSync<Ctx>> => {
-    const acceptedEncodingHeader = ctx.request.headers[HttpHeaders.AcceptEncoding];
-    const acceptedEncoding =
+export function Compress(): Middleware {
+  return async (ctx, next): Promise<ResultSync> => {
+    const request = ctx.get(RequestContext);
+    const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];
+    const acceptedEncoding: Array<Encoding> =
       typeof acceptedEncodingHeader === 'string'
-        ? acceptedEncodingHeader.split(/, ?/)
+        ? (acceptedEncodingHeader.split(/, ?/) as any)
         : Array.isArray(acceptedEncodingHeader)
         ? acceptedEncodingHeader
-        : ContentEncoding.Identity;
+        : [ContentEncoding.Identity];
 
-    const nextCtx: Ctx = {
-      ...ctx,
-      compress: {
-        acceptedEncoding,
-        usedEncoding: null,
-      },
+    const compressCtx = {
+      acceptedEncoding,
+      usedEncoding: null,
     };
+
+    const nextCtx = ctx.set(CompressContext.provide(compressCtx));
     // we allow next middleware to change what acceptedEncoding are accepted
-    const { response, ctx: endCtx } = await next(nextCtx);
+    const response = await next(nextCtx);
     if (response === null) {
       // no response = do nothing
-      return { response, ctx: endCtx };
+      return response;
     }
-    const endAccepted = endCtx.compress ? endCtx.compress.acceptedEncoding : acceptedEncoding;
 
     const usedEncoding: Array<Encoding> = (() => {
-      if (endAccepted.indexOf(ContentEncoding.Brotli) >= 0) {
+      if (compressCtx.acceptedEncoding.indexOf(ContentEncoding.Brotli) >= 0) {
         return [ContentEncoding.Brotli];
       }
-      if (endAccepted.indexOf(ContentEncoding.Gzip) >= 0) {
+      if (compressCtx.acceptedEncoding.indexOf(ContentEncoding.Gzip) >= 0) {
         return [ContentEncoding.Gzip];
       }
-      if (endAccepted.indexOf(ContentEncoding.Deflate) >= 0) {
+      if (compressCtx.acceptedEncoding.indexOf(ContentEncoding.Deflate) >= 0) {
         return [ContentEncoding.Deflate];
       }
       return [ContentEncoding.Identity];
     })();
-    const returedCtx: Ctx = {
-      ...endCtx,
-      compress: {
-        ...endCtx.compress,
-        usedEncoding,
-      },
-    };
+
+    // const doneCtx = ctx.set(CompressContext.provide({
+    //   ...compressCtx,
+    //   usedEncoding,
+    // }))
+
+    // const returedCtx: Ctx = {
+    //   ...endCtx,
+    //   compress: {
+    //     ...endCtx.compress,
+    //     usedEncoding,
+    //   },
+    // };
     const compressResponse = new CompressResponse(response, usedEncoding);
-    return { response: compressResponse, ctx: returedCtx };
+    return compressResponse;
   };
 }

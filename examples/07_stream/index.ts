@@ -1,9 +1,10 @@
-import { Server, Response, HttpError, HttpHeaders, ContentType } from '@tumau/core';
+import { Server, Response, HttpError, HttpHeaders, ContentType, RequestContext } from '@tumau/core';
 import path from 'path';
 import fs from 'fs-extra';
 
 const server = Server.create(async ctx => {
-  if (ctx.request.url !== '/') {
+  const request = ctx.get(RequestContext);
+  if (request.url !== '/') {
     throw new HttpError.NotFound();
   }
   const filePath = path.resolve(__dirname, './demo.html');

@@ -2,23 +2,26 @@ import http, { OutgoingHttpHeaders } from 'http';
 import { Middleware } from './Middleware';
 import { Request } from './Request';
 import { Response } from './Response';
-import { BaseContext } from './BaseContext';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
 import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
 import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
+import { Context, ContextStack, ContextManager } from './Context';
+
+export const RequestContext = Context.create<Request>();
+
+export const ServerResponseContext = Context.create<http.ServerResponse>();
 
 export interface Server {
   httpServer: http.Server;
   listen(port: number, listeningListener?: () => void): Server;
 }
 
-interface Options<Ctx extends BaseContext> {
-  mainMiddleware: Middleware<Ctx>;
+interface Options {
+  mainMiddleware: Middleware;
   handleErrors?: boolean;
-  createInitialCtx?: (ctx: BaseContext) => Ctx;
   httpServer?: http.Server;
 }
 
@@ -26,9 +29,9 @@ export const Server = {
   create: createServer,
 };
 
-function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<Ctx>): Server {
+function createServer(opts: Middleware | Options): Server {
   const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
-  const { mainMiddleware, createInitialCtx = ((ctx: BaseContext) => ctx) as any, handleErrors = true } = options;
+  const { mainMiddleware, handleErrors = true } = options;
 
   const httpServer: http.Server = options.httpServer || http.createServer();
 
@@ -47,21 +50,24 @@ function createServer<Ctx extends BaseContext>(opts: Middleware<Ctx> | Options<C
 
   async function handler(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const request = await Request.create(req);
-    const baseCtx = await BaseContext.create(request, res);
-    const ctx = createInitialCtx(baseCtx);
 
-    const wrappedMiddleware: Middleware<Ctx> = handleErrors
-      ? Middleware.compose<Ctx>(
-          HandleErrors(),
-          HandleInvalidResponse(),
+    const requestCtx = RequestContext.provide(request);
+    const resCtx = ServerResponseContext.provide(res);
+
+    const wrappedMiddleware: Middleware = handleErrors
+      ? Middleware.compose(
+          HandleErrors,
+          HandleInvalidResponse,
           mainMiddleware
         )
       : mainMiddleware;
 
-    return Promise.resolve(wrappedMiddleware(ctx, async () => Middleware.resolveResult(ctx, null)))
-      .then(res => Middleware.resolveResult(ctx, res))
-      .then(result => {
-        sendResponseAny(result.response, res, request);
+    const rootStack = ContextStack.create(resCtx, requestCtx);
+    const rootContext = ContextManager.create(rootStack);
+
+    return Promise.resolve(wrappedMiddleware(rootContext, () => Promise.resolve(null)))
+      .then(response => {
+        sendResponseAny(response, res, request);
       })
       .catch((err): void => {
         // fatal

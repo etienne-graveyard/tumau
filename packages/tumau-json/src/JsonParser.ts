@@ -1,4 +1,13 @@
-import { Middleware, HttpMethod, HttpHeaders, ContentType, HttpError, BaseContext, ResultSync } from '@tumau/core';
+import {
+  Middleware,
+  HttpMethod,
+  HttpHeaders,
+  ContentType,
+  HttpError,
+  Context,
+  Response,
+  RequestContext,
+} from '@tumau/core';
 import { parseJsonBody } from './parseJsonBody';
 
 interface Options {
@@ -6,25 +15,21 @@ interface Options {
   limit?: number;
 }
 
-export interface JsonParserCtx extends BaseContext {
-  jsonBody?: object | null;
-}
+export const JsonParserContext = Context.create<object | null>();
 
-export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Middleware<Ctx> {
+export function JsonParser(options: Options = {}): Middleware {
   const _1mb = 1024 * 1024 * 1024;
   const { limit = _1mb } = options;
 
-  return async (ctx, next): Promise<ResultSync<Ctx>> => {
-    const headers = ctx.request.headers;
-    const noBodyNextCtx = {
-      ...ctx,
-      jsonBody: null,
-    };
+  return async (ctx, next): Promise<null | Response> => {
+    const request = ctx.getOrThrow(RequestContext);
+    const headers = request.headers;
+    const noBodyNextCtx = ctx.set(JsonParserContext.provide(null));
 
     if (
-      ctx.request.method === HttpMethod.GET ||
-      ctx.request.method === HttpMethod.DELETE ||
-      ctx.request.method === HttpMethod.OPTIONS
+      request.method === HttpMethod.GET ||
+      request.method === HttpMethod.DELETE ||
+      request.method === HttpMethod.OPTIONS
     ) {
       return next(noBodyNextCtx);
     }
@@ -53,10 +58,7 @@ export function JsonParser<Ctx extends JsonParserCtx>(options: Options = {}): Mi
     if (length !== null && length > limit) {
       throw new HttpError.PayloadTooLarge();
     }
-    const jsonBody = await parseJsonBody(ctx.request.req, limit, length);
-    return next({
-      ...ctx,
-      jsonBody,
-    });
+    const jsonBody = await parseJsonBody(request.req, limit, length);
+    return next(ctx.set(JsonParserContext.provide(jsonBody)));
   };
 }

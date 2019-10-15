@@ -1,5 +1,5 @@
 {
-  "name": "@tumau/example-url-parser",
+  "name": "@tumau/example-router",
   "version": "1.0.0-alpha.23",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",

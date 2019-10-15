@@ -1,26 +1,31 @@
-import { Middleware, Result, ResultSync } from '@tumau/core';
-import { RouterCtx } from './RouterCtx';
+import { Middleware, Response, RequestContext, Context } from '@tumau/core';
 import { Route, Routes } from './Route';
-import { notNill } from './utils';
+import { RouterContext } from './RouterContext';
+import { UrlParserContext } from '@tumau/url-parser';
+import {} from '@tumau/core';
 
 /**
  * Handle an array of routes
  */
-export function StandaloneRouter<Ctx extends RouterCtx>(routes: Routes<Ctx>): Middleware<Ctx> {
+export function StandaloneRouter(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (ctx, next): Promise<ResultSync<Ctx>> => {
-    if (ctx.router) {
+  return async (ctx, next): Promise<null | Response> => {
+    if (ctx.has(RouterContext)) {
       console.warn(
         [
           `Warning: Using a Router inside another Router will break 'Allow' header for OPTIONS request !`,
-          `If you want to group routes together you can use Route.namespace() or the low level Route.crete()`,
+          `If you want to group routes together you can use Route.namespace() or the low level Route.create()`,
         ].join('\n')
       );
     }
+
+    const routerCtx = ctx.get(RouterContext);
     // all matching routes
-    const matchingRoutesAllMethods = Route.find(flatRoutes, notNill(ctx.parsedUrl).pathname);
-    const requestMethod = ctx.request.method;
+    const parsedUrl = ctx.getOrThrow(UrlParserContext);
+    const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
+    const request = ctx.getOrThrow(RequestContext);
+    const requestMethod = request.method;
 
     const matchingRoutes = matchingRoutesAllMethods.filter(findResult => {
       const expectedMethod = findResult.route.method;
@@ -30,46 +35,43 @@ export function StandaloneRouter<Ctx extends RouterCtx>(routes: Routes<Ctx>): Mi
       return methodMatch;
     });
 
-    async function handleNext(index: number): Promise<Result<Ctx>> {
+    return handleNext(0, ctx);
+
+    async function handleNext(index: number, ctx: Context): Promise<null | Response> {
       const findResult = matchingRoutes[index] || null;
       const routeMiddleware = findResult ? findResult.route.middleware : null;
-      const pattern = findResult ? findResult.route.pattern : '';
-      const composedPattern = ctx.router ? ctx.router.pattern + pattern : pattern;
+      const pattern = findResult ? findResult.route.pattern || '' : '';
+      const composedPattern = routerCtx ? routerCtx.pattern + pattern : pattern;
 
-      const nextCtx: Ctx = {
-        ...ctx,
-        router: {
-          middleware: routeMiddleware,
-          pattern: composedPattern,
-          notFound: findResult === null,
-          params: findResult ? findResult.params : {},
-        },
+      const routerData: RouterContext = {
+        middleware: routeMiddleware,
+        pattern: composedPattern,
+        notFound: findResult === null,
+        params: findResult ? findResult.params : {},
       };
+
+      const withRouterCtx = ctx.set(RouterContext.provide(routerData));
 
       if (findResult === null) {
         // no more match, run next
-        return next(nextCtx);
+        return next(withRouterCtx);
       }
 
       if (findResult.route.middleware === null) {
-        return next(nextCtx);
+        return next(withRouterCtx);
       }
 
-      // found a match, run it's middleware
-      const res = await findResult.route.middleware(nextCtx, (ctx: RouterCtx) => {
-        return next(ctx as any);
+      const result = await findResult.route.middleware(withRouterCtx, nextCtx => {
+        return handleNext(index + 1, nextCtx);
       });
-      const result = Middleware.resolveResult(nextCtx, res);
 
       // If the match did not return a response handle the next match
-      if (result.response === null) {
-        return handleNext(index + 1);
+      if (result === null) {
+        return handleNext(index + 1, withRouterCtx);
       }
 
       // return the response
       return result;
     }
-
-    return handleNext(0);
   };
 }

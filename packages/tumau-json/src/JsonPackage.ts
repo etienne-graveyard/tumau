@@ -1,5 +1,5 @@
 import { Middleware } from '@tumau/core';
-import { JsonParserCtx, JsonParser } from './JsonParser';
+import { JsonParser } from './JsonParser';
 import { ErrorToJson } from './ErrorToJson';
 
 interface Options {
@@ -7,9 +7,9 @@ interface Options {
   limit?: number;
 }
 
-export function JsonPackage(options: Options = {}): Middleware<JsonParserCtx> {
+export function JsonPackage(options: Options = {}): Middleware {
   return Middleware.compose(
     JsonParser(options),
-    ErrorToJson()
+    ErrorToJson
   );
 }

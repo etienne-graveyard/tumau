@@ -1,9 +1,7 @@
-import { Server, BaseContext, Response, Middleware } from '@tumau/core';
-import { Router, RouterCtx, Route, Routes } from '@tumau/router';
+import { Server, Response, Middleware } from '@tumau/core';
+import { Router, Route, Routes } from '@tumau/router';
 
-interface Ctx extends BaseContext, RouterCtx {}
-
-const ROUTES: Routes<Ctx> = [
+const ROUTES: Routes = [
   Route.GET('/', () => {
     return Response.redirect('/hello');
   }),
@@ -12,7 +10,7 @@ const ROUTES: Routes<Ctx> = [
   }),
 ];
 
-const server = Server.create<Ctx>(Middleware.compose(Router(ROUTES)));
+const server = Server.create(Middleware.compose(Router(ROUTES)));
 
 server.listen(3002, () => {
   console.log(`Server is up at http://localhost:3002`);

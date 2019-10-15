@@ -1,14 +1,13 @@
-import { Server, BaseContext, Middleware } from '@tumau/core';
-import { JsonParserCtx, JsonParser, JsonResponse } from '@tumau/json';
+import { Server, Middleware } from '@tumau/core';
+import { JsonParser, JsonResponse, JsonParserContext } from '@tumau/json';
 
-interface Ctx extends BaseContext, JsonParserCtx {}
-
-const server = Server.create<Ctx>(
+const server = Server.create(
   Middleware.compose(
     JsonParser(),
     ctx => {
-      if (ctx.jsonBody) {
-        return JsonResponse.with({ you: '<- are here !', received: ctx.jsonBody });
+      const jsonBody = ctx.getOrThrow(JsonParserContext);
+      if (jsonBody) {
+        return JsonResponse.with({ you: '<- are here !', received: jsonBody });
       }
       return JsonResponse.with({ you: '<- are here !' });
     }

@@ -1,1 +1,1 @@
-export { ParsedUrl, UrlParserCtx, UrlParser } from './UrlParser';
+export { ParsedUrl, UrlParserContext, UrlParser } from './UrlParser';

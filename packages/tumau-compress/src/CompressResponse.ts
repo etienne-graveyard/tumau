@@ -1,5 +1,5 @@
 import { Response, Body, HttpHeaders, ContentEncoding } from '@tumau/core';
-import { Encoding } from './CompressCtx';
+import { Encoding } from './CompressContext';
 import { OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { StringStream } from './StringStream';

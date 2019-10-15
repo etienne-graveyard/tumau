@@ -1,5 +1,5 @@
 {
-  "name": "@tumau/example-url-parser",
+  "name": "@tumau/example-context",
   "version": "1.0.0-alpha.23",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
@@ -7,13 +7,14 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "scripts": {
+    "dev": "ts-node-dev ./index.ts",
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.23",
-    "@tumau/url-parser": "^1.0.0-alpha.23"
+    "@tumau/core": "^1.0.0-alpha.23"
   },
   "devDependencies": {
-    "ts-node": "^8.3.0"
+    "ts-node": "^8.3.0",
+    "ts-node-dev": "^1.0.0-pre.42"
   }
 }

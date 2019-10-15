@@ -1,17 +1,18 @@
-import { RouterCtx } from './RouterCtx';
-import { Middleware, HttpMethod, Response, ALL_HTTP_METHODS, ResultSync } from '@tumau/core';
+import { Middleware, HttpMethod, Response, ALL_HTTP_METHODS, RequestContext } from '@tumau/core';
 import { Routes, Route } from './Route';
-import { notNill } from './utils';
+import { UrlParserContext } from '@tumau/url-parser';
+import { RouterAllowedMethodsContext } from './RouterContext';
 
-export function AllowedMethods<Ctx extends RouterCtx>(routes: Routes<Ctx>): Middleware<Ctx> {
+export function AllowedMethods(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (ctx, next): Promise<ResultSync<Ctx>> => {
-    if (ctx.request.method !== HttpMethod.OPTIONS) {
+  return async (ctx, next): Promise<null | Response> => {
+    const request = ctx.getOrThrow(RequestContext);
+    if (request.method !== HttpMethod.OPTIONS) {
       return next(ctx);
     }
-
-    const matchingRoutesAllMethods = Route.find(flatRoutes, notNill(ctx.parsedUrl).pathname);
+    const parsedUrl = ctx.getOrThrow(UrlParserContext);
+    const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
 
     const allowedMethods = matchingRoutesAllMethods.reduce<Set<HttpMethod> | null>((acc, findResult) => {
       if (acc === null || findResult.route.method === null) {
@@ -27,19 +28,10 @@ export function AllowedMethods<Ctx extends RouterCtx>(routes: Routes<Ctx>): Midd
       return acc;
     }, new Set<HttpMethod>());
 
-    const ctxWithMethods: Ctx = {
-      ...ctx,
-      routerAllowedMethods: allowedMethods,
-    };
-
-    const result = await next(ctxWithMethods);
-    if (result.ctx.routerAllowedMethods === undefined) {
-      // for some reason our context has been removed
-      return result;
-    }
-    const methods = result.ctx.routerAllowedMethods || ALL_HTTP_METHODS;
+    const result = await next(ctx.set(RouterAllowedMethodsContext.provide(allowedMethods)));
+    const methods = allowedMethods || ALL_HTTP_METHODS;
     const allowHeaderContent = Array.from(methods.values()).join(',');
-    let response = result.response || new Response({ code: 204 });
+    let response = result || new Response({ code: 204 });
     response = {
       ...response,
       headers: {
@@ -48,9 +40,6 @@ export function AllowedMethods<Ctx extends RouterCtx>(routes: Routes<Ctx>): Midd
       },
     };
 
-    return {
-      ...result,
-      response,
-    };
+    return response;
   };
 }

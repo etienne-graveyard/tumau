@@ -11,10 +11,11 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 ## Gist
 
 ```ts
-import { Server, Response } from '@tumau/core';
+import { Server, Response, RequestContext } from '@tumau/core';
 
 const server = Server.create(ctx => {
-  return Response.withText(`Hello World ! (from ${ctx.request.url})`);
+  const request = ctx.get(RequestContext);
+  return Response.withText(`Hello World ! (from ${request.url})`);
 });
 
 server.listen(3002, () => {
@@ -59,13 +60,61 @@ A middleware can stop the chain and return a response. In that case the next mid
 
 ## The context (ctx)
 
-In tumau the context a an object passed between middleware to share data between them.
+In tumau the context a way to share data between middleware.
 
-**Note**: You should **NOT** mutate the context but rather create a copy where changes can be performed. This changed copy is passed to the next middleware.
+```js
+import { Context, Server, Middleware } from '@tumau/core';
+
+// first let's create a context
+const NumContext = Context.create(7); // 7 is the default value (optionnal)
+
+// middleware
+const myContextProvider = (ctx, next) => {
+  // we provide our context
+  const numProvider = NumContext.provide(42);
+  // we create a new ctx by calling ctx.set()
+  const nextCtx = ctx.set(numProvider);
+  // we call next with our new context
+  return next(nextCtx);
+};
+
+// middleware
+const myContextConsumer = (ctx, next) => {
+  const has = ctx.has(NumContext);
+  const num = ctx.get(NumContext); // get the value of the default if not provided
+  // if the context is required we could also call
+  // const num = ctx.getOrThrow(NumContext);
+  console.log({
+    has,
+    num,
+  });
+  return next(ctx);
+};
+
+const server = Server.create(
+  Middleware.compose(
+    myContextConsumer, // contex not there yet, will log { has: false, num: 7 } (7 is the default value)
+    myContextProvider,
+    myContextConsumer // logs { has: true, num: 42 }
+  )
+);
+
+server.listen(3002, () => {
+  console.log(`Server is up at http://localhost:3002`);
+});
+```
 
 ### For TypeScript users
 
-The type of the context is defined for the entire app (all the middleware). This make the typings simpler because the type system does not care about the order in which middleware are called. But it also mean that some part of the context might not be there yet !
+Contexts are typed when you create them:
+
+```ts
+// here we could omit <number> because it would be infered
+const NumCtx = Context.create<number>(0);
+
+// you can omit the default value
+const NameCtx = Context.create<string>();
+```
 
 ## Middleware
 
@@ -73,7 +122,11 @@ A middleare is a function that:
 
 - receives a context from the previous middleware
 - receives a `next` function that will execute the next middleware
-- can return a response
+- can return a response or null (or a promise of one of them)
+
+```ts
+type Middleware = (ctx: Context, next: Next) => null | Response | Promise<null | Response>;
+```
 
 <p align="center">
   <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-3.png" width="597">
@@ -82,12 +135,13 @@ A middleare is a function that:
 ```js
 const myMiddleware = async (ctx, next) => {
   // 1. Context from previous middleware
-  console.log(ctx);
+  // (you need to call call `ctx.get()`)
+  console.log(ctx); // { get, getOrThrow, set, has }
   // 2. We call `next` to call the next middleware
   const response = await next(ctx);
-  // 3. The next middleware return a result ({ response, ctx })
+  // 3. The next middleware return a response
   console.log(response);
-  // 4. We return something, in that case we return the result from the next middleware
+  // 4. We return that response
   return response;
 };
 ```
@@ -95,19 +149,11 @@ const myMiddleware = async (ctx, next) => {
 ### `next`
 
 The `next` function is always async (it return a Promise).
-It take one parameter: the `Context` and return a Promise of an object with two keys:
+It take one parameter: the `Context` and return a Promise of a Response or null
 
-- `ctx`: the context returned by the middleware
-- `response`: the response returned by the middleware or null
-
-### Return type of a middleware
-
-A middleware can return
-
-- `null`,
-- A valid `Response`
-- A object with `ctx` and `response` where `response` can be `null`
-- A Promise of any of the three above
+```ts
+type Next = (ctx: Context) => Promise<Response | null>;
+```
 
 ### Some examples
 
@@ -117,31 +163,18 @@ const middleware = () => Response.withText('Hello');
 
 // Return a response if the next middleware did not
 const middleware = async (ctx, next) => {
-  const { response } = await next(ctx);
+  const response = await next(ctx);
   if (response === null) {
     return Response.withText('Not found');
   }
   return response;
 };
 
-// Add a key to the context before calling the next middleware
+// Add a item to the context before calling the next middleware
 // return whatever the next middleware return
 const middleware = (ctx, next) => {
-  const nextCtx = {
-    ...ctx,
-    receivedAt: new Date(),
-  };
+  const nextCtx = ctx.set(ReceivedAtContext.provide(new Date()));
   return next(nextCtx);
-};
-
-// Add something to the context on the way up
-const middleware = async (ctx, next) => {
-  const result = await next(ctx);
-  const nextCtx = {
-    ...result.ctx,
-    responseSendAt: new Date(),
-  };
-  return { response: result.response, ctx: nextCtx };
 };
 ```
 
@@ -165,30 +198,7 @@ const server = Server.create(composed);
 
 ## TypeScript Example
 
-```ts
-import { Server, BaseContext, Response, Middleware } from '@tumau/core';
-import { UrlParserCtx, UrlParser } from '@tumau/url-parser';
-
-// Define the type of the Context of your app, you can add your own properties
-interface Ctx extends UrlParserCtx {}
-
-const main: Middleware<Ctx> = ctx => {
-  return Response.create({
-    body: JSON.stringify(ctx.parsedUrl),
-  });
-};
-
-const server = Server.create<Ctx>(
-  Middleware.compose(
-    UrlParser(),
-    main
-  )
-);
-
-server.listen(3002, () => {
-  console.log(`Server is up at http://localhost:3002/foo?bar=hey `);
-});
-```
+Take a look a the [Examples](./tree/master/examples) folder !
 
 ## Performance
 

@@ -1,3 +1,3 @@
 export { Compress } from './Compress';
-export { CompressCtx, Encoding } from './CompressCtx';
+export { CompressContext, Encoding } from './CompressContext';
 export { CompressResponse } from './CompressResponse';

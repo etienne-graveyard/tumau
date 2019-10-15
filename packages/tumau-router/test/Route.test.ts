@@ -1,7 +1,7 @@
 import { Route } from '../src';
 import { Middleware } from '@tumau/core';
 
-const noop: Middleware<any> = ctx => ({ ctx, response: null });
+const noop: Middleware = () => null;
 
 describe('flatten', () => {
   it('flatten a single route', () => {

@@ -25,12 +25,12 @@ function parseRoute(str: string, exact: boolean = true): ParseResult {
 
   let c: string,
     o: number,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tmp: any,
     ext: number,
-    keys = [],
-    pattern = '',
-    arr = str.split('/');
+    pattern = '';
+  const keys = [];
+  const arr = str.split('/');
+
   arr[0] || arr.shift();
 
   while ((tmp = arr.shift())) {

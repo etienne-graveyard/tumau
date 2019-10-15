@@ -1,62 +1,36 @@
-import { BaseContext } from './BaseContext';
 import { Response } from './Response';
+import { Context } from './Context';
 
-export interface ResultResolved<Ctx extends BaseContext> {
-  ctx: Ctx;
-  response: Response | null;
-}
+export type ResultSync = null | Response;
+export type Result = ResultSync | Promise<ResultSync>;
 
-export type ResultSync<Ctx extends BaseContext> = null | Response | ResultResolved<Ctx>;
+export type Middleware = (ctx: Context, next: (nextCtx: Context) => Promise<ResultSync>) => Result;
 
-export type Result<Ctx extends BaseContext> = null | Response | ResultResolved<Ctx> | Promise<ResultSync<Ctx>>;
-
-export type Next<Ctx extends BaseContext> = (nextCtx: Ctx) => Promise<ResultResolved<Ctx>>;
-
-export type Middleware<Ctx extends BaseContext> = (
-  ctx: Ctx,
-  next: Next<Ctx>
-) => null | Response | ResultResolved<Ctx> | Promise<ResultSync<Ctx>>;
-
-export type Middlewares<Ctx extends BaseContext> = Array<Middleware<Ctx>>;
+export type Middlewares = Array<Middleware>;
 
 export const Middleware = {
   compose,
-  resolveResult,
 };
 
-function resolveResult<Ctx extends BaseContext>(
-  prevCtx: Ctx,
-  result: null | Response | ResultResolved<Ctx>
-): ResultResolved<Ctx> {
-  if (result === null) {
-    return { ctx: prevCtx, response: null };
-  }
-  if (Response.isResponse(result)) {
-    return { ctx: prevCtx, response: result };
-  }
-  return result;
-}
-
-function compose<Ctx extends BaseContext>(...middlewares: Middlewares<Ctx>): Middleware<Ctx> {
-  return async function(inCtx, next): Promise<ResultResolved<Ctx>> {
+function compose(...middlewares: Middlewares): Middleware {
+  return async function(ctx, next): Promise<Response | null> {
     // last called middleware #
     let index = -1;
-    return dispatch(0, inCtx);
-    async function dispatch(i: number, tmpCtx: Ctx): Promise<ResultResolved<Ctx>> {
+    return dispatch(0, ctx);
+    async function dispatch(i: number, ctx: Context): Promise<Response | null> {
       if (i <= index) {
         return Promise.reject(new Error('next() called multiple times'));
       }
       index = i;
-      let fn = middlewares[i];
-      if (i === middlewares.length) {
-        fn = next;
+      const middle = middlewares[i];
+      if (!middle) {
+        return next(ctx);
       }
-      if (!fn) {
-        throw new Error('what ?');
-      }
-      const result: Result<Ctx> = fn(tmpCtx, dispatch.bind(null, i + 1));
-      const res = await Promise.resolve<null | Response | ResultResolved<Ctx>>(result);
-      return resolveResult(tmpCtx, res);
+      const result = middle(ctx, nextCtx => {
+        return dispatch(i + 1, nextCtx);
+      });
+      const res = await Promise.resolve<null | Response>(result);
+      return res;
     }
   };
 }

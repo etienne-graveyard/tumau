@@ -1,35 +1,31 @@
 import { parse as parseQueryString, ParsedUrlQuery } from 'querystring';
-import { BaseContext, Middleware } from '@tumau/core';
+import { Middleware, Context, RequestContext } from '@tumau/core';
 
 export interface ParsedUrl {
   query: null | ParsedUrlQuery;
-  body: object;
-  // parsed url
   search: null | string;
-  href: string;
   path: string;
   pathname: string;
   rawQuery: null | string;
 }
 
-export interface UrlParserCtx extends BaseContext {
-  parsedUrl?: ParsedUrl;
-}
+export const UrlParserContext = Context.create<ParsedUrl>();
 
-export function UrlParser<Ctx extends UrlParserCtx>(): Middleware<Ctx> {
+export function UrlParser(): Middleware {
   return (ctx, next) => {
-    const parsed = parseUrl(ctx.request.url);
-    const nextCtx: Ctx = {
-      ...ctx,
-      parsedUrl: {
-        path: parsed.path,
-        pathname: parsed.pathname,
-        rawQuery: parsed.query,
-        query: parsed.query ? parseQueryString(parsed.query) : null,
-        search: parsed.search,
-      },
+    if (ctx.has(RequestContext)) {
+      return next(ctx);
+    }
+    const request = ctx.get(RequestContext);
+    const parsedObj = parseUrl(request.url);
+    const parsed: ParsedUrl = {
+      path: parsedObj.path,
+      pathname: parsedObj.pathname,
+      rawQuery: parsedObj.query,
+      query: parsedObj.query ? parseQueryString(parsedObj.query) : null,
+      search: parsedObj.search,
     };
-    return next(nextCtx);
+    return next(ctx.set(UrlParserContext.provide(parsed)));
   };
 }
 
@@ -50,7 +46,7 @@ function parseUrl(url: string): ParsedUrlObj {
     pathname: url,
   };
 
-  let idx = url.indexOf('?', 1);
+  const idx = url.indexOf('?', 1);
   if (idx !== -1) {
     const search = url.substring(idx);
     obj.search = search;
