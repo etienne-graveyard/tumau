@@ -1,9 +1,9 @@
 import { IncomingMessage } from 'http';
 import { readStream } from './readStream';
-import { HttpHeaders, ContentEncoding } from '@tumau/core';
-import { Encoding } from '@tumau/compress';
 import { Readable } from 'stream';
 import zlib from 'zlib';
+
+export type Encoding = 'br' | 'gzip' | 'deflate';
 
 export const BodyResponse = {
   asText,
@@ -15,15 +15,15 @@ export const BodyResponse = {
 };
 
 async function fromGzip(res: IncomingMessage): Promise<string> {
-  return readStream(decodeBodyWithEncoding(res, ContentEncoding.Gzip));
+  return readStream(decodeBodyWithEncoding(res, 'gzip'));
 }
 
 async function fromBrotli(res: IncomingMessage): Promise<string> {
-  return readStream(decodeBodyWithEncoding(res, ContentEncoding.Brotli));
+  return readStream(decodeBodyWithEncoding(res, 'br'));
 }
 
 async function fromDeflate(res: IncomingMessage): Promise<string> {
-  return readStream(decodeBodyWithEncoding(res, ContentEncoding.Deflate));
+  return readStream(decodeBodyWithEncoding(res, 'deflate'));
 }
 
 async function fromJson(res: IncomingMessage): Promise<object> {
@@ -35,7 +35,7 @@ async function asText(res: IncomingMessage): Promise<string> {
   const limit = _1mb;
 
   const length = (() => {
-    const lengthStr = res.headers[HttpHeaders.ContentLength];
+    const lengthStr = res.headers['content-length'];
     if (lengthStr === undefined || Array.isArray(lengthStr)) {
       return null;
     }
@@ -50,13 +50,13 @@ async function asText(res: IncomingMessage): Promise<string> {
     return Promise.resolve('');
   }
 
-  const encodingHeader = res.headers[HttpHeaders.ContentEncoding];
+  const encodingHeader = res.headers['content-encoding'];
   const encoding: Array<Encoding> =
     typeof encodingHeader === 'string'
       ? (encodingHeader.split(/, ?/) as any)
       : Array.isArray(encodingHeader)
       ? encodingHeader
-      : [ContentEncoding.Identity];
+      : ['identity'];
 
   const decoded = decodeBodyWithEncodings(res, encoding);
   const str = await readStream(decoded, limit);
@@ -73,20 +73,20 @@ function decodeBodyWithEncodings(body: Readable, encodings: Array<Encoding>): Re
 }
 
 function decodeBodyWithEncoding(body: Readable, encoding: Encoding): Readable {
-  if (encoding === ContentEncoding.Brotli) {
+  if (encoding === 'br') {
     return body.pipe(zlib.createBrotliDecompress());
   }
-  if (encoding === ContentEncoding.Gzip) {
+  if (encoding === 'gzip') {
     return body.pipe(zlib.createGunzip());
   }
-  if (encoding === ContentEncoding.Deflate) {
+  if (encoding === 'deflate') {
     return body.pipe(zlib.createInflate());
   }
   return body;
 }
 
 async function isEmpty(res: IncomingMessage): Promise<boolean> {
-  const lengthStr = res.headers[HttpHeaders.ContentLength];
+  const lengthStr = res.headers['content-length'];
   if (lengthStr !== undefined) {
     if (Array.isArray(lengthStr)) {
       throw new Error('Invalid Length');

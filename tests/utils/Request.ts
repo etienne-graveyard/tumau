@@ -1,22 +1,21 @@
 import { IncomingHttpHeaders } from 'http';
-import { HttpMethod } from '@tumau/core';
 import { Readable } from 'stream';
 
 interface Options {
-  method?: HttpMethod;
+  method?: string;
   path?: string;
   headers?: IncomingHttpHeaders;
   body?: string | Readable;
 }
 
 export class Request {
-  public method: HttpMethod;
+  public method: string;
   public path: string;
   public headers: IncomingHttpHeaders;
   public body: null | string | Readable;
 
   public constructor(opts: Options = {}) {
-    const { headers = {}, method = HttpMethod.GET, path = '/', body = null } = opts;
+    const { headers = {}, method = 'GET', path = '/', body = null } = opts;
     this.headers = headers;
     this.method = method;
     this.path = path;
@@ -24,14 +23,14 @@ export class Request {
   }
 
   public static get(path: string, headers: IncomingHttpHeaders = {}): Request {
-    return new Request({ method: HttpMethod.GET, path, headers });
+    return new Request({ method: 'GET', path, headers });
   }
 
   public static post(path: string, headers: IncomingHttpHeaders = {}): Request {
-    return new Request({ method: HttpMethod.POST, path, headers });
+    return new Request({ method: 'POST', path, headers });
   }
 
   public static put(path: string, headers: IncomingHttpHeaders = {}): Request {
-    return new Request({ method: HttpMethod.PUT, path, headers });
+    return new Request({ method: 'PUT', path, headers });
   }
 }
