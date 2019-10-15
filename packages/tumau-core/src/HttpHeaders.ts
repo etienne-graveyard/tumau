@@ -7,6 +7,7 @@ export const HttpHeaders = {
   AccessControlAllowHeaders: 'access-control-allow-headers' as const,
   Location: 'location' as const,
   Origin: 'origin' as const,
+  Allow: 'allow' as const,
 };
 
 export const ContentType = {

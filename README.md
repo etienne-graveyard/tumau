@@ -66,7 +66,7 @@ A middleware can stop the chain and return a response. In that case the next mid
 
 ## The context (ctx)
 
-In tumau the context a way to share data between middleware.
+In tumau the context is a way to share data between middleware.
 
 ```js
 import { Context, Server, Middleware } from 'tumau';

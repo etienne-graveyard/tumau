@@ -2,6 +2,7 @@ import { Middleware, HttpMethod, Response, RequestContext } from '@tumau/core';
 import { Routes, Route } from './Route';
 import { UrlParserContext } from '@tumau/url-parser';
 import { RouterAllowedMethodsContext } from './RouterContext';
+import { AllowedMethodsResponse } from './AllowedMethodsResponse';
 
 export function AllowedMethods(routes: Routes): Middleware {
   // flatten routes
@@ -30,16 +31,7 @@ export function AllowedMethods(routes: Routes): Middleware {
 
     const methods = allowedMethods || HttpMethod.__ALL;
     const result = await next(ctx.set(RouterAllowedMethodsContext.provide(methods)));
-    const allowHeaderContent = Array.from(methods.values()).join(',');
-    let response = result || new Response({ code: 204 });
-    response = {
-      ...response,
-      headers: {
-        ...response.headers,
-        ['Allow']: allowHeaderContent,
-      },
-    };
-
-    return response;
+    const response = result || new Response({ code: 204 });
+    return new AllowedMethodsResponse(response, methods);
   };
 }
