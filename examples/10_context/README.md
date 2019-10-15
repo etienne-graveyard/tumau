@@ -1,4 +1,4 @@
-# @tumau/redirect (private)
+# @tumau/example-context (private)
 
 ## Tumau
 

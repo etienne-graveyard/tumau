@@ -1,4 +1,4 @@
-# @tumau/example-router (private)
+# @tumau/example-url-parser (private)
 
 ## Tumau
 

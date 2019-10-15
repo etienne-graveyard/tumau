@@ -1,0 +1,31 @@
+{
+  "name": "tumau",
+  "version": "1.0.0-alpha.24",
+  "description": "A Zero dependency node HTTP server written in Typescript",
+  "keywords": [
+    "node",
+    "server",
+    "ts",
+    "zero-deps"
+  ],
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/tumau.esm.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf ./dist && tsdx build --target node",
+    "start": "tsdx watch --target node"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.0",
+    "tsdx": "^0.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

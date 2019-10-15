@@ -1,4 +1,6 @@
-# @tumau/example-router (private)
+# tumau
+
+> A Zero dependency node HTTP server written in Typescript
 
 ## Tumau
 
