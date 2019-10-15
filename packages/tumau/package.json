@@ -1,6 +1,6 @@
 {
   "name": "tumau",
-  "version": "1.0.0-alpha.26",
+  "version": "1.0.0-alpha.27",
   "description": "A Zero dependency node HTTP server written in Typescript",
   "keywords": [
     "node",
@@ -22,11 +22,11 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.25",
-    "@tumau/core": "^1.0.0-alpha.25",
-    "@tumau/json": "^1.0.0-alpha.25",
-    "@tumau/router": "^1.0.0-alpha.25",
-    "@tumau/url-parser": "^1.0.0-alpha.25"
+    "@tumau/compress": "^1.0.0-alpha.27",
+    "@tumau/core": "^1.0.0-alpha.27",
+    "@tumau/json": "^1.0.0-alpha.27",
+    "@tumau/router": "^1.0.0-alpha.27",
+    "@tumau/url-parser": "^1.0.0-alpha.27"
   },
   "devDependencies": {
     "rimraf": "^3.0.0",
