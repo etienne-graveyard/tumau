@@ -11,11 +11,11 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 ## Gist
 
 ```ts
-import { Server, Response, RequestContext } from 'tumau';
+import { Server, TumauResponse, RequestContext } from 'tumau';
 
 const server = Server.create(ctx => {
   const request = ctx.get(RequestContext);
-  return Response.withText(`Hello World ! (from ${request.url})`);
+  return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 
 server.listen(3002, () => {
@@ -66,7 +66,7 @@ A middleware can stop the chain and return a response. In that case the next mid
 
 ## The context (ctx)
 
-In tumau the context a way to share data between middleware.
+In tumau the context is a way to share data between middleware.
 
 ```js
 import { Context, Server, Middleware } from 'tumau';

@@ -11,11 +11,11 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 ## Gist
 
 ```ts
-import { Server, Response, RequestContext } from 'tumau';
+import { Server, TumauResponse, RequestContext } from 'tumau';
 
 const server = Server.create(ctx => {
   const request = ctx.get(RequestContext);
-  return Response.withText(`Hello World ! (from ${request.url})`);
+  return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 
 server.listen(3002, () => {

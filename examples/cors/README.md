@@ -1,4 +1,4 @@
-# @tumau-example/url-parser (private)
+# @tumau-example/cors (private)
 
 ## Tumau
 

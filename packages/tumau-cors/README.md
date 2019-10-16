@@ -1,6 +1,6 @@
-# @tumau/json
+# @tumau/cors
 
-> JSON parser and Response for @tumau/core
+> CORS for tumau
 
 ## Tumau
 
