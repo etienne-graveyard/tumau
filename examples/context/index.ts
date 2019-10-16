@@ -9,8 +9,8 @@ const MaybeNumContext = Context.create<number>('MaybeNum');
 // middleware
 const myContextProvider: Middleware = (ctx, next) => {
   // we provide our context
-  const numProvider = NumContext.provide(42);
-  const maybeNumProvider = MaybeNumContext.provide(6);
+  const numProvider = NumContext.Provider(42);
+  const maybeNumProvider = MaybeNumContext.Provider(6);
   // we create a new ctx by calling ctx.set()
   const nextCtx = ctx.set(numProvider, maybeNumProvider);
   // we call next with our new context
@@ -21,18 +21,18 @@ const myContextProvider: Middleware = (ctx, next) => {
 const myContextConsumer: Middleware = (ctx, next) => {
   // Num
   console.log({
-    has: ctx.has(NumContext),
-    num: ctx.get(NumContext),
+    has: ctx.has(NumContext.Consumer),
+    num: ctx.get(NumContext.Consumer),
     // NumContext has a default value so this would never throw
-    numOrThrow: ctx.getOrThrow(NumContext),
+    numOrThrow: ctx.getOrThrow(NumContext.Consumer),
   });
 
   // MaybeNum
   console.log({
-    has: ctx.has(MaybeNumContext),
-    maybeNum: ctx.get(MaybeNumContext),
+    has: ctx.has(MaybeNumContext.Consumer),
+    maybeNum: ctx.get(MaybeNumContext.Consumer),
     // this will throw an error if the Context is not present
-    numOrThrow: ctx.getOrThrow(MaybeNumContext),
+    numOrThrow: ctx.getOrThrow(MaybeNumContext.Consumer),
   });
 
   return next(ctx);

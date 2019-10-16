@@ -8,3 +8,5 @@ export const CompressContext = Context.create<{
   acceptedEncoding: Array<Encoding>;
   usedEncoding: null | Array<Encoding>;
 }>('Compress');
+
+export const CompressConsumer = CompressContext.Consumer;

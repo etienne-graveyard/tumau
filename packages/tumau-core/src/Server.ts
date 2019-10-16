@@ -11,8 +11,10 @@ import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { Context, ContextStack, ContextManager } from './Context';
 
 export const RequestContext = Context.create<TumauRequest>('TumauRequest');
+export const RequestConsumer = RequestContext.Consumer;
 
 export const ServerResponseContext = Context.create<http.ServerResponse>('ServerResponse');
+export const ServerResponseConsumer = ServerResponseContext.Consumer;
 
 export interface Server {
   httpServer: http.Server;
@@ -51,8 +53,8 @@ function createServer(opts: Middleware | Options): Server {
   async function handler(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const request = new TumauRequest(req);
 
-    const requestCtx = RequestContext.provide(request);
-    const resCtx = ServerResponseContext.provide(res);
+    const requestCtx = RequestContext.Provider(request);
+    const resCtx = ServerResponseContext.Provider(res);
 
     const wrappedMiddleware: Middleware = handleErrors
       ? Middleware.compose(

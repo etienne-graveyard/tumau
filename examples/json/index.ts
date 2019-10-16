@@ -1,10 +1,10 @@
-import { Server, Middleware, JsonParser, JsonResponse, JsonParserContext } from 'tumau';
+import { Server, Middleware, JsonParser, JsonResponse, JsonParserConsumer } from 'tumau';
 
 const server = Server.create(
   Middleware.compose(
     JsonParser(),
     ctx => {
-      const jsonBody = ctx.getOrThrow(JsonParserContext);
+      const jsonBody = ctx.getOrThrow(JsonParserConsumer);
       if (jsonBody) {
         return JsonResponse.with({ you: '<- are here !', received: jsonBody });
       }

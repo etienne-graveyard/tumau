@@ -1,5 +1,5 @@
 import { parse as parseQueryString, ParsedUrlQuery } from 'querystring';
-import { Middleware, Context, RequestContext } from '@tumau/core';
+import { Middleware, Context, RequestConsumer } from '@tumau/core';
 
 export interface ParsedUrl {
   query: null | ParsedUrlQuery;
@@ -11,12 +11,14 @@ export interface ParsedUrl {
 
 export const UrlParserContext = Context.create<ParsedUrl>('UrlParser');
 
+export const UrlParserConsumer = UrlParserContext.Consumer;
+
 export function UrlParser(): Middleware {
   return (ctx, next) => {
-    if (ctx.has(UrlParserContext)) {
+    if (ctx.has(UrlParserContext.Consumer)) {
       return next(ctx);
     }
-    const request = ctx.getOrThrow(RequestContext);
+    const request = ctx.getOrThrow(RequestConsumer);
     const parsedObj = parseUrl(request.url);
     const parsed: ParsedUrl = {
       path: parsedObj.path,
@@ -25,7 +27,7 @@ export function UrlParser(): Middleware {
       query: parsedObj.query ? parseQueryString(parsedObj.query) : null,
       search: parsedObj.search,
     };
-    return next(ctx.set(UrlParserContext.provide(parsed)));
+    return next(ctx.set(UrlParserContext.Provider(parsed)));
   };
 }
 

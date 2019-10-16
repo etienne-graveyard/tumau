@@ -1,7 +1,7 @@
-import { Middleware, TumauResponse, RequestContext, Context } from '@tumau/core';
+import { Middleware, TumauResponse, RequestConsumer, Context } from '@tumau/core';
 import { Route, Routes } from './Route';
 import { RouterContext } from './RouterContext';
-import { UrlParserContext } from '@tumau/url-parser';
+import { UrlParserConsumer } from '@tumau/url-parser';
 import {} from '@tumau/core';
 
 /**
@@ -11,7 +11,7 @@ export function StandaloneRouter(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
   return async (ctx, next): Promise<null | TumauResponse> => {
-    if (ctx.has(RouterContext)) {
+    if (ctx.has(RouterContext.Consumer)) {
       console.warn(
         [
           `Warning: Using a Router inside another Router will break 'Allow' header for OPTIONS request !`,
@@ -20,11 +20,11 @@ export function StandaloneRouter(routes: Routes): Middleware {
       );
     }
 
-    const routerCtx = ctx.get(RouterContext);
+    const routerCtx = ctx.get(RouterContext.Consumer);
     // all matching routes
-    const parsedUrl = ctx.getOrThrow(UrlParserContext);
+    const parsedUrl = ctx.getOrThrow(UrlParserConsumer);
     const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
-    const request = ctx.getOrThrow(RequestContext);
+    const request = ctx.getOrThrow(RequestConsumer);
     const requestMethod = request.method;
 
     const matchingRoutes = matchingRoutesAllMethods.filter(findResult => {
@@ -50,7 +50,7 @@ export function StandaloneRouter(routes: Routes): Middleware {
         params: findResult ? findResult.params : {},
       };
 
-      const withRouterCtx = ctx.set(RouterContext.provide(routerData));
+      const withRouterCtx = ctx.set(RouterContext.Provider(routerData));
 
       if (findResult === null) {
         // no more match, run next

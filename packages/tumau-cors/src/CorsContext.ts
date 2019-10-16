@@ -19,3 +19,4 @@ export interface CorsContext {
 }
 
 export const CorsContext = Context.create<CorsContext>('Cors');
+export const CorsContextConsumer = CorsContext.Consumer;

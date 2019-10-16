@@ -6,8 +6,8 @@ import {
   Router,
   Route,
   Routes,
-  RouterContext,
-  UrlParserContext,
+  RouterConsumer,
+  UrlParserConsumer,
 } from 'tumau';
 
 const render = (content: string) => `<!DOCTYPE html>
@@ -36,7 +36,7 @@ const render = (content: string) => `<!DOCTYPE html>
 </html>`;
 
 const logRoute: Middleware = (ctx, next) => {
-  const parsedUrl = ctx.get(UrlParserContext);
+  const parsedUrl = ctx.get(UrlParserConsumer);
   console.log(parsedUrl && parsedUrl.pathname);
   return next(ctx);
 };
@@ -72,7 +72,7 @@ const ROUTES: Routes = [
     ),
   ]),
   Route.GET('/search', ctx => {
-    const parsedUrl = ctx.getOrThrow(UrlParserContext);
+    const parsedUrl = ctx.getOrThrow(UrlParserConsumer);
     const searchQuery = parsedUrl && parsedUrl.query && parsedUrl.query.q;
     if (searchQuery) {
       return TumauResponse.withHtml(render(`Search page for "${searchQuery}"`));
@@ -93,7 +93,7 @@ const server = Server.create(
     Router(ROUTES),
     // this middleware is executed if next is called inside a route middleware
     ctx => {
-      const router = ctx.get(RouterContext);
+      const router = ctx.get(RouterConsumer);
       const pattern = router && router.pattern;
       const params = router && router.params && router.params.wild;
 

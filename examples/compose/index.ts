@@ -1,10 +1,10 @@
-import { Server, Middleware, TumauResponse, Context, RequestContext } from 'tumau';
+import { Server, Middleware, TumauResponse, Context, RequestConsumer } from 'tumau';
 
 const NumCtx = Context.create<number>('Num');
 
 const logger: Middleware = async (ctx, next) => {
   const start = process.hrtime();
-  const request = ctx.getOrThrow(RequestContext);
+  const request = ctx.getOrThrow(RequestConsumer);
   console.log(`Received request for ${request.method} ${request.url}`);
   const result = await next(ctx);
   const time = process.hrtime(start);
@@ -13,14 +13,14 @@ const logger: Middleware = async (ctx, next) => {
 };
 
 const addNum: Middleware = (ctx, next) => {
-  return next(ctx.set(NumCtx.provide(Math.floor(Math.random() * 100000))));
+  return next(ctx.set(NumCtx.Provider(Math.floor(Math.random() * 100000))));
 };
 
 const logNum: Middleware = async (ctx, next) => {
   await new Promise(resolve => {
     setTimeout(resolve, 2000);
   });
-  const num = ctx.get(NumCtx);
+  const num = ctx.get(NumCtx.Consumer);
   console.log(`num : ${num}`);
   return next(ctx);
 };
@@ -29,7 +29,7 @@ const main: Middleware = async ctx => {
   await new Promise(resolve => {
     setTimeout(resolve, 2000);
   });
-  const num = ctx.getOrThrow(NumCtx);
+  const num = ctx.getOrThrow(NumCtx.Consumer);
   return TumauResponse.withText(`Num : ${num}`);
 };
 

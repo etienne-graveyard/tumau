@@ -1,9 +1,9 @@
-import { Server, TumauResponse, HttpError, HttpHeaders, ContentType, RequestContext } from 'tumau';
+import { Server, TumauResponse, HttpError, HttpHeaders, ContentType, RequestConsumer } from 'tumau';
 import path from 'path';
 import fs from 'fs-extra';
 
 const server = Server.create(async ctx => {
-  const request = ctx.getOrThrow(RequestContext);
+  const request = ctx.getOrThrow(RequestConsumer);
   if (request.url !== '/') {
     throw new HttpError.NotFound();
   }

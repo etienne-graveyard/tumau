@@ -1,6 +1,6 @@
-import { Middleware, HttpMethod, TumauResponse, RequestContext } from '@tumau/core';
+import { Middleware, HttpMethod, TumauResponse, RequestConsumer } from '@tumau/core';
 import { Routes, Route } from './Route';
-import { UrlParserContext } from '@tumau/url-parser';
+import { UrlParserConsumer } from '@tumau/url-parser';
 import { RouterAllowedMethodsContext } from './RouterContext';
 import { AllowedMethodsResponse } from './AllowedMethodsResponse';
 
@@ -8,11 +8,11 @@ export function AllowedMethods(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
   return async (ctx, next): Promise<null | TumauResponse> => {
-    const request = ctx.getOrThrow(RequestContext);
+    const request = ctx.getOrThrow(RequestConsumer);
     if (request.method !== HttpMethod.OPTIONS) {
       return next(ctx);
     }
-    const parsedUrl = ctx.getOrThrow(UrlParserContext);
+    const parsedUrl = ctx.getOrThrow(UrlParserConsumer);
     const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
 
     const allowedMethods = matchingRoutesAllMethods.reduce<Set<HttpMethod> | null>((acc, findResult) => {
@@ -30,7 +30,7 @@ export function AllowedMethods(routes: Routes): Middleware {
     }, new Set<HttpMethod>());
 
     const methods = allowedMethods || HttpMethod.__ALL;
-    const result = await next(ctx.set(RouterAllowedMethodsContext.provide(methods)));
+    const result = await next(ctx.set(RouterAllowedMethodsContext.Provider(methods)));
     const response = result || new TumauResponse({ code: 204 });
     return new AllowedMethodsResponse(response, methods);
   };

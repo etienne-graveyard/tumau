@@ -1,7 +1,7 @@
-import { Server, TumauResponse, Middleware, UrlParserContext, UrlParser } from 'tumau';
+import { Server, TumauResponse, Middleware, UrlParserConsumer, UrlParser } from 'tumau';
 
 const main: Middleware = ctx => {
-  const parsedUrl = ctx.getOrThrow(UrlParserContext);
+  const parsedUrl = ctx.getOrThrow(UrlParserConsumer);
   return TumauResponse.withText(JSON.stringify(parsedUrl));
 };
 

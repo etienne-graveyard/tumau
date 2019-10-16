@@ -6,7 +6,7 @@ import {
   HttpError,
   Context,
   TumauResponse,
-  RequestContext,
+  RequestConsumer,
 } from '@tumau/core';
 import { parseJsonBody } from './parseJsonBody';
 
@@ -16,15 +16,16 @@ interface Options {
 }
 
 export const JsonParserContext = Context.create<object | null>('JsonParser');
+export const JsonParserConsumer = JsonParserContext.Consumer;
 
 export function JsonParser(options: Options = {}): Middleware {
   const _1mb = 1024 * 1024 * 1024;
   const { limit = _1mb } = options;
 
   return async (ctx, next): Promise<null | TumauResponse> => {
-    const request = ctx.getOrThrow(RequestContext);
+    const request = ctx.getOrThrow(RequestConsumer);
     const headers = request.headers;
-    const noBodyNextCtx = ctx.set(JsonParserContext.provide(null));
+    const noBodyNextCtx = ctx.set(JsonParserContext.Provider(null));
 
     if (
       request.method === HttpMethod.GET ||
@@ -59,6 +60,6 @@ export function JsonParser(options: Options = {}): Middleware {
       throw new HttpError.PayloadTooLarge();
     }
     const jsonBody = await parseJsonBody(request.req, limit, length);
-    return next(ctx.set(JsonParserContext.provide(jsonBody)));
+    return next(ctx.set(JsonParserContext.Provider(jsonBody)));
   };
 }

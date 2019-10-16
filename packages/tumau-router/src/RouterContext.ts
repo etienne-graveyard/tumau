@@ -12,4 +12,7 @@ export interface RouterContext {
 }
 
 export const RouterContext = Context.create<RouterContext>('Router');
+export const RouterConsumer = RouterContext.Consumer;
+
 export const RouterAllowedMethodsContext = Context.create<Set<HttpMethod>>('RouterAllowedMethods');
+export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;

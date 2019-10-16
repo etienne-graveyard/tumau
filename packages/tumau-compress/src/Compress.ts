@@ -1,10 +1,10 @@
-import { Middleware, HttpHeaders, ContentEncoding, ResultSync, RequestContext } from '@tumau/core';
+import { Middleware, HttpHeaders, ContentEncoding, ResultSync, RequestConsumer } from '@tumau/core';
 import { CompressContext, Encoding } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 
 export function Compress(): Middleware {
   return async (ctx, next): Promise<ResultSync> => {
-    const request = ctx.getOrThrow(RequestContext);
+    const request = ctx.getOrThrow(RequestConsumer);
     const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];
     const acceptedEncoding: Array<Encoding> =
       typeof acceptedEncodingHeader === 'string'
@@ -18,7 +18,7 @@ export function Compress(): Middleware {
       usedEncoding: null,
     };
 
-    const nextCtx = ctx.set(CompressContext.provide(compressCtx));
+    const nextCtx = ctx.set(CompressContext.Provider(compressCtx));
     // we allow next middleware to change what acceptedEncoding are accepted
     const response = await next(nextCtx);
     if (response === null) {

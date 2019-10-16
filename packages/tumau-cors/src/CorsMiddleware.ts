@@ -1,4 +1,4 @@
-import { Middleware, Context, HttpMethod, RequestContext, TumauResponse, HttpHeaders } from '@tumau/core';
+import { Middleware, Context, HttpMethod, RequestConsumer, TumauResponse, HttpHeaders } from '@tumau/core';
 import { CorsResponse } from './CorsResponse';
 import { CorsContext, DEFAULT_CORS_CONTEXT } from './CorsContext';
 
@@ -28,7 +28,7 @@ const DEFAULT_ALLOW_METHODS = new Set([
 
 export function createCorsMiddleware(config: Config = {}): Middleware {
   return async (ctx, next) => {
-    const request = ctx.getOrThrow(RequestContext);
+    const request = ctx.getOrThrow(RequestConsumer);
     const origin = request.origin;
     const allowOrigin: string | null =
       config.allowOrigin === undefined ? origin : resolveFunction(ctx, config.allowOrigin);
@@ -51,7 +51,7 @@ export function createCorsMiddleware(config: Config = {}): Middleware {
       allowCredentials,
     };
 
-    const res = (await next(ctx.set(CorsContext.provide(corsContext)))) || TumauResponse.noContent();
+    const res = (await next(ctx.set(CorsContext.Provider(corsContext)))) || TumauResponse.noContent();
     const isPreflight = request.method === HttpMethod.OPTIONS;
     if (isPreflight === false) {
       // Simple Cross-Origin Request, Actual Request, and Redirects
