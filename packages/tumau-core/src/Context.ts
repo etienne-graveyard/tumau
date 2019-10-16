@@ -4,8 +4,9 @@ export const Context = {
   create: createContext,
 };
 
-export interface ContextItem<T> {
+export interface ContextItem<T, HasDefault extends boolean = boolean> {
   [CONTEXT_TOKEN]: {
+    hasDefault: HasDefault;
     defaultValue: T | undefined;
     name: string;
   };
@@ -13,14 +14,17 @@ export interface ContextItem<T> {
 }
 
 export interface ProvidedContext<T> {
-  context: ContextItem<T>;
+  context: ContextItem<T, any>;
   value: T;
 }
 
-function createContext<T>(name: string, defaultValue?: T): ContextItem<T> {
-  const ctx = {
+function createContext<T>(name: string): ContextItem<T, false>;
+function createContext<T>(name: string, defaultValue: T): ContextItem<T, true>;
+function createContext<T>(name: string, defaultValue?: T): ContextItem<T, boolean> {
+  const ctx: ContextItem<T, boolean> = {
     [CONTEXT_TOKEN]: {
-      defaultValue,
+      hasDefault: defaultValue !== undefined && arguments.length === 2,
+      defaultValue: defaultValue,
       name,
     },
     provide: (value: T) => {
@@ -35,9 +39,9 @@ function createContext<T>(name: string, defaultValue?: T): ContextItem<T> {
 
 export interface Context {
   set: (...contexts: Array<ProvidedContext<any>>) => Context;
-  get: <T>(ctx: ContextItem<T>) => T | null;
-  has: <T>(ctx: ContextItem<T>) => boolean;
-  getOrThrow: <T>(ctx: ContextItem<T | null | undefined>) => T;
+  get: <T, HasDefault extends boolean>(ctx: ContextItem<T, HasDefault>) => HasDefault extends true ? T : T | null;
+  has: (ctx: ContextItem<any, any>) => boolean;
+  getOrThrow: <T>(ctx: ContextItem<T>) => T;
 }
 
 export interface ContextStack {
@@ -58,7 +62,7 @@ export const ContextStack = {
     }, stack);
   },
 
-  read(stack: ContextStack, ctx: ContextItem<any>): { found: boolean; value: any } {
+  read(stack: ContextStack, ctx: ContextItem<any, any>): { found: boolean; value: any } {
     if (stack.item.context === ctx) {
       return {
         found: true,
@@ -112,14 +116,20 @@ function createContextManager(currentStack: ContextStack): Context {
     get: ctx => {
       const res = ContextStack.read(currentStack, ctx);
       if (res.found === false) {
-        return ctx[CONTEXT_TOKEN].defaultValue;
+        if (ctx[CONTEXT_TOKEN].hasDefault) {
+          return ctx[CONTEXT_TOKEN].defaultValue;
+        }
+        return null;
       }
       return res.value;
     },
     getOrThrow: ctx => {
       const res = ContextStack.read(currentStack, ctx);
       if (res.found === false) {
-        throw new Error('Missing context');
+        if (ctx[CONTEXT_TOKEN].hasDefault) {
+          return ctx[CONTEXT_TOKEN].defaultValue;
+        }
+        throw new Error(`Missing context ${ctx[CONTEXT_TOKEN].name}`);
       }
       return res.value;
     },

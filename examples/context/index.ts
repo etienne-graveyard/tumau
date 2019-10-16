@@ -1,35 +1,47 @@
 import { Context, Server, Middleware } from 'tumau';
 
-// first let's create a context
-const NumContext = Context.create<number>('Num', 7); // 7 is the default value (optionnal)
+// Num context with a default value of 7
+const NumContext = Context.create<number>('Num', 7);
+
+// MaybeNum with no default value
+const MaybeNumContext = Context.create<number>('MaybeNum');
 
 // middleware
 const myContextProvider: Middleware = (ctx, next) => {
   // we provide our context
   const numProvider = NumContext.provide(42);
+  const maybeNumProvider = MaybeNumContext.provide(6);
   // we create a new ctx by calling ctx.set()
-  const nextCtx = ctx.set(numProvider);
+  const nextCtx = ctx.set(numProvider, maybeNumProvider);
   // we call next with our new context
   return next(nextCtx);
 };
 
 // middleware
 const myContextConsumer: Middleware = (ctx, next) => {
-  const has = ctx.has(NumContext);
-  const num = ctx.get(NumContext); // get the value of the default if not provided
-  // if the context is required we could also call
-  // const num = ctx.getOrThrow(NumContext);
+  // Num
   console.log({
-    has,
-    num,
+    has: ctx.has(NumContext),
+    num: ctx.get(NumContext),
+    // NumContext has a default value so this would never throw
+    numOrThrow: ctx.getOrThrow(NumContext),
   });
+
+  // MaybeNum
+  console.log({
+    has: ctx.has(MaybeNumContext),
+    maybeNum: ctx.get(MaybeNumContext),
+    // this will throw an error if the Context is not present
+    numOrThrow: ctx.getOrThrow(MaybeNumContext),
+  });
+
   return next(ctx);
 };
 
 const server = Server.create(
   Middleware.compose(
-    myContextConsumer, // contex not there yet, will log { has: false, num: 7 } (7 is the default value)
-    myContextProvider,
+    myContextConsumer, // consume but context are not there yet
+    myContextProvider, // providing context
     myContextConsumer // logs { has: true, num: 42 }
   )
 );
