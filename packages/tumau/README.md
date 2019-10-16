@@ -101,7 +101,7 @@ type Middleware = (ctx: Context, next: Next) => null | Response | Promise<null |
 ```js
 const myMiddleware = async (ctx, next) => {
   // 1. Context from previous middleware
-  // (you need to call call `ctx.get()`)
+  // (you need to call `ctx.get(SomeConsumer)` to read data from the context)
   console.log(ctx); // { get, getOrThrow, set, has }
   // 2. We call `next` to call the next middleware
   const response = await next(ctx);
@@ -139,7 +139,7 @@ const middleware = async (ctx, next) => {
 // Add a item to the context before calling the next middleware
 // return whatever the next middleware return
 const middleware = (ctx, next) => {
-  const nextCtx = ctx.set(ReceivedAtContext.provide(new Date()));
+  const nextCtx = ctx.set(ReceivedAtContext.Provide(new Date()));
   return next(nextCtx);
 };
 ```
@@ -164,7 +164,7 @@ const server = Server.create(composed);
 
 ## More Examples
 
-Take a look a the [Examples](./tree/master/examples) folder !
+Take a look a the [Examples](https://github.com/etienne-dldc/tumau/tree/master/examples) folder !
 
 ## Performance
 
