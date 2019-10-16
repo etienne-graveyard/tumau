@@ -10,10 +10,11 @@ import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { Context, ContextStack, ContextManager } from './Context';
 
-export const RequestContext = Context.create<TumauRequest>('TumauRequest');
+// We force a deault value because these context are always there !
+export const RequestContext = Context.create<TumauRequest>('TumauRequest', null as any);
 export const RequestConsumer = RequestContext.Consumer;
 
-export const ServerResponseContext = Context.create<http.ServerResponse>('ServerResponse');
+export const ServerResponseContext = Context.create<http.ServerResponse>('ServerResponse', null as any);
 export const ServerResponseConsumer = ServerResponseContext.Consumer;
 
 export interface Server {

@@ -1,7 +1,7 @@
 import { Server, TumauResponse, RequestConsumer } from 'tumau';
 
 const server = Server.create(ctx => {
-  const request = ctx.getOrThrow(RequestConsumer);
+  const request = ctx.get(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 
