@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/json-error",
-  "version": "1.0.0-alpha.28",
+  "version": "1.0.0-alpha.29",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "^1.0.0-alpha.28"
+    "tumau": "^1.0.0-alpha.29"
   },
   "devDependencies": {
     "ts-node": "^8.4.1",
