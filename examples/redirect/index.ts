@@ -1,11 +1,11 @@
-import { Server, Response, Middleware, Router, Route, Routes } from 'tumau';
+import { Server, TumauResponse, Middleware, Router, Route, Routes } from 'tumau';
 
 const ROUTES: Routes = [
   Route.GET('/', () => {
-    return Response.redirect('/hello');
+    return TumauResponse.redirect('/hello');
   }),
   Route.GET('/hello', () => {
-    return Response.withText('Hello');
+    return TumauResponse.withText('Hello');
   }),
 ];
 

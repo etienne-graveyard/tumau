@@ -15,7 +15,7 @@ interface Options {
   limit?: number;
 }
 
-export const JsonParserContext = Context.create<object | null>();
+export const JsonParserContext = Context.create<object | null>('JsonParser');
 
 export function JsonParser(options: Options = {}): Middleware {
   const _1mb = 1024 * 1024 * 1024;

@@ -1,9 +1,9 @@
-import { Server, Response, HttpError, HttpHeaders, ContentType, RequestContext } from 'tumau';
+import { Server, TumauResponse, HttpError, HttpHeaders, ContentType, RequestContext } from 'tumau';
 import path from 'path';
 import fs from 'fs-extra';
 
 const server = Server.create(async ctx => {
-  const request = ctx.get(RequestContext);
+  const request = ctx.getOrThrow(RequestContext);
   if (request.url !== '/') {
     throw new HttpError.NotFound();
   }
@@ -13,7 +13,7 @@ const server = Server.create(async ctx => {
   // get the stream
   const fileStream = fs.createReadStream(filePath);
 
-  return new Response({
+  return new TumauResponse({
     body: fileStream,
     headers: {
       [HttpHeaders.ContentLength]: stats.size,

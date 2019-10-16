@@ -11,5 +11,5 @@ export interface RouterContext {
   pattern: string;
 }
 
-export const RouterContext = Context.create<RouterContext>();
-export const RouterAllowedMethodsContext = Context.create<Set<HttpMethod>>();
+export const RouterContext = Context.create<RouterContext>('Router');
+export const RouterAllowedMethodsContext = Context.create<Set<HttpMethod>>('RouterAllowedMethods');

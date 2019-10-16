@@ -7,6 +7,7 @@ export const Context = {
 export interface ContextItem<T> {
   [CONTEXT_TOKEN]: {
     defaultValue: T | undefined;
+    name: string;
   };
   provide(value: T): ProvidedContext<T>;
 }
@@ -16,10 +17,11 @@ export interface ProvidedContext<T> {
   value: T;
 }
 
-function createContext<T>(defaultValue?: T): ContextItem<T> {
+function createContext<T>(name: string, defaultValue?: T): ContextItem<T> {
   const ctx = {
     [CONTEXT_TOKEN]: {
       defaultValue,
+      name,
     },
     provide: (value: T) => {
       return {
@@ -81,6 +83,26 @@ export const ContextManager = {
   create: createContextManager,
 };
 
+function debugStack(currentStack: ContextStack): Array<{ name: string; value: any; ctxId: string }> {
+  const idMap = new Map<any, string>();
+  const result: Array<{ name: string; value: any; ctxId: string }> = [];
+  const traverse = (stack: ContextStack) => {
+    let ctxId = idMap.get(stack.item.context);
+    if (ctxId === undefined) {
+      ctxId = Math.random()
+        .toString(36)
+        .substring(7);
+      idMap.set(stack.item.context, ctxId);
+    }
+    result.push({ ctxId, name: stack.item.context[CONTEXT_TOKEN].name, value: stack.item.value });
+    if (stack.parent) {
+      traverse(stack.parent);
+    }
+  };
+  traverse(currentStack);
+  return result;
+}
+
 function createContextManager(currentStack: ContextStack): Context {
   const manager: Context = {
     set: (...contexts) => {
@@ -106,5 +128,7 @@ function createContextManager(currentStack: ContextStack): Context {
     },
   };
   (manager as any).__stack = currentStack;
+  (manager as any).debug = () => debugStack(currentStack);
+
   return manager;
 }

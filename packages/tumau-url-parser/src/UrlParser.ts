@@ -9,11 +9,11 @@ export interface ParsedUrl {
   rawQuery: null | string;
 }
 
-export const UrlParserContext = Context.create<ParsedUrl>();
+export const UrlParserContext = Context.create<ParsedUrl>('UrlParser');
 
 export function UrlParser(): Middleware {
   return (ctx, next) => {
-    if (ctx.has(RequestContext)) {
+    if (ctx.has(UrlParserContext)) {
       return next(ctx);
     }
     const request = ctx.getOrThrow(RequestContext);

@@ -1,7 +1,7 @@
 import { Context, Server, Middleware } from 'tumau';
 
 // first let's create a context
-const NumContext = Context.create<number>(7); // 7 is the default value (optionnal)
+const NumContext = Context.create<number>('Num', 7); // 7 is the default value (optionnal)
 
 // middleware
 const myContextProvider: Middleware = (ctx, next) => {

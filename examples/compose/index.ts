@@ -1,6 +1,6 @@
-import { Server, Middleware, Response, Context, RequestContext } from 'tumau';
+import { Server, Middleware, TumauResponse, Context, RequestContext } from 'tumau';
 
-const NumCtx = Context.create<number>();
+const NumCtx = Context.create<number>('Num');
 
 const logger: Middleware = async (ctx, next) => {
   const start = process.hrtime();
@@ -30,7 +30,7 @@ const main: Middleware = async ctx => {
     setTimeout(resolve, 2000);
   });
   const num = ctx.getOrThrow(NumCtx);
-  return Response.withText(`Num : ${num}`);
+  return TumauResponse.withText(`Num : ${num}`);
 };
 
 const composed = Middleware.compose(

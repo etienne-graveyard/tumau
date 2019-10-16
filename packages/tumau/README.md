@@ -72,7 +72,7 @@ In tumau the context a way to share data between middleware.
 import { Context, Server, Middleware } from 'tumau';
 
 // first let's create a context
-const NumContext = Context.create(7); // 7 is the default value (optionnal)
+const NumContext = Context.create('Num', 7); // 7 is the default value (optionnal)
 
 // middleware
 const myContextProvider = (ctx, next) => {
@@ -116,10 +116,10 @@ Contexts are typed when you create them:
 
 ```ts
 // here we could omit <number> because it would be infered
-const NumCtx = Context.create<number>(0);
+const NumCtx = Context.create<number>('Num', 0);
 
 // you can omit the default value
-const NameCtx = Context.create<string>();
+const NameCtx = Context.create<string>('Num');
 ```
 
 ## Middleware

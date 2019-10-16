@@ -10,9 +10,9 @@ import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { Context, ContextStack, ContextManager } from './Context';
 
-export const RequestContext = Context.create<TumauRequest>();
+export const RequestContext = Context.create<TumauRequest>('TumauRequest');
 
-export const ServerResponseContext = Context.create<http.ServerResponse>();
+export const ServerResponseContext = Context.create<http.ServerResponse>('ServerResponse');
 
 export interface Server {
   httpServer: http.Server;
