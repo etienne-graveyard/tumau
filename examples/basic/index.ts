@@ -1,7 +1,8 @@
-import { Server, TumauResponse } from 'tumau';
+import { Server, TumauResponse, RequestConsumer } from 'tumau';
 
-const server = Server.create(() => {
-  return TumauResponse.withText('Hello Tumau');
+const server = Server.create(ctx => {
+  const request = ctx.getOrThrow(RequestConsumer);
+  return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 
 server.listen(3002, () => {
