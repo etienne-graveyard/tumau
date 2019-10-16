@@ -1,7 +1,7 @@
 import http, { OutgoingHttpHeaders } from 'http';
 import { Middleware } from './Middleware';
-import { Request } from './Request';
-import { Response } from './Response';
+import { TumauRequest } from './TumauRequest';
+import { TumauResponse } from './TumauResponse';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
 import { HttpHeaders } from './HttpHeaders';
@@ -10,7 +10,7 @@ import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { Context, ContextStack, ContextManager } from './Context';
 
-export const RequestContext = Context.create<Request>();
+export const RequestContext = Context.create<TumauRequest>();
 
 export const ServerResponseContext = Context.create<http.ServerResponse>();
 
@@ -49,7 +49,7 @@ function createServer(opts: Middleware | Options): Server {
   }
 
   async function handler(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
-    const request = await Request.create(req);
+    const request = new TumauRequest(req);
 
     const requestCtx = RequestContext.provide(request);
     const resCtx = ServerResponseContext.provide(res);
@@ -78,7 +78,7 @@ function createServer(opts: Middleware | Options): Server {
       });
   }
 
-  function sendResponseAny(response: any, res: http.ServerResponse, request: Request): void {
+  function sendResponseAny(response: any, res: http.ServerResponse, request: TumauRequest): void {
     if (res.finished) {
       throw new Error('Response finished ?');
     }
@@ -88,14 +88,14 @@ function createServer(opts: Middleware | Options): Server {
     if (response === null) {
       throw new Error('Response is null');
     }
-    if (response instanceof Response === false) {
-      throw new Error('The returned response is not valid (does not inherit the Response class)');
+    if (response instanceof TumauResponse === false) {
+      throw new Error('The returned response is not valid (does not inherit the TumauResponse class)');
     }
 
     return sendResponse(response, res, request);
   }
 
-  function sendResponse(response: Response, res: http.ServerResponse, request: Request): void {
+  function sendResponse(response: TumauResponse, res: http.ServerResponse, request: TumauRequest): void {
     const headers: OutgoingHttpHeaders = {
       ...response.headers,
     };

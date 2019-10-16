@@ -6,26 +6,37 @@ import { Readable } from 'stream';
 
 export type Body = Readable | string | null;
 
-interface CreateResponseOptions {
+export interface ResponseConstuctorOptions {
   code?: HttpStatusCode;
   body?: Body;
   headers?: OutgoingHttpHeaders;
 }
 
-export class Response {
+export class TumauResponse {
   public code: HttpStatusCode;
   public body: Body;
   public headers: OutgoingHttpHeaders;
 
-  public constructor(options: CreateResponseOptions = {}) {
+  public constructor(options: ResponseConstuctorOptions = {}) {
     const { code = 200, headers = {}, body = null } = options;
     this.code = code;
     this.body = body;
     this.headers = headers;
   }
 
+  public extends(overrides: ResponseConstuctorOptions = {}): ResponseConstuctorOptions {
+    return {
+      body: overrides.body || this.body,
+      code: overrides.code || this.code,
+      headers: {
+        ...this.headers,
+        ...(overrides.headers || {}),
+      },
+    };
+  }
+
   public static withText(text: string) {
-    return new Response({
+    return new TumauResponse({
       body: text,
       headers: {
         [HttpHeaders.ContentLength]: text.length,
@@ -35,7 +46,7 @@ export class Response {
   }
 
   public static withHtml(html: string) {
-    return new Response({
+    return new TumauResponse({
       body: html,
       headers: {
         [HttpHeaders.ContentLength]: html.length,
@@ -44,8 +55,14 @@ export class Response {
     });
   }
 
+  public static noContent() {
+    return new TumauResponse({
+      code: 204,
+    });
+  }
+
   public static redirect(to: string, permanent: boolean = false) {
-    return new Response({
+    return new TumauResponse({
       code: permanent ? 301 : 302,
       headers: {
         [HttpHeaders.Location]: to,
@@ -54,7 +71,7 @@ export class Response {
   }
 
   public static withStream(stream: Readable, size: number) {
-    return new Response({
+    return new TumauResponse({
       body: stream,
       headers: {
         [HttpHeaders.ContentLength]: size,
@@ -62,37 +79,20 @@ export class Response {
     });
   }
 
-  public static isResponse(maybe: any): maybe is Response {
-    return maybe && maybe instanceof Response;
+  public static isTumauResponse(maybe: any): maybe is TumauResponse {
+    return maybe && maybe instanceof TumauResponse;
   }
 
-  public static fromError(err: any): Response {
+  public static fromError(err: any): TumauResponse {
     if (err instanceof HttpError) {
-      return new Response({
+      return new TumauResponse({
         code: err.code,
         body: err.message,
       });
     }
     if (err instanceof Error) {
-      return Response.fromError(new HttpError.Internal(err.message));
+      return TumauResponse.fromError(new HttpError.Internal(err.message));
     }
-    return Response.fromError(new HttpError.Internal(String(err)));
-  }
-
-  public static extends(originalResponse: Response, overrides: CreateResponseOptions = {}): ExtendedResponse {
-    return new ExtendedResponse(originalResponse, overrides);
-  }
-}
-
-export class ExtendedResponse extends Response {
-  constructor(public originalResponse: Response, overrides: CreateResponseOptions = {}) {
-    super({
-      body: overrides.body || originalResponse.body,
-      code: overrides.code || originalResponse.code,
-      headers: {
-        ...originalResponse.headers,
-        ...(overrides.headers || {}),
-      },
-    });
+    return TumauResponse.fromError(new HttpError.Internal(String(err)));
   }
 }

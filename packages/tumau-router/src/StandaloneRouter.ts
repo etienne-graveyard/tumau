@@ -1,4 +1,4 @@
-import { Middleware, Response, RequestContext, Context } from '@tumau/core';
+import { Middleware, TumauResponse, RequestContext, Context } from '@tumau/core';
 import { Route, Routes } from './Route';
 import { RouterContext } from './RouterContext';
 import { UrlParserContext } from '@tumau/url-parser';
@@ -10,7 +10,7 @@ import {} from '@tumau/core';
 export function StandaloneRouter(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (ctx, next): Promise<null | Response> => {
+  return async (ctx, next): Promise<null | TumauResponse> => {
     if (ctx.has(RouterContext)) {
       console.warn(
         [
@@ -37,7 +37,7 @@ export function StandaloneRouter(routes: Routes): Middleware {
 
     return handleNext(0, ctx);
 
-    async function handleNext(index: number, ctx: Context): Promise<null | Response> {
+    async function handleNext(index: number, ctx: Context): Promise<null | TumauResponse> {
       const findResult = matchingRoutes[index] || null;
       const routeMiddleware = findResult ? findResult.route.middleware : null;
       const pattern = findResult ? findResult.route.pattern || '' : '';

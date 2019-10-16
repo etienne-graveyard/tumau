@@ -1,14 +1,14 @@
-import { Response, Body, HttpHeaders, ContentEncoding } from '@tumau/core';
+import { TumauResponse, Body, HttpHeaders, ContentEncoding } from '@tumau/core';
 import { Encoding } from './CompressContext';
 import { OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { StringStream } from './StringStream';
 import zlib from 'zlib';
 
-export class CompressResponse extends Response {
-  public originalResponse: Response;
+export class CompressResponse extends TumauResponse {
+  public originalResponse: TumauResponse;
 
-  constructor(originalResponse: Response, encodings: Array<Encoding>) {
+  constructor(originalResponse: TumauResponse, encodings: Array<Encoding>) {
     const body = CompressResponse.encodeBodyWithEncodings(originalResponse.body, encodings);
     const headers: OutgoingHttpHeaders = {
       ...originalResponse.headers,

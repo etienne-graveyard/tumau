@@ -1,7 +1,7 @@
-import { Server } from 'tumau';
+import { Server, TumauResponse } from 'tumau';
 
 const server = Server.create(() => {
-  return null;
+  return TumauResponse.withText('Hello Tumau');
 });
 
 server.listen(3002, () => {

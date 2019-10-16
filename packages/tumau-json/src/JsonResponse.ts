@@ -1,4 +1,4 @@
-import { Response, HttpStatusCode, HttpHeaders, ContentType, HttpError } from '@tumau/core';
+import { TumauResponse, HttpStatusCode, HttpHeaders, ContentType, HttpError } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
 
 interface Options {
@@ -7,7 +7,7 @@ interface Options {
   headers?: OutgoingHttpHeaders;
 }
 
-export class JsonResponse extends Response {
+export class JsonResponse extends TumauResponse {
   public json: object;
 
   public constructor(options: Options) {

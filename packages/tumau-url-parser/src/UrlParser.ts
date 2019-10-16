@@ -16,7 +16,7 @@ export function UrlParser(): Middleware {
     if (ctx.has(RequestContext)) {
       return next(ctx);
     }
-    const request = ctx.get(RequestContext);
+    const request = ctx.getOrThrow(RequestContext);
     const parsedObj = parseUrl(request.url);
     const parsed: ParsedUrl = {
       path: parsedObj.path,

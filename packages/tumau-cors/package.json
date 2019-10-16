@@ -1,13 +1,7 @@
 {
-  "name": "tumau",
+  "name": "@tumau/cors",
   "version": "1.0.0-alpha.27",
-  "description": "A Zero dependency node HTTP server written in Typescript",
-  "keywords": [
-    "node",
-    "server",
-    "ts",
-    "zero-deps"
-  ],
+  "description": "CORS for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
@@ -15,19 +9,14 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/tumau.esm.js",
+  "module": "dist/cors.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --target node",
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.27",
-    "@tumau/core": "^1.0.0-alpha.27",
-    "@tumau/cors": "^1.0.0-alpha.27",
-    "@tumau/json": "^1.0.0-alpha.27",
-    "@tumau/router": "^1.0.0-alpha.27",
-    "@tumau/url-parser": "^1.0.0-alpha.27"
+    "@tumau/core": "^1.0.0-alpha.27"
   },
   "devDependencies": {
     "tsdx": "^0.10.0"

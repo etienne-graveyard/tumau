@@ -33,7 +33,7 @@ function createContext<T>(defaultValue?: T): ContextItem<T> {
 
 export interface Context {
   set: (...contexts: Array<ProvidedContext<any>>) => Context;
-  get: <T>(ctx: ContextItem<T>) => T;
+  get: <T>(ctx: ContextItem<T>) => T | null;
   has: <T>(ctx: ContextItem<T>) => boolean;
   getOrThrow: <T>(ctx: ContextItem<T | null | undefined>) => T;
 }

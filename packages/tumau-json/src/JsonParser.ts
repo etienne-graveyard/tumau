@@ -5,7 +5,7 @@ import {
   ContentType,
   HttpError,
   Context,
-  Response,
+  TumauResponse,
   RequestContext,
 } from '@tumau/core';
 import { parseJsonBody } from './parseJsonBody';
@@ -21,7 +21,7 @@ export function JsonParser(options: Options = {}): Middleware {
   const _1mb = 1024 * 1024 * 1024;
   const { limit = _1mb } = options;
 
-  return async (ctx, next): Promise<null | Response> => {
+  return async (ctx, next): Promise<null | TumauResponse> => {
     const request = ctx.getOrThrow(RequestContext);
     const headers = request.headers;
     const noBodyNextCtx = ctx.set(JsonParserContext.provide(null));

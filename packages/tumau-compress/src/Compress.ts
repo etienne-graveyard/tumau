@@ -4,7 +4,7 @@ import { CompressResponse } from './CompressResponse';
 
 export function Compress(): Middleware {
   return async (ctx, next): Promise<ResultSync> => {
-    const request = ctx.get(RequestContext);
+    const request = ctx.getOrThrow(RequestContext);
     const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];
     const acceptedEncoding: Array<Encoding> =
       typeof acceptedEncodingHeader === 'string'
