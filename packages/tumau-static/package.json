@@ -1,7 +1,7 @@
 {
-  "name": "@tumau/compress",
+  "name": "@tumau/static",
   "version": "1.0.0-alpha.31",
-  "description": "Compress middleware (gzip, deflate & brotli) for @tumau/core",
+  "description": "Static server for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
@@ -9,7 +9,7 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/tumau.compress.esm.js",
+  "module": "dist/tumau.static.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --target node",

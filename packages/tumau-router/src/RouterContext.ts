@@ -1,4 +1,5 @@
 import { Middleware, HttpMethod, Context } from '@tumau/core';
+import { RoutePattern } from './RoutePattern';
 
 export interface Params {
   [key: string]: string;
@@ -8,7 +9,7 @@ export interface RouterContext {
   params: Params;
   middleware: Middleware | null;
   notFound: boolean;
-  pattern: string;
+  pattern: RoutePattern | null;
 }
 
 export const RouterContext = Context.create<RouterContext>('Router');

@@ -8,4 +8,4 @@ export { Body, TumauResponse, ResponseConstuctorOptions } from './TumauResponse'
 export { Server, RequestConsumer, ServerResponseConsumer } from './Server';
 export { HandleInvalidResponse } from './HandleInvalidResponse';
 export { HandleErrors } from './HandleErrors';
-export { Context, ContextItem, ContextConsumer, ContextProvider } from './Context';
+export { Context, ContextItem, ContextConsumer, ContextProvider, ContextProviderFn } from './Context';

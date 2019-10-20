@@ -9,7 +9,7 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/cors.esm.js",
+  "module": "dist/tumau.cors.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --target node",

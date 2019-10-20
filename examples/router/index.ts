@@ -3,11 +3,13 @@ import {
   TumauResponse,
   Middleware,
   HttpMethod,
-  Router,
+  RouterPackage,
   Route,
   Routes,
   RouterConsumer,
   UrlParserConsumer,
+  JsonResponse,
+  RoutePattern,
 } from 'tumau';
 
 const render = (content: string) => `<!DOCTYPE html>
@@ -31,6 +33,8 @@ const render = (content: string) => `<!DOCTYPE html>
     <a href="/search">/search</a><br />
     <a href="/next">/next</a><br />
     <a href="/next/demo">/next/demo</a><br />
+    <a href="/static/hey">/static/hey</a><br />
+    <a href="/static/yolo">/static/yolo</a><br />
     <p>${content}</p>
   </body>
 </html>`;
@@ -41,9 +45,15 @@ const logRoute: Middleware = (ctx, next) => {
   return next(ctx);
 };
 
+const STATIC_PATTERN = RoutePattern.create('static', RoutePattern.string('app'));
+
 const ROUTES: Routes = [
   Route.GET('/', logRoute, () => {
     return TumauResponse.withHtml(render('Home'));
+  }),
+  Route.create({ pattern: STATIC_PATTERN, exact: false, method: null }, ctx => {
+    const params = ctx.getOrThrow(STATIC_PATTERN.Consumer);
+    return JsonResponse.with(params);
   }),
   Route.create({ pattern: '/group', exact: false }, logRoute, [
     Route.GET('/skip', async () => {
@@ -88,9 +98,11 @@ const ROUTES: Routes = [
   Route.create({ pattern: '/all' }, () => null),
 ];
 
+console.log(Route.flatten(ROUTES).map(route => route.pattern && route.pattern.parts));
+
 const server = Server.create(
   Middleware.compose(
-    Router(ROUTES),
+    RouterPackage(ROUTES),
     // this middleware is executed if next is called inside a route middleware
     ctx => {
       const router = ctx.get(RouterConsumer);

@@ -1,6 +1,5 @@
-import { Middleware, HttpMethod } from '@tumau/core';
-import { Params } from './RouterContext';
-import { RouteToRegexp } from './RouteToRegexp';
+import { Middleware, HttpMethod, ContextProvider } from '@tumau/core';
+import { RoutePattern } from './RoutePattern';
 
 const ROUTE_TOKEN = Symbol('ROUTE_TOKEN');
 
@@ -8,7 +7,7 @@ type Method = null | HttpMethod | Array<HttpMethod>;
 
 export interface Route {
   [ROUTE_TOKEN]: true;
-  pattern: string | null;
+  pattern: RoutePattern | null;
   exact: boolean;
   middleware: Array<Middleware>;
   method: Method;
@@ -17,7 +16,7 @@ export interface Route {
 
 export interface RouteResolved {
   [ROUTE_TOKEN]: true;
-  pattern: string | null;
+  pattern: RoutePattern | null;
   exact: boolean;
   middleware: null | Middleware;
   method: Method;
@@ -26,13 +25,7 @@ export interface RouteResolved {
 
 export type Routes = Array<Route>;
 
-export interface FindResult {
-  params: Params;
-  route: RouteResolved;
-  index: number;
-}
-
-const withMethod = (method: Method) => (pattern: string | null, ...middleware: Array<Middleware>) =>
+const withMethod = (method: Method) => (pattern: RoutePattern | string | null, ...middleware: Array<Middleware>) =>
   createRoute({ method, pattern }, middleware);
 
 export const Route = {
@@ -44,14 +37,14 @@ export const Route = {
   PUT: withMethod(HttpMethod.PUT),
   DELETE: withMethod(HttpMethod.DELETE),
   PATCH: withMethod(HttpMethod.PATCH),
-  all: withMethod(HttpMethod.PATCH),
+  all: withMethod(null),
   namespace: (pattern: string | null, routes: Routes) =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
 };
 
 interface RouteOptions {
   method?: Method;
-  pattern?: string | null;
+  pattern?: RoutePattern | string | null;
   exact?: boolean;
 }
 
@@ -61,9 +54,10 @@ function createRoute(
   children: Routes = []
 ): Route {
   const { exact = true, method = null, pattern = null } = options;
+  const patternResolved = typeof pattern === 'string' ? RoutePattern.parse(pattern) : pattern;
   return {
     [ROUTE_TOKEN]: true,
-    pattern,
+    pattern: patternResolved,
     exact,
     middleware: resolveMiddleware(middleware),
     method,
@@ -79,46 +73,6 @@ function resolveMiddleware(middleware: null | Middleware | Array<Middleware>): A
     return middleware;
   }
   return [middleware];
-}
-
-function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult> {
-  return routes
-    .map((route, index): FindResult | false => {
-      if (route.pattern === null) {
-        return {
-          params: {},
-          route,
-          index,
-        };
-      }
-      const { keys, regexp } = RouteToRegexp.parse(route.pattern, route.exact);
-      const isDynamicRoute = keys.length > 0;
-      if (isDynamicRoute) {
-        const matches = regexp.exec(pathname);
-        if (matches === null) {
-          return false;
-        }
-        const params: Params = {};
-        keys.forEach((key, index): void => {
-          params[key] = matches[index];
-        });
-        return {
-          params,
-          route,
-          index,
-        };
-      } else if (regexp.test(pathname)) {
-        return {
-          params: {},
-          route,
-          index,
-        };
-      }
-      return false;
-    })
-    .filter((result: FindResult | false): result is FindResult => {
-      return result !== false;
-    });
 }
 
 function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
@@ -151,7 +105,9 @@ function flattenRoutes(routes: Routes): Array<Route> {
             );
             patterns[1] = null;
           }
-          const pattern = patterns.filter((v: string | null): v is string => v !== null).join('');
+          const pattern = RoutePattern.create(
+            ...patterns.filter((v: RoutePattern | null): v is RoutePattern => v !== null)
+          );
           const exact = route.exact || childRoute.exact;
           const method = combineMethods(route.method, childRoute.method, m => {
             console.warn(
@@ -204,4 +160,43 @@ function combineMethods(parent: Method, child: Method, onInvalid: (method: HttpM
     }
   });
   return common;
+}
+
+export interface FindResult {
+  providers: Array<ContextProvider<any, false>>;
+  route: RouteResolved;
+  index: number;
+  params: { [key: string]: any };
+}
+
+function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult> {
+  const parts = RoutePattern.splitPathname(pathname);
+  return routes
+    .map((route, index): FindResult | false => {
+      if (route.pattern === null) {
+        return {
+          providers: [],
+          route,
+          index,
+          params: {},
+        };
+      }
+      const match = RoutePattern.match(route.pattern, parts);
+
+      if (match === false) {
+        return false;
+      }
+      if (route.exact && match.next.length > 0) {
+        return false;
+      }
+      return {
+        index,
+        providers: match.providers,
+        route: route,
+        params: match.params,
+      };
+    })
+    .filter((result: FindResult | false): result is FindResult => {
+      return result !== false;
+    });
 }

@@ -3,5 +3,6 @@
     "**/.rts2_cache_cjs": true,
     "**/.rts2_cache_esm": true
   },
-  "eslint.enable": true
+  "eslint.enable": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

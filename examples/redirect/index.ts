@@ -1,4 +1,4 @@
-import { Server, TumauResponse, Middleware, Router, Route, Routes } from 'tumau';
+import { Server, TumauResponse, Middleware, Route, Routes, RouterPackage } from 'tumau';
 
 const ROUTES: Routes = [
   Route.GET('/', () => {
@@ -9,7 +9,7 @@ const ROUTES: Routes = [
   }),
 ];
 
-const server = Server.create(Middleware.compose(Router(ROUTES)));
+const server = Server.create(Middleware.compose(RouterPackage(ROUTES)));
 
 server.listen(3002, () => {
   console.log(`Server is up at http://localhost:3002`);

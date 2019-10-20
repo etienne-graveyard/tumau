@@ -19,9 +19,11 @@ export interface ContextProvider<T, HasDefault extends boolean = boolean> {
   };
 }
 
+export type ContextProviderFn<T, HasDefault extends boolean> = (value: T) => ContextProvider<T, HasDefault>;
+
 export interface ContextItem<T, HasDefault extends boolean = boolean> {
   Consumer: ContextConsumer<T, HasDefault>;
-  Provider: (value: T) => ContextProvider<T, HasDefault>;
+  Provider: ContextProviderFn<T, HasDefault>;
 }
 
 function createContext<T>(name: string): ContextItem<T, false>;

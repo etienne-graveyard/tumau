@@ -9,7 +9,7 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/json.esm.js",
+  "module": "dist/tumau.json.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --target node",

@@ -15,7 +15,7 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/core.esm.js",
+  "module": "dist/tumau.core.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --target node",
