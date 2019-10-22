@@ -4,9 +4,9 @@
 
 # 🏺 Tumau
 
-> A Zero dependency node HTTP server written in Typescript
+> A node HTTP framework written in Typescript
 
-Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with zero external dependencies and written in TypeScript.
+Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with almost no external dependencies and written in TypeScript.
 
 ## Gist
 

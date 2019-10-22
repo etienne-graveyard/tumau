@@ -2897,6 +2897,11 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+chemin@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/chemin/-/chemin-2.0.0.tgz#bb81553defb2d6f9f624aabe897f11ab79fc99bb"
+  integrity sha512-o0rJjH54J7zfQiPlJFpKZHsQfpaHIUMDKbeMyPaMAhubkIyZQAvDOc5KRw3yuU3BBJAm4XdX0009E9J1mF37Dw==
+
 chokidar@^3.0.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.2.2.tgz#a433973350021e09f2b853a2287781022c0dc935"
