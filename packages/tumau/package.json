@@ -1,12 +1,11 @@
 {
   "name": "tumau",
   "version": "1.0.0-alpha.33",
-  "description": "A Zero dependency node HTTP server written in Typescript",
+  "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
     "server",
-    "ts",
-    "zero-deps"
+    "ts"
   ],
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",

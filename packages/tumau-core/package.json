@@ -5,8 +5,7 @@
   "keywords": [
     "node",
     "server",
-    "ts",
-    "zero-deps"
+    "ts"
   ],
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",

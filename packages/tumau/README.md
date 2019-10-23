@@ -26,7 +26,7 @@ server.listen(3002, () => {
 ## Benefits over Express/Koa/Other
 
 - Written in Typescript (strong yet easy-to-use types)
-- Zero-dependency (easy to audit)
+- Almost no external dependency (easy to audit)
 - Simple to extends (using middleware)
 - Minimal (contains only the bare minimum)
 
@@ -49,6 +49,10 @@ The `tumau` package is a proxi for different packages:
 - [`@tumau/router`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-router) for routing (it uses `@tumau/url-parser` for url parsing)
 - [`@tumau/json`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-json) for parsing / sending JSON
 - [`@tumau/compress`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-compress) for Brotli / GZip / Deflate compression
+
+## Dependencies
+
+`@tumau/router` has [`chemin`](https://github.com/etienne-dldc/chemin) as a peer dependency. This is the only dependency the project has and `chemin` itself has zero dependencies.
 
 ## Overview
 
