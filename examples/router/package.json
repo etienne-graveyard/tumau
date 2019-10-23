@@ -11,9 +11,11 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
+    "chemin": "^2.1.0",
     "tumau": "^1.0.0-alpha.32"
   },
   "devDependencies": {
+    "lerna": "^3.18.3",
     "ts-node": "^8.4.1",
     "ts-node-dev": "^1.0.0-pre.43"
   }

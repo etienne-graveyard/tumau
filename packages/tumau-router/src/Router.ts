@@ -2,6 +2,7 @@ import { Middleware, TumauResponse, RequestConsumer, Context } from '@tumau/core
 import { Route, Routes } from './Route';
 import { RouterContext } from './RouterContext';
 import { UrlParserConsumer } from '@tumau/url-parser';
+import { Chemin } from 'chemin';
 
 /**
  * Handle an array of routes
@@ -40,16 +41,34 @@ export function Router(routes: Routes): Middleware {
     async function handleNext(index: number, ctx: Context): Promise<null | TumauResponse> {
       const findResult = matchingRoutes[index] || null;
       const routeMiddleware = findResult ? findResult.route.middleware : null;
-      const pattern = findResult ? findResult.route.pattern || null : null;
+      const route = findResult ? findResult.route : null;
+      const pattern = route ? route.pattern : null;
+      const patterns = route ? route.patterns || [] : [];
+      const params = findResult ? findResult.params : {};
+
+      const has = (chemin: Chemin): boolean => {
+        return patterns.indexOf(chemin) >= 0;
+      };
 
       const routerData: RouterContext = {
         middleware: routeMiddleware,
-        pattern: pattern,
         notFound: findResult === null,
-        params: findResult ? findResult.params : {},
+        pattern,
+        patterns,
+        params,
+        has,
+        get: <P>(chemin: Chemin<P>) => {
+          return has(chemin) ? (params as P) : null;
+        },
+        getOrThrow: <P>(chemin: Chemin<P>) => {
+          if (!has(chemin)) {
+            throw new Error(`Chemin is not part of the route context !`);
+          }
+          return params as P;
+        },
       };
 
-      const withRouterCtx = ctx.set(RouterContext.Provider(routerData), ...(findResult ? findResult.providers : []));
+      const withRouterCtx = ctx.set(RouterContext.Provider(routerData));
 
       if (findResult === null) {
         // no more match, run next

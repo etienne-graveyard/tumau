@@ -1,5 +1,5 @@
-import { Middleware, HttpMethod, ContextProvider } from '@tumau/core';
-import { RoutePattern } from './RoutePattern';
+import { Middleware, HttpMethod } from '@tumau/core';
+import { Chemin, CheminUtils } from 'chemin';
 
 const ROUTE_TOKEN = Symbol('ROUTE_TOKEN');
 
@@ -7,7 +7,7 @@ type Method = null | HttpMethod | Array<HttpMethod>;
 
 export interface Route {
   [ROUTE_TOKEN]: true;
-  pattern: RoutePattern | null;
+  pattern: Chemin | null;
   exact: boolean;
   middleware: Array<Middleware>;
   method: Method;
@@ -16,7 +16,9 @@ export interface Route {
 
 export interface RouteResolved {
   [ROUTE_TOKEN]: true;
-  pattern: RoutePattern | null;
+  pattern: Chemin | null;
+  // if pattern is compose of other Chemin we extract them
+  patterns: Array<Chemin> | null;
   exact: boolean;
   middleware: null | Middleware;
   method: Method;
@@ -25,7 +27,7 @@ export interface RouteResolved {
 
 export type Routes = Array<Route>;
 
-const withMethod = (method: Method) => (pattern: RoutePattern | string | null, ...middleware: Array<Middleware>) =>
+const withMethod = (method: Method) => (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
   createRoute({ method, pattern }, middleware);
 
 export const Route = {
@@ -44,7 +46,7 @@ export const Route = {
 
 interface RouteOptions {
   method?: Method;
-  pattern?: RoutePattern | string | null;
+  pattern?: Chemin | string | null;
   exact?: boolean;
 }
 
@@ -54,7 +56,7 @@ function createRoute(
   children: Routes = []
 ): Route {
   const { exact = true, method = null, pattern = null } = options;
-  const patternResolved = typeof pattern === 'string' ? RoutePattern.parse(pattern) : pattern;
+  const patternResolved = typeof pattern === 'string' ? Chemin.parse(pattern) : pattern;
   return {
     [ROUTE_TOKEN]: true,
     pattern: patternResolved,
@@ -80,6 +82,7 @@ function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
   return flat.map(route => {
     return {
       ...route,
+      patterns: route.pattern ? Chemin.extract(route.pattern) : null,
       middleware: route.middleware.length === 1 ? route.middleware[0] : Middleware.compose(...route.middleware),
     };
   });
@@ -105,9 +108,7 @@ function flattenRoutes(routes: Routes): Array<Route> {
             );
             patterns[1] = null;
           }
-          const pattern = RoutePattern.create(
-            ...patterns.filter((v: RoutePattern | null): v is RoutePattern => v !== null)
-          );
+          const pattern = Chemin.create(...patterns.filter(Chemin.is));
           const exact = route.exact || childRoute.exact;
           const method = combineMethods(route.method, childRoute.method, m => {
             console.warn(
@@ -163,35 +164,32 @@ function combineMethods(parent: Method, child: Method, onInvalid: (method: HttpM
 }
 
 export interface FindResult {
-  providers: Array<ContextProvider<any, false>>;
   route: RouteResolved;
   index: number;
   params: { [key: string]: any };
 }
 
 function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult> {
-  const parts = RoutePattern.splitPathname(pathname);
+  const parts = CheminUtils.splitPathname(pathname);
   return routes
     .map((route, index): FindResult | false => {
       if (route.pattern === null) {
         return {
-          providers: [],
           route,
           index,
           params: {},
         };
       }
-      const match = RoutePattern.match(route.pattern, parts);
+      const match = Chemin.match(route.pattern, parts);
 
       if (match === false) {
         return false;
       }
-      if (route.exact && match.next.length > 0) {
+      if (route.exact && match.rest.length > 0) {
         return false;
       }
       return {
         index,
-        providers: match.providers,
         route: route,
         params: match.params,
       };
