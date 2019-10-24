@@ -1,6 +1,6 @@
 {
   "name": "benchmarks",
-  "version": "1.0.0-alpha.34",
+  "version": "1.0.0-alpha.35",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -9,7 +9,7 @@
   "dependencies": {
     "@tumau/core": "^1.0.0-alpha.34",
     "@tumau/json": "^1.0.0-alpha.34",
-    "@tumau/router": "^1.0.0-alpha.34",
+    "@tumau/router": "^1.0.0-alpha.35",
     "express": "^4.17.1",
     "fastify": "^2.10.0",
     "koa": "^2.10.0"
