@@ -9,8 +9,9 @@ import {
   RouterConsumer,
   UrlParserConsumer,
   JsonResponse,
+  Chemin,
+  CheminParam as P,
 } from 'tumau';
-import { Chemin, CheminParams as P } from 'chemin';
 
 const render = (content: string) => `<!DOCTYPE html>
 <html lang="en">
@@ -45,14 +46,14 @@ const logRoute: Middleware = (ctx, next) => {
   return next(ctx);
 };
 
-const STATIC_PATTERN = Chemin.create('static', P.string('app'));
+const ROUTE_WITH_PARAM = Chemin.create('static', P.string('app'));
 
 const ROUTES: Routes = [
   Route.GET('/', logRoute, () => {
     return TumauResponse.withHtml(render('Home'));
   }),
-  Route.create({ pattern: STATIC_PATTERN, exact: false, method: null }, ctx => {
-    const params = ctx.getOrThrow(RouterConsumer).getOrThrow(STATIC_PATTERN);
+  Route.create({ pattern: ROUTE_WITH_PARAM, exact: false, method: null }, ctx => {
+    const params = ctx.getOrThrow(RouterConsumer).getOrThrow(ROUTE_WITH_PARAM);
     return JsonResponse.with({
       appParam: params.app,
     });

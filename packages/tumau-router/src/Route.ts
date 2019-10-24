@@ -82,7 +82,7 @@ function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
   return flat.map(route => {
     return {
       ...route,
-      patterns: route.pattern ? Chemin.extract(route.pattern) : null,
+      patterns: route.pattern ? route.pattern.extract() : null,
       middleware: route.middleware.length === 1 ? route.middleware[0] : Middleware.compose(...route.middleware),
     };
   });
@@ -108,7 +108,7 @@ function flattenRoutes(routes: Routes): Array<Route> {
             );
             patterns[1] = null;
           }
-          const pattern = Chemin.create(...patterns.filter(Chemin.is));
+          const pattern = Chemin.create(...patterns.filter(Chemin.isChemin));
           const exact = route.exact || childRoute.exact;
           const method = combineMethods(route.method, childRoute.method, m => {
             console.warn(
@@ -180,7 +180,7 @@ function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult>
           params: {},
         };
       }
-      const match = Chemin.match(route.pattern, parts);
+      const match = route.pattern.match(parts);
 
       if (match === false) {
         return false;
