@@ -1,4 +1,4 @@
-import { Server, Response, HttpMethod, HttpError } from '@tumau/core';
+import { Server, TumauResponse, HttpMethod, HttpError } from '@tumau/core';
 import { runTumauRequest, runKoaRequest } from '../utils/runRequest';
 import { Request } from '../utils/Request';
 import { BodyResponse } from '../utils/BodyResponse';
@@ -11,7 +11,7 @@ describe('Server', () => {
 
   test('simple text response', async () => {
     const app = Server.create(() => {
-      return Response.withText('Hey');
+      return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request());
     expect(res).toMatchInlineSnapshot(`
@@ -26,7 +26,7 @@ describe('Server', () => {
 
   test('response to arbitrary path', async () => {
     const app = Server.create(() => {
-      return Response.withText('Hey');
+      return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request({ path: '/some/path' }));
     expect(res).toMatchInlineSnapshot(`
@@ -41,7 +41,7 @@ describe('Server', () => {
 
   test('response to post method', async () => {
     const app = Server.create(() => {
-      return Response.withText('Hey');
+      return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request({ method: HttpMethod.POST }));
     expect(res).toMatchInlineSnapshot(`
@@ -56,7 +56,7 @@ describe('Server', () => {
 
   test('head request return 204 & empty body', async () => {
     const app = Server.create(() => {
-      return Response.withText('Hey');
+      return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request({ method: HttpMethod.HEAD }));
     expect(res).toMatchInlineSnapshot(`
@@ -69,7 +69,7 @@ describe('Server', () => {
 
   test('should return the same result as koa', async () => {
     const tumauApp = Server.create(() => {
-      return Response.withText('Hey');
+      return TumauResponse.withText('Hey');
     });
     const koaApp = new koa();
     koaApp.use((ctx: any) => {
@@ -111,7 +111,7 @@ describe('Server', () => {
 
   test('throw return an error', async () => {
     const app = Server.create(() => {
-      throw new Error('Opps');
+      throw new Error('Oops');
     });
     const res = await runTumauRequest(app, new Request());
     expect(res).toMatchInlineSnapshot(`

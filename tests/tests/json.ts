@@ -1,5 +1,5 @@
 import { Server, HttpError, Middleware, HttpHeaders, HttpMethod } from '@tumau/core';
-import { JsonParser, ErrorToJson, JsonResponse } from '@tumau/json';
+import { JsonParser, ErrorToJson, JsonResponse, JsonParserConsumer } from '@tumau/json';
 import { runTumauRequest } from '../utils/runRequest';
 import { Request } from '../utils/Request';
 import { BodyResponse } from '../utils/BodyResponse';
@@ -8,7 +8,7 @@ describe('Server', () => {
   test('convert HTTPError to JsonResponse', async () => {
     const app = Server.create(
       Middleware.compose(
-        ErrorToJson(),
+        ErrorToJson,
         JsonParser(),
         () => {
           throw new HttpError.NotFound();
@@ -29,12 +29,11 @@ describe('Server', () => {
   test('parse JSON body', async () => {
     const app = Server.create(
       Middleware.compose(
-        ErrorToJson(),
+        ErrorToJson,
         JsonParser(),
         ctx => {
-          console.log(ctx.jsonBody);
-
-          return JsonResponse.with({ body: ctx.jsonBody });
+          console.log(ctx.get(JsonParserConsumer));
+          return JsonResponse.with({ body: ctx.get(JsonParserConsumer) });
         }
       )
     );
