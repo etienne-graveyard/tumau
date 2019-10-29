@@ -1,7 +1,10 @@
+import { Middleware } from './Middleware';
+
 const CONTEXT_TOKEN = Symbol('CONTEXT_TOKEN');
 
 export const Context = {
   create: createContext,
+  createProviderMiddleware: createProviderMiddleware,
 };
 
 export interface ContextConsumer<T, HasDefault extends boolean = boolean> {
@@ -150,4 +153,8 @@ function createContextManager(currentStack: ContextStack): Context {
   (manager as any).debug = () => debugStack(currentStack);
 
   return manager;
+}
+
+function createProviderMiddleware(...contexts: Array<ContextProvider<any>>): Middleware {
+  return (ctx, next) => next(ctx.set(...contexts));
 }
