@@ -120,6 +120,6 @@ describe('Server', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
       Transfer-Encoding: chunked
     `);
-    expect(await BodyResponse.asText(res)).toEqual('Internal Server Error: Opps');
+    expect(await BodyResponse.asText(res)).toEqual('Internal Server Error: Oops');
   });
 });
