@@ -1,5 +1,5 @@
 import { TumauResponse } from './TumauResponse';
-import { Context } from './Context';
+import { Context, ContextProvider } from './Context';
 
 export type ResultSync = null | TumauResponse;
 export type Result = ResultSync | Promise<ResultSync>;
@@ -10,6 +10,7 @@ export type Middlewares = Array<Middleware>;
 
 export const Middleware = {
   compose,
+  provider: createProviderMiddleware,
 };
 
 function compose(...middlewares: Middlewares): Middleware {
@@ -33,4 +34,8 @@ function compose(...middlewares: Middlewares): Middleware {
       return res;
     }
   };
+}
+
+function createProviderMiddleware(...contexts: Array<ContextProvider<any>>): Middleware {
+  return (ctx, next) => next(ctx.set(...contexts));
 }
