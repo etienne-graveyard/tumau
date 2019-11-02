@@ -81,8 +81,8 @@ function getStatus(code: HttpStatusCode): HttpStatus {
 }
 
 export const HttpStatus = {
-  getMessage(code: HttpStatusCode): HttpStatusMessage {
-    return ALL_STATUS[code];
+  getMessage(code: HttpStatusCode, details?: string): HttpStatusMessage {
+    return ALL_STATUS[code] + (details ? `: ${details}` : '');
   },
   get: getStatus,
   isEmpty(code: HttpStatusCode): boolean {

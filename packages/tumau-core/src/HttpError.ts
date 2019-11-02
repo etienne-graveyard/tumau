@@ -41,7 +41,7 @@ class LengthRequired extends HttpError {
 class NotAcceptable extends HttpError {
   public info: string;
   public constructor(info: string) {
-    super(406, `${HttpStatus.getMessage(406)}: ${info}`);
+    super(406, HttpStatus.getMessage(406, info));
     this.info = info;
   }
 }
@@ -59,28 +59,28 @@ class NotFound extends HttpError {
 }
 
 class BadRequest extends HttpError {
-  public info: string;
-  public constructor(info: string) {
-    super(400, `${HttpStatus.getMessage(400)}: ${info}`);
-    this.info = info;
+  public info: string | null = null;
+  public constructor(info?: string) {
+    super(400, HttpStatus.getMessage(400, info));
+    this.info = info || null;
   }
 }
 
 class ServerDidNotRespond extends HttpError {
   public constructor() {
-    super(500, `${HttpStatus.getMessage(500)}: Server did not respond`);
+    super(500, HttpStatus.getMessage(500, 'Server did not respond'));
   }
 }
 
 class Unauthorized extends HttpError {
-  public constructor() {
-    super(401, `${HttpStatus.getMessage(401)}`);
+  public constructor(reason?: string) {
+    super(401, HttpStatus.getMessage(401, reason));
   }
 }
 
 class Forbidden extends HttpError {
-  public constructor() {
-    super(403, `${HttpStatus.getMessage(403)}`);
+  public constructor(reason?: string) {
+    super(403, `${HttpStatus.getMessage(403, reason)}`);
   }
 }
 
