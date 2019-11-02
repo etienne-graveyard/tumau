@@ -28,6 +28,8 @@ export class HttpError extends Error {
   public static NotFound: typeof NotFound;
   public static ServerDidNotRespond: typeof ServerDidNotRespond;
   public static Internal: typeof Internal;
+  public static Forbidden: typeof Forbidden;
+  public static Unauthorized: typeof Unauthorized;
 }
 
 class LengthRequired extends HttpError {
@@ -70,6 +72,18 @@ class ServerDidNotRespond extends HttpError {
   }
 }
 
+class Unauthorized extends HttpError {
+  public constructor() {
+    super(401, `${HttpStatus.getMessage(401)}`);
+  }
+}
+
+class Forbidden extends HttpError {
+  public constructor() {
+    super(403, `${HttpStatus.getMessage(403)}`);
+  }
+}
+
 class Internal extends HttpError {
   public constructor(message: string = '') {
     super(500, `${HttpStatus.getMessage(500)}: ${message}`);
@@ -83,3 +97,5 @@ HttpError.BadRequest = BadRequest;
 HttpError.NotFound = NotFound;
 HttpError.ServerDidNotRespond = ServerDidNotRespond;
 HttpError.Internal = Internal;
+HttpError.Forbidden = Forbidden;
+HttpError.Unauthorized = Unauthorized;
