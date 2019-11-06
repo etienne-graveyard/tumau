@@ -30,6 +30,7 @@ export class HttpError extends Error {
   public static Internal: typeof Internal;
   public static Forbidden: typeof Forbidden;
   public static Unauthorized: typeof Unauthorized;
+  public static TooManyRequests: typeof TooManyRequests;
 }
 
 class LengthRequired extends HttpError {
@@ -84,6 +85,12 @@ class Forbidden extends HttpError {
   }
 }
 
+class TooManyRequests extends HttpError {
+  public constructor(reason?: string) {
+    super(403, `${HttpStatus.getMessage(403, reason)}`);
+  }
+}
+
 class Internal extends HttpError {
   public constructor(message: string = '') {
     super(500, `${HttpStatus.getMessage(500)}: ${message}`);
@@ -99,3 +106,4 @@ HttpError.ServerDidNotRespond = ServerDidNotRespond;
 HttpError.Internal = Internal;
 HttpError.Forbidden = Forbidden;
 HttpError.Unauthorized = Unauthorized;
+HttpError.TooManyRequests = TooManyRequests;
