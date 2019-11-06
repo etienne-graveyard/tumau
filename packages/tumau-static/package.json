@@ -1,6 +1,6 @@
 {
   "name": "@tumau/static",
-  "version": "1.0.0-alpha.38",
+  "version": "1.0.0-alpha.40",
   "description": "Static server for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.38"
+    "@tumau/core": "^1.0.0-alpha.40"
   },
   "devDependencies": {
     "tsdx": "^0.10.5"
