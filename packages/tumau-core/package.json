@@ -1,6 +1,6 @@
 {
   "name": "@tumau/core",
-  "version": "1.0.0-alpha.40",
+  "version": "1.0.0-alpha.41",
   "description": "A Zero dependency node HTTP server written in Typescript",
   "keywords": [
     "node",
