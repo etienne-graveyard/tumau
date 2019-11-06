@@ -1,0 +1,27 @@
+{
+  "name": "@tumau/rate-limit",
+  "version": "1.0.0-alpha.40",
+  "description": "Rate limit for @tumau/core",
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/tumau.rate-limit.esm.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --target node"
+  },
+  "dependencies": {
+    "@tumau/core": "^1.0.0-alpha.40"
+  },
+  "devDependencies": {
+    "tsdx": "^0.10.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
