@@ -87,7 +87,7 @@ class Forbidden extends HttpError {
 
 class TooManyRequests extends HttpError {
   public constructor(reason?: string) {
-    super(403, `${HttpStatus.getMessage(403, reason)}`);
+    super(429, `${HttpStatus.getMessage(429, reason)}`);
   }
 }
 
