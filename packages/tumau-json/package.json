@@ -1,6 +1,6 @@
 {
   "name": "@tumau/json",
-  "version": "1.0.0-alpha.41",
+  "version": "1.0.0-alpha.42",
   "description": "JSON parser and Response for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
