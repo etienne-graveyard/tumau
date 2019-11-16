@@ -51,11 +51,13 @@ export function createCorsMiddleware(config: Config = {}): Middleware {
       allowCredentials,
     };
 
-    const res = (await next(ctx.set(CorsContext.Provider(corsContext)))) || TumauResponse.noContent();
+    const res = await next(ctx.set(CorsContext.Provider(corsContext)));
+    const resResolved = res === null ? TumauResponse.noContent() : res;
+
     const isPreflight = request.method === HttpMethod.OPTIONS;
     if (isPreflight === false) {
       // Simple Cross-Origin Request, Actual Request, and Redirects
-      return new CorsResponse(res, {
+      return new CorsResponse(resResolved, {
         ...DEFAULT_CORS_CONTEXT,
         allowOrigin: corsContext.allowOrigin,
         allowCredentials: corsContext.allowCredentials,
@@ -80,7 +82,7 @@ export function createCorsMiddleware(config: Config = {}): Middleware {
     }
 
     // set headers
-    return new CorsResponse(res, {
+    return new CorsResponse(resResolved, {
       ...corsContext,
       allowHeaders: allowHeadersOut,
       // don't Access-Control-Expose-Headers on preflight

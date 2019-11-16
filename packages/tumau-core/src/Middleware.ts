@@ -31,6 +31,7 @@ function compose(...middlewares: Middlewares): Middleware {
         return dispatch(i + 1, nextCtx);
       });
       const res = await Promise.resolve<null | TumauResponse>(result);
+      // maybe we should validate that res is either null or an instance of TumauResponse
       return res;
     }
   };
