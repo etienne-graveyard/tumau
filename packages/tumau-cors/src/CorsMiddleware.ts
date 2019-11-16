@@ -4,7 +4,7 @@ import { CorsContext, DEFAULT_CORS_CONTEXT } from './CorsContext';
 
 type ValOrFn<T> = T | ((ctx: Context) => T);
 
-interface Config {
+export interface Config {
   allowOrigin?: ValOrFn<string | null>;
   allowMethods?: ValOrFn<Set<HttpMethod> | null>;
   allowHeaders?: ValOrFn<Set<string> | null>;

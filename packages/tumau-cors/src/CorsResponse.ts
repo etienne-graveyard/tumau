@@ -1,4 +1,4 @@
-import { TumauResponse, HttpHeaders } from '@tumau/core';
+import { TumauResponse, HttpHeaders, HttpError } from '@tumau/core';
 import { CorsContext } from './CorsContext';
 import { OutgoingHttpHeaders } from 'http';
 
@@ -8,6 +8,10 @@ export class CorsResponse extends TumauResponse {
 
   constructor(originalResponse: TumauResponse, cors: CorsContext) {
     const headers: OutgoingHttpHeaders = {};
+
+    if (originalResponse instanceof TumauResponse === false) {
+      throw new HttpError.Internal('originalResponse is expected to be a TumauResponse instance');
+    }
 
     if (cors.allowOrigin !== null) {
       headers[HttpHeaders.AccessControlAllowOrigin] = cors.allowOrigin;
