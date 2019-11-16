@@ -131,11 +131,6 @@ function flattenRoutes(routes: Routes): Array<Route> {
         console.warn(`Route ${route.pattern} has no middleware, it will be ignored`);
         return false;
       }
-      if (route.pattern === null && route.method === null) {
-        console.warn(
-          `A Route has no pattern and not method specified, it should be a simple middleware instead of a route`
-        );
-      }
       if (route.children.length !== 0) {
         throw new Error(`Flatten returned a route with children ! That shouldn't have happened...`);
       }
