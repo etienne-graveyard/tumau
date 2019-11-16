@@ -3,10 +3,10 @@ import { Cors } from './Cors';
 import { Middleware, HandleErrors } from '@tumau/core';
 
 export const CorsPackage = {
-  create: (options: Config) =>
+  create: (options?: Config) =>
     Middleware.compose(
-      HandleErrors,
-      Cors.create(options)
+      Cors.create(options),
+      HandleErrors
     ),
   setCors: Cors.setCors,
 };
