@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/router",
-  "version": "1.0.0-alpha.44",
+  "version": "1.0.0-alpha.45",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "^1.0.0-alpha.44"
+    "tumau": "^1.0.0-alpha.45"
   },
   "devDependencies": {
     "lerna": "^3.18.3",
