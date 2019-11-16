@@ -16,7 +16,7 @@ export class JsonResponse<T extends object = object> extends TumauResponse {
     const outHeaders: OutgoingHttpHeaders = {
       ...headers,
       [HttpHeaders.ContentType]: ContentType.Json,
-      [HttpHeaders.ContentLength]: body.length,
+      [HttpHeaders.ContentLength]: Buffer.byteLength(body, 'utf8'),
     };
     super({ code, headers: outHeaders, body });
     this.json = json;
