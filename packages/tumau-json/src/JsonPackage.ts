@@ -9,7 +9,7 @@ interface Options {
 
 export function JsonPackage(options: Options = {}): Middleware {
   return Middleware.compose(
-    JsonParser(options),
-    ErrorToJson
+    ErrorToJson,
+    JsonParser(options)
   );
 }
