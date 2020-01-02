@@ -1,15 +1,15 @@
 {
   "name": "benchmarks",
-  "version": "1.0.0-alpha.47",
+  "version": "1.0.0-alpha.48",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.45",
-    "@tumau/json": "^1.0.0-alpha.47",
-    "@tumau/router": "^1.0.0-alpha.46",
+    "@tumau/core": "^1.0.0-alpha.48",
+    "@tumau/json": "^1.0.0-alpha.48",
+    "@tumau/router": "^1.0.0-alpha.48",
     "express": "^4.17.1",
     "fastify": "^2.10.0",
     "koa": "^2.11.0"
