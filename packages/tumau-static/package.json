@@ -19,7 +19,7 @@
     "@tumau/core": "^1.0.0-alpha.45"
   },
   "devDependencies": {
-    "tsdx": "^0.10.5"
+    "tsdx": "^0.12.1"
   },
   "publishConfig": {
     "access": "public"
