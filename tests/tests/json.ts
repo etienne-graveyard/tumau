@@ -7,13 +7,9 @@ import { BodyResponse } from '../utils/BodyResponse';
 describe('Server', () => {
   test('convert HTTPError to JsonResponse', async () => {
     const app = Server.create(
-      Middleware.compose(
-        ErrorToJson,
-        JsonParser(),
-        () => {
-          throw new HttpError.NotFound();
-        }
-      )
+      Middleware.compose(ErrorToJson, JsonParser(), () => {
+        throw new HttpError.NotFound();
+      })
     );
     const res = await runTumauRequest(app, new Request());
     expect(res).toMatchInlineSnapshot(`
@@ -28,14 +24,10 @@ describe('Server', () => {
 
   test('parse JSON body', async () => {
     const app = Server.create(
-      Middleware.compose(
-        ErrorToJson,
-        JsonParser(),
-        ctx => {
-          console.log(ctx.get(JsonParserConsumer));
-          return JsonResponse.with({ body: ctx.get(JsonParserConsumer) });
-        }
-      )
+      Middleware.compose(ErrorToJson, JsonParser(), tools => {
+        console.log(tools.readContext(JsonParserConsumer));
+        return JsonResponse.with({ body: tools.readContext(JsonParserConsumer) });
+      })
     );
     const body = JSON.stringify({ name: 'Perceval', alias: 'Provençal le Gaulois' });
     const res = await runTumauRequest(
