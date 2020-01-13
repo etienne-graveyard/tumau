@@ -52,7 +52,7 @@ async function run() {
           }
         );
         currentInstance = instance;
-        console.log(`Benchmarking ${name}`);
+        console.log(`\n\nBenchmarking ${name}\n`);
         autocannon.track(instance);
       } catch (error) {
         reject(error);

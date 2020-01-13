@@ -3,7 +3,7 @@
 const tumau = require('@tumau/core');
 
 const app = tumau.Server.create(() => {
-  return new tumau.Response({
+  return new tumau.TumauResponse({
     body: JSON.stringify({ hello: 'world (tumau)' }),
     headers: {
       'content-type': 'application/json; charset=utf-8',
