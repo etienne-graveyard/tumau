@@ -1,0 +1,30 @@
+{
+  "name": "@tumau/middleware",
+  "version": "1.0.0-alpha.48",
+  "description": "Middleware & Context system for Tumau",
+  "keywords": [
+    "node",
+    "server",
+    "ts",
+    "middleware"
+  ],
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/tumau.middleware.esm.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --target node"
+  },
+  "devDependencies": {
+    "tsdx": "^0.12.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
