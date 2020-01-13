@@ -1,42 +1,25 @@
+import * as TumauMiddleware from '@tumau/middleware';
 import { TumauResponse } from './TumauResponse';
-import { Context, ContextProvider } from './Context';
+import { ContextStack } from '@tumau/middleware/dist/Context';
 
-export type ResultSync = null | TumauResponse;
-export type Result = ResultSync | Promise<ResultSync>;
+export type Result = TumauResponse | null;
+export type Middleware = TumauMiddleware.Middleware<Result>;
+export type Middlewares = TumauMiddleware.Middlewares<Result>;
+export type Tools = TumauMiddleware.Tools<Result>;
+export type Done = TumauMiddleware.Done<Result>;
 
-export type Middleware = (ctx: Context, next: (nextCtx: Context) => Promise<ResultSync>) => Result;
-
-export type Middlewares = Array<Middleware>;
-
-export const Middleware = {
-  compose,
-  provider: createProviderMiddleware,
+export const Tools = {
+  getContext: (tools: Tools): ContextStack | null => TumauMiddleware.Tools.getContext(tools),
+  getDone: (tools: Tools): Done => TumauMiddleware.Tools.getDone(tools),
+  create: (context: ContextStack | null, done: Done): Tools => TumauMiddleware.Tools.create(context, done),
 };
 
-function compose(...middlewares: Middlewares): Middleware {
-  return async function(ctx, next): Promise<TumauResponse | null> {
-    // last called middleware #
-    let index = -1;
-    return dispatch(0, ctx);
-    async function dispatch(i: number, ctx: Context): Promise<TumauResponse | null> {
-      if (i <= index) {
-        return Promise.reject(new Error('next() called multiple times'));
-      }
-      index = i;
-      const middle = middlewares[i];
-      if (!middle) {
-        return next(ctx);
-      }
-      const result = middle(ctx, nextCtx => {
-        return dispatch(i + 1, nextCtx);
-      });
-      const res = await Promise.resolve<null | TumauResponse>(result);
-      // maybe we should validate that res is either null or an instance of TumauResponse
-      return res;
-    }
-  };
-}
-
-function createProviderMiddleware(...contexts: Array<ContextProvider<any>>): Middleware {
-  return (ctx, next) => next(ctx.set(...contexts));
-}
+export const Middleware = {
+  compose: (...middleware: Array<Middleware | null>): Middleware => TumauMiddleware.Middleware.compose(...middleware),
+  run: (middleware: Middleware, done: () => Result): Promise<Result> =>
+    TumauMiddleware.Middleware.run(middleware, done),
+  provider: (
+    first: TumauMiddleware.ContextProvider<any>,
+    ...contexts: Array<TumauMiddleware.ContextProvider<any>>
+  ): Middleware => TumauMiddleware.Middleware.provider(first, ...contexts),
+};

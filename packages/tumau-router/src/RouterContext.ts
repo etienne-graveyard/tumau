@@ -12,12 +12,12 @@ export interface RouterContext {
   pattern: Chemin | null;
   patterns: Array<Chemin>;
   get<P>(chemin: Chemin<P>): P | null;
-  getOrThrow<P>(chemin: Chemin<P>): P;
+  getOrFail<P>(chemin: Chemin<P>): P;
   has(chemin: Chemin): boolean;
 }
 
-export const RouterContext = Context.create<RouterContext>('Router');
+export const RouterContext = Context.create<RouterContext>();
 export const RouterConsumer = RouterContext.Consumer;
 
-export const RouterAllowedMethodsContext = Context.create<Set<HttpMethod>>('RouterAllowedMethods');
+export const RouterAllowedMethodsContext = Context.create<Set<HttpMethod>>();
 export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;

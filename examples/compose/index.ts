@@ -1,45 +1,39 @@
 import { Server, Middleware, TumauResponse, Context, RequestConsumer } from 'tumau';
 
-const NumCtx = Context.create<number>('Num');
+const NumCtx = Context.create<number>();
 
-const logger: Middleware = async (ctx, next) => {
+const logger: Middleware = async tools => {
   const start = process.hrtime();
-  const request = ctx.getOrThrow(RequestConsumer);
+  const request = tools.readContextOrFail(RequestConsumer);
   console.log(`Received request for ${request.method} ${request.url}`);
-  const result = await next(ctx);
+  const result = await tools.next();
   const time = process.hrtime(start);
   console.log(`${request.method} ${request.url} was served in ${time[0]}s ${time[1] / 1000000}ms`);
   return result;
 };
 
-const addNum: Middleware = (ctx, next) => {
-  return next(ctx.set(NumCtx.Provider(Math.floor(Math.random() * 100000))));
+const addNum: Middleware = tools => {
+  return tools.withContext(NumCtx.Provider(Math.floor(Math.random() * 100000))).next();
 };
 
-const logNum: Middleware = async (ctx, next) => {
+const logNum: Middleware = async tools => {
   await new Promise(resolve => {
     setTimeout(resolve, 2000);
   });
-  const num = ctx.get(NumCtx.Consumer);
+  const num = tools.readContext(NumCtx.Consumer);
   console.log(`num : ${num}`);
-  return next(ctx);
+  return tools.next();
 };
 
-const main: Middleware = async ctx => {
+const main: Middleware = async tools => {
   await new Promise(resolve => {
     setTimeout(resolve, 2000);
   });
-  const num = ctx.getOrThrow(NumCtx.Consumer);
+  const num = tools.readContextOrFail(NumCtx.Consumer);
   return TumauResponse.withText(`Num : ${num}`);
 };
 
-const composed = Middleware.compose(
-  logger,
-  logNum,
-  addNum,
-  logNum,
-  main
-);
+const composed = Middleware.compose(logger, logNum, addNum, logNum, main);
 
 const server = Server.create(composed);
 

@@ -9,16 +9,16 @@ export interface ParsedUrl {
   rawQuery: null | string;
 }
 
-export const UrlParserContext = Context.create<ParsedUrl>('UrlParser');
+export const UrlParserContext = Context.create<ParsedUrl>();
 
 export const UrlParserConsumer = UrlParserContext.Consumer;
 
 export function UrlParser(): Middleware {
-  return (ctx, next) => {
-    if (ctx.has(UrlParserContext.Consumer)) {
-      return next(ctx);
+  return tools => {
+    if (tools.hasContext(UrlParserContext.Consumer)) {
+      return tools.next();
     }
-    const request = ctx.getOrThrow(RequestConsumer);
+    const request = tools.readContextOrFail(RequestConsumer);
     const parsedObj = parseUrl(request.url);
     const parsed: ParsedUrl = {
       path: parsedObj.path,
@@ -27,7 +27,7 @@ export function UrlParser(): Middleware {
       query: parsedObj.query ? parseQueryString(parsedObj.query) : null,
       search: parsedObj.search,
     };
-    return next(ctx.set(UrlParserContext.Provider(parsed)));
+    return tools.withContext(UrlParserContext.Provider(parsed)).next();
   };
 }
 

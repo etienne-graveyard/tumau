@@ -8,13 +8,13 @@ import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
 import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
-import { Context, ContextStack, ContextManager } from './Context';
+import { Context } from '@tumau/middleware';
 
 // We force a deault value because these context are always there !
-export const RequestContext = Context.create<TumauRequest>('TumauRequest', null as any);
+export const RequestContext = Context.create<TumauRequest>(null as any);
 export const RequestConsumer = RequestContext.Consumer;
 
-export const ServerResponseContext = Context.create<http.ServerResponse>('ServerResponse', null as any);
+export const ServerResponseContext = Context.create<http.ServerResponse>(null as any);
 export const ServerResponseConsumer = ServerResponseContext.Consumer;
 
 export interface Server {
@@ -57,18 +57,16 @@ function createServer(opts: Middleware | Options): Server {
     const requestCtx = RequestContext.Provider(request);
     const resCtx = ServerResponseContext.Provider(res);
 
-    const wrappedMiddleware: Middleware = handleErrors
-      ? Middleware.compose(
-          HandleErrors,
-          HandleInvalidResponse,
-          mainMiddleware
-        )
-      : mainMiddleware;
+    const exposeContextMiddleware: Middleware = Middleware.provider(requestCtx, resCtx);
 
-    const rootStack = ContextStack.create(resCtx, requestCtx);
-    const rootContext = ContextManager.create(rootStack);
+    const rootMiddleware: Middleware = Middleware.compose(
+      exposeContextMiddleware,
+      handleErrors ? HandleErrors : null,
+      handleErrors ? HandleInvalidResponse : null,
+      mainMiddleware
+    );
 
-    return Promise.resolve(wrappedMiddleware(rootContext, () => Promise.resolve(null)))
+    return Middleware.run(rootMiddleware, () => null)
       .then(response => {
         sendResponseAny(response, res, request);
       })

@@ -20,7 +20,7 @@ export interface RouteResolved {
   // if pattern is compose of other Chemin we extract them
   patterns: Array<Chemin> | null;
   exact: boolean;
-  middleware: null | Middleware;
+  middleware: Middleware | null;
   method: Method;
   children: Array<Route>;
 }
@@ -83,7 +83,12 @@ function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
     return {
       ...route,
       patterns: route.pattern ? route.pattern.extract() : null,
-      middleware: route.middleware.length === 1 ? route.middleware[0] : Middleware.compose(...route.middleware),
+      middleware:
+        route.middleware.length === 0
+          ? null
+          : route.middleware.length === 1
+          ? route.middleware[0]
+          : Middleware.compose(...route.middleware),
     };
   });
 }

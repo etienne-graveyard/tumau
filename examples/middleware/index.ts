@@ -3,27 +3,28 @@ import { Middleware, Context } from '@tumau/middleware';
 const ACtx = Context.create<string>('A');
 
 const mid = Middleware.compose<string>(
-  next => {
+  tools => {
     console.log('middleware 1');
-    console.log((next as any).debug());
-    return next.set(ACtx.Provider('a1')).run();
+    console.log((tools as any).debug());
+    return tools.withContext(ACtx.Provider('a1')).next();
   },
-  next => {
+  tools => {
     console.log('middleware 2');
-    console.log((next as any).debug());
-    return next.set(ACtx.Provider('a2')).run();
+    console.log((tools as any).debug());
+    return tools.withContext(ACtx.Provider('a2')).next();
   },
-  next => {
+  tools => {
     console.log('middleware 3');
-    console.log((next as any).debug());
-    return next.set(ACtx.Provider('a3')).run();
+    console.log(tools.readContext(ACtx.Consumer));
+    console.log((tools as any).debug());
+    return tools.withContext(ACtx.Provider('a3')).next();
   }
 );
 
-const mid2 = Middleware.compose(mid, async next => {
+const mid2 = Middleware.compose(mid, async tools => {
   console.log('done');
-  console.log((next as any).debug());
-  return next.run();
+  console.log((tools as any).debug());
+  return tools.next();
 });
 
 Middleware.run(mid2, () => {

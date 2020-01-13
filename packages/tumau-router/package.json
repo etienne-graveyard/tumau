@@ -19,10 +19,10 @@
   "dependencies": {
     "@tumau/core": "^1.0.0-alpha.48",
     "@tumau/url-parser": "^1.0.0-alpha.48",
-    "chemin": "^4.2.0"
+    "chemin": "^5.0.0"
   },
   "devDependencies": {
-    "tsdx": "^0.12.1"
+    "tsdx": "^0.12.3"
   },
   "publishConfig": {
     "access": "public"

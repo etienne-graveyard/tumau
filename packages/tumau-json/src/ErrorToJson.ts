@@ -1,9 +1,9 @@
 import { Middleware, TumauResponse } from '@tumau/core';
 import { JsonResponse } from './JsonResponse';
 
-export const ErrorToJson: Middleware = async (ctx, next): Promise<TumauResponse | null> => {
+export const ErrorToJson: Middleware = async (tools): Promise<TumauResponse | null> => {
   try {
-    return await next(ctx);
+    return await tools.next();
   } catch (error) {
     return JsonResponse.fromError(error);
   }

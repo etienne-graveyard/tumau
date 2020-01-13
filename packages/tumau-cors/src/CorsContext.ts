@@ -18,5 +18,5 @@ export interface CorsContext {
   allowCredentials: boolean;
 }
 
-export const CorsContext = Context.create<CorsContext>('Cors');
+export const CorsContext = Context.create<CorsContext>();
 export const CorsContextConsumer = CorsContext.Consumer;

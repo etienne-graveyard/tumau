@@ -1,9 +1,9 @@
 import { Middleware } from './Middleware';
 import { TumauResponse } from './TumauResponse';
 
-export const HandleErrors: Middleware = async (ctx, next) => {
+export const HandleErrors: Middleware = async tools => {
   try {
-    return await next(ctx);
+    return await tools.next();
   } catch (error) {
     // console.error(error);
     return TumauResponse.fromError(error);

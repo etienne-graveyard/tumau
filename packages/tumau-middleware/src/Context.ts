@@ -1,14 +1,14 @@
-import { CONTEXT_TOKEN } from './constants';
+import { CONTEXT } from './constants';
 
 export interface ContextConsumer<T, HasDefault extends boolean = boolean> {
-  [CONTEXT_TOKEN]: {
+  [CONTEXT]: {
     hasDefault: HasDefault;
     defaultValue: T | undefined;
   };
 }
 
 export interface ContextProvider<T, HasDefault extends boolean = boolean> {
-  [CONTEXT_TOKEN]: {
+  [CONTEXT]: {
     consumer: ContextConsumer<T, HasDefault>;
     value: T;
   };
@@ -16,7 +16,8 @@ export interface ContextProvider<T, HasDefault extends boolean = boolean> {
 
 export type ContextProviderFn<T, HasDefault extends boolean> = (value: T) => ContextProvider<T, HasDefault>;
 
-export interface ContextItem<T, HasDefault extends boolean = boolean> {
+// Expose both Provider & Consumer because this way you can expose only one of them
+export interface Context<T, HasDefault extends boolean = boolean> {
   Consumer: ContextConsumer<T, HasDefault>;
   Provider: ContextProviderFn<T, HasDefault>;
 }
@@ -30,18 +31,18 @@ export const Context = {
   create: createContext,
 };
 
-function createContext<T>(): ContextItem<T, false>;
-function createContext<T>(defaultValue: T): ContextItem<T, true>;
-function createContext<T>(defaultValue?: T): ContextItem<T, boolean> {
+function createContext<T>(): Context<T, false>;
+function createContext<T>(defaultValue: T): Context<T, true>;
+function createContext<T>(defaultValue?: T): Context<T, boolean> {
   const Consumer: ContextConsumer<T, any> = {
-    [CONTEXT_TOKEN]: {
+    [CONTEXT]: {
       hasDefault: defaultValue !== undefined && arguments.length === 2,
       defaultValue: defaultValue,
     },
   };
   return {
     Consumer,
-    Provider: value => ({ [CONTEXT_TOKEN]: { value, consumer: Consumer } }),
+    Provider: value => ({ [CONTEXT]: { value, consumer: Consumer } }),
   };
 }
 
@@ -65,10 +66,10 @@ export const ContextStack = {
         value: null,
       };
     }
-    if (stack.provider[CONTEXT_TOKEN].consumer === ctx) {
+    if (stack.provider[CONTEXT].consumer === ctx) {
       return {
         found: true,
-        value: stack.provider[CONTEXT_TOKEN].value,
+        value: stack.provider[CONTEXT].value,
       };
     }
     if (stack.parent === null) {

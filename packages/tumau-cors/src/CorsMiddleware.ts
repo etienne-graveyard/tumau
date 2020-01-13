@@ -1,8 +1,8 @@
-import { Middleware, Context, HttpMethod, RequestConsumer, TumauResponse, HttpHeaders } from '@tumau/core';
+import { Middleware, Tools, HttpMethod, RequestConsumer, TumauResponse, HttpHeaders } from '@tumau/core';
 import { CorsResponse } from './CorsResponse';
 import { CorsContext, DEFAULT_CORS_CONTEXT } from './CorsContext';
 
-type ValOrFn<T> = T | ((ctx: Context) => T);
+type ValOrFn<T> = T | ((tools: Tools) => T);
 
 export interface Config {
   allowOrigin?: ValOrFn<string | null>;
@@ -13,8 +13,8 @@ export interface Config {
   allowCredentials?: ValOrFn<boolean>;
 }
 
-function resolveFunction<T>(ctx: Context, option: ValOrFn<T>): T {
-  return typeof option === 'function' ? (option as any)(ctx) : option;
+function resolveFunction<T>(tools: Tools, option: ValOrFn<T>): T {
+  return typeof option === 'function' ? (option as any)(tools) : option;
 }
 
 const DEFAULT_ALLOW_METHODS = new Set([
@@ -27,20 +27,20 @@ const DEFAULT_ALLOW_METHODS = new Set([
 ]);
 
 export function createCorsMiddleware(config: Config = {}): Middleware {
-  return async (ctx, next) => {
-    const request = ctx.getOrThrow(RequestConsumer);
+  return async tools => {
+    const request = tools.readContextOrFail(RequestConsumer);
     const origin = request.origin;
     const allowOrigin: string | null =
-      config.allowOrigin === undefined ? origin : resolveFunction(ctx, config.allowOrigin);
+      config.allowOrigin === undefined ? origin : resolveFunction(tools, config.allowOrigin);
     const allowMethods: Set<HttpMethod> | null =
-      config.allowMethods === undefined ? DEFAULT_ALLOW_METHODS : resolveFunction(ctx, config.allowMethods);
+      config.allowMethods === undefined ? DEFAULT_ALLOW_METHODS : resolveFunction(tools, config.allowMethods);
     const allowHeaders: Set<string> | null =
-      config.allowHeaders === undefined ? null : resolveFunction(ctx, config.allowHeaders);
+      config.allowHeaders === undefined ? null : resolveFunction(tools, config.allowHeaders);
     const exposeHeaders: Set<string> | null =
-      config.exposeHeaders === undefined ? null : resolveFunction(ctx, config.exposeHeaders);
-    const maxAge: number | null = config.maxAge === undefined ? null : resolveFunction(ctx, config.maxAge);
+      config.exposeHeaders === undefined ? null : resolveFunction(tools, config.exposeHeaders);
+    const maxAge: number | null = config.maxAge === undefined ? null : resolveFunction(tools, config.maxAge);
     const allowCredentials: boolean =
-      config.allowCredentials === undefined ? false : resolveFunction(ctx, config.allowCredentials);
+      config.allowCredentials === undefined ? false : resolveFunction(tools, config.allowCredentials);
 
     const corsContext: CorsContext = {
       allowOrigin,
@@ -51,7 +51,7 @@ export function createCorsMiddleware(config: Config = {}): Middleware {
       allowCredentials,
     };
 
-    const res = await next(ctx.set(CorsContext.Provider(corsContext)));
+    const res = await tools.withContext(CorsContext.Provider(corsContext)).next();
     const resResolved = res === null ? TumauResponse.noContent() : res;
 
     const isPreflight = request.method === HttpMethod.OPTIONS;

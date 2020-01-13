@@ -1,41 +1,41 @@
 import { Context, Server, Middleware } from 'tumau';
 
 // Num context with a default value of 7
-const NumContext = Context.create<number>('Num', 7);
+const NumContext = Context.create<number>(7);
 
 // MaybeNum with no default value
-const MaybeNumContext = Context.create<number>('MaybeNum');
+const MaybeNumContext = Context.create<number>();
 
 // middleware
-const myContextProvider: Middleware = (ctx, next) => {
+const myContextProvider: Middleware = tools => {
   // we provide our context
   const numProvider = NumContext.Provider(42);
   const maybeNumProvider = MaybeNumContext.Provider(6);
-  // we create a new ctx by calling ctx.set()
-  const nextCtx = ctx.set(numProvider, maybeNumProvider);
-  // we call next with our new context
-  return next(nextCtx);
+  // we create a new tools by calling tools.withContext()
+  const nextTools = tools.withContext(numProvider, maybeNumProvider);
+  // we call next on our new tools to execute the next middleware
+  return nextTools.next();
 };
 
 // middleware
-const myContextConsumer: Middleware = (ctx, next) => {
+const myContextConsumer: Middleware = tools => {
   // Num
   console.log({
-    has: ctx.has(NumContext.Consumer),
-    num: ctx.get(NumContext.Consumer),
+    has: tools.hasContext(NumContext.Consumer),
+    num: tools.readContext(NumContext.Consumer),
     // NumContext has a default value so this would never throw
-    numOrThrow: ctx.getOrThrow(NumContext.Consumer),
+    numOrThrow: tools.readContextOrFail(NumContext.Consumer),
   });
 
   // MaybeNum
   console.log({
-    has: ctx.has(MaybeNumContext.Consumer),
-    maybeNum: ctx.get(MaybeNumContext.Consumer),
+    has: tools.hasContext(MaybeNumContext.Consumer),
+    maybeNum: tools.readContext(MaybeNumContext.Consumer),
     // this will throw an error if the Context is not present
-    numOrThrow: ctx.getOrThrow(MaybeNumContext.Consumer),
+    numOrThrow: tools.readContextOrFail(MaybeNumContext.Consumer),
   });
 
-  return next(ctx);
+  return tools.next();
 };
 
 const server = Server.create(

@@ -1,16 +1,13 @@
 import { Server, Middleware, JsonParser, JsonResponse, JsonParserConsumer } from 'tumau';
 
 const server = Server.create(
-  Middleware.compose(
-    JsonParser(),
-    ctx => {
-      const jsonBody = ctx.getOrThrow(JsonParserConsumer);
-      if (jsonBody) {
-        return JsonResponse.with({ you: '<- are here !', received: jsonBody });
-      }
-      return JsonResponse.with({ you: '<- are here !' });
+  Middleware.compose(JsonParser(), tools => {
+    const jsonBody = tools.readContextOrFail(JsonParserConsumer);
+    if (jsonBody) {
+      return JsonResponse.with({ you: '<- are here !', received: jsonBody });
     }
-  )
+    return JsonResponse.with({ you: '<- are here !' });
+  })
 );
 
 server.listen(3002, () => {
