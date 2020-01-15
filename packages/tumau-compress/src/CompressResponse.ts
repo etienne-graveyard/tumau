@@ -31,11 +31,13 @@ export class CompressResponse extends TumauResponse {
     if (body === null) {
       return null;
     }
-    const bodyStream = typeof body === 'string' ? new StringStream(body) : body;
+    let bodyStream = typeof body === 'string' ? new StringStream(body) : body;
 
-    return encodings.reduce<Readable>((body, encoding) => {
-      return CompressResponse.encodeBodyWithEncoding(body, encoding);
-    }, bodyStream);
+    encodings.forEach(encoding => {
+      bodyStream = CompressResponse.encodeBodyWithEncoding(bodyStream, encoding);
+    });
+
+    return bodyStream;
   }
 
   public static encodeBodyWithEncoding(body: Readable, encoding: Encoding): Readable {

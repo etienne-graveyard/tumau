@@ -1,6 +1,6 @@
-# @tumau-example/basic (private)
+# @tumau-example/middleware (private)
 
-> Basic example of @tumau/core
+> Basic example of @tumau/middleware
 
 ## Tumau
 

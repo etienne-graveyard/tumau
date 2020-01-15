@@ -1,6 +1,6 @@
-# @tumau/middleware
+# @tumau/cookie
 
-> Middleware & Context system for Tumau
+> Cookies for tumau
 
 ## Tumau
 

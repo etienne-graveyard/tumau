@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@tumau/compress": "^1.0.0-alpha.49",
+    "@tumau/cookie": "^1.0.0-alpha.49",
     "@tumau/core": "^1.0.0-alpha.49",
     "@tumau/cors": "^1.0.0-alpha.49",
     "@tumau/json": "^1.0.0-alpha.49",

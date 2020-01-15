@@ -1,6 +1,6 @@
-# @tumau/middleware
+# @tumau-example/basic (private)
 
-> Middleware & Context system for Tumau
+> Basic example of @tumau/core
 
 ## Tumau
 

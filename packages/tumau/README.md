@@ -155,11 +155,7 @@ The `Server.create` function take only one middleware as parameter. To use multi
 ```js
 import { Middleware } from 'tumau';
 
-const composed = Middleware.compose(
-  logger,
-  cors,
-  main
-);
+const composed = Middleware.compose(logger, cors, main);
 
 const server = Server.create(composed);
 ```

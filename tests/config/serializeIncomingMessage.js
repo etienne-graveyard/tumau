@@ -9,16 +9,28 @@ function formatHeaderName(name) {
     .join('-');
 }
 
+function formatValue(key, value) {
+  const isDate = key.toLowerCase() === 'date';
+  // hide date to match every time
+  const v = isDate ? `Xxx, XX Xxx XXXX XX:XX:XX GMT` : value;
+  return `${formatHeaderName(key)}: ${v}`;
+}
+
 module.exports = {
+  /**
+   *
+   * @param {http.IncomingMessage} val
+   */
   print(val) {
     const sortedHeaders = Object.keys(val.headers).sort();
     return [
       `HTTP/1.1 ${val.statusCode}${val.statusMessage ? ' ' + val.statusMessage : ''}`,
       ...sortedHeaders.map(key => {
-        const isDate = key.toLowerCase() === 'date';
-        // hide date to match every time
-        const value = isDate ? `Xxx, XX Xxx XXXX XX:XX:XX GMT` : val.headers[key];
-        return `${formatHeaderName(key)}: ${value}`;
+        const rawValue = val.headers[key];
+        if (Array.isArray(rawValue)) {
+          return rawValue.map(v => formatValue(key, v)).join('\n');
+        }
+        return formatValue(key, rawValue);
       }),
     ].join('\n');
   },

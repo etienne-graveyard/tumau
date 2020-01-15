@@ -1,6 +1,6 @@
 # @tumau/static
 
-> Static server for tumau
+> Static file handler for tumau
 
 ## Tumau
 

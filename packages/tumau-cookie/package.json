@@ -1,7 +1,7 @@
 {
-  "name": "@tumau/static",
+  "name": "@tumau/cookie",
   "version": "1.0.0-alpha.49",
-  "description": "Static file handler for tumau",
+  "description": "Cookies for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
@@ -9,7 +9,7 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "module": "dist/tumau.static.esm.js",
+  "module": "dist/tumau.cookie.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsdx build --target node",
