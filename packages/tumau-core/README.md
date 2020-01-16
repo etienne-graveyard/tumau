@@ -1,6 +1,6 @@
 # @tumau/core
 
-> A Zero dependency node HTTP server written in Typescript
+> A node HTTP framework written in Typescript
 
 ## Tumau
 

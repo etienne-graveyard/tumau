@@ -10,18 +10,7 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 
 ## Gist
 
-```ts
-import { Server, TumauResponse, RequestConsumer } from 'tumau';
-
-const server = Server.create(tools => {
-  const request = tools.readContext(RequestConsumer);
-  return TumauResponse.withText(`Hello World ! (from ${request.url})`);
-});
-
-server.listen(3002, () => {
-  console.log(`Server is up at http://localhost:3002`);
-});
-```
+[[@tumau-example/basic/index.ts]]
 
 ## Benefits over Express/Koa/Other
 
@@ -83,15 +72,7 @@ The tools let you do two things:
 
 Contexts are typed when you create them:
 
-```ts
-import { Context } from 'tumau';
-
-// here we could omit <number> because it would be infered
-const NumCtx = Context.create<number>(0);
-
-// you can omit the default value
-const NameCtx = Context.create<string>();
-```
+[[@tumau-example/context/create.ts]]
 
 ## Middleware
 
