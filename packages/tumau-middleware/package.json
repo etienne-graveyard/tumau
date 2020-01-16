@@ -1,6 +1,6 @@
 {
   "name": "@tumau/middleware",
-  "version": "1.0.0-alpha.50",
+  "version": "1.0.0-alpha.51",
   "description": "Middleware & Context system for Tumau",
   "keywords": [
     "node",
