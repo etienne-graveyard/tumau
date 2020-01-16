@@ -13,6 +13,6 @@
     "tumau": "^1.0.0-alpha.51"
   },
   "devDependencies": {
-    "ts-node": "^8.6.1"
+    "ts-node": "^8.6.2"
   }
 }
