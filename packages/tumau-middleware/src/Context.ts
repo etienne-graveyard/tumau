@@ -80,8 +80,12 @@ export const ContextStack = {
     }
     return ContextStack.read(stack.parent, ctx);
   },
-  create(first: ContextProvider<any>, ...items: Array<ContextProvider<any>>): ContextStack {
+  create(...items: Array<ContextProvider<any>>): ContextStack | null {
+    const [first, ...other] = items;
+    if (!first) {
+      return null;
+    }
     const root: ContextStack = { provider: first, parent: null };
-    return ContextStack.add(root, ...items);
+    return ContextStack.add(root, ...other);
   },
 };

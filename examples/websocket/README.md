@@ -1,6 +1,6 @@
-# @tumau-example/cookie (private)
+# @tumau-example/websocket (private)
 
-> Exemple usage of cookie
+> Websocket example for tumau
 
 ## Tumau
 

@@ -1,6 +1,6 @@
 import * as TumauMiddleware from '@tumau/middleware';
 import { TumauResponse } from './TumauResponse';
-import { ContextStack } from '@tumau/middleware/dist/Context';
+import { ContextStack, ContextProvider } from '@tumau/middleware';
 
 export type Result = TumauResponse | null;
 export type Middleware = TumauMiddleware.Middleware<Result>;
@@ -18,6 +18,11 @@ export const Middleware = {
   compose: (...middleware: Array<Middleware | null>): Middleware => TumauMiddleware.Middleware.compose(...middleware),
   run: (middleware: Middleware, done: () => Result): Promise<Result> =>
     TumauMiddleware.Middleware.run(middleware, done),
+  runWithContexts: (
+    middleware: Middleware,
+    contexts: Array<ContextProvider<any>>,
+    done: () => Result
+  ): Promise<Result> => TumauMiddleware.Middleware.runWithContexts(middleware, contexts, done),
   provider: (
     first: TumauMiddleware.ContextProvider<any>,
     ...contexts: Array<TumauMiddleware.ContextProvider<any>>

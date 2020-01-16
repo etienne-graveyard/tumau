@@ -37,7 +37,7 @@ export function Compress(): Middleware {
       }
       return [ContentEncoding.Identity];
     })();
-    const compressResponse = new CompressResponse(response, usedEncoding);
+    const compressResponse = CompressResponse.fromResponse(response, usedEncoding);
     return compressResponse;
   };
 }

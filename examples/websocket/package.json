@@ -1,0 +1,23 @@
+{
+  "name": "@tumau-example/websocket",
+  "version": "1.0.0-alpha.50",
+  "private": true,
+  "description": "Websocket example for tumau",
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev ./index.ts",
+    "start": "ts-node ./index.ts"
+  },
+  "dependencies": {
+    "tumau": "^1.0.0-alpha.50",
+    "ws": "^7.2.1"
+  },
+  "devDependencies": {
+    "@types/ws": "^7.2.0",
+    "ts-node": "^8.6.1",
+    "ts-node-dev": "^1.0.0-pre.43"
+  }
+}

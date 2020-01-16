@@ -1,9 +1,17 @@
 import { Middleware } from './Middleware';
 import { TumauResponse } from './TumauResponse';
 import { HttpError } from './HttpError';
+import { RequestConsumer } from './Server';
 
-export const HandleInvalidResponse: Middleware = async next => {
-  const response = await next.next();
+export const HandleInvalidResponse: Middleware = async tools => {
+  const request = tools.readContext(RequestConsumer);
+  const isUpgrade = request.isUpgrade;
+  const response = await tools.next();
+  if (isUpgrade) {
+    // when upgrade this middleware is useless because we can't send a response
+    // and response are checked by Server
+    return response;
+  }
   if (response === null || response === undefined) {
     throw new HttpError.ServerDidNotRespond();
   }

@@ -1,4 +1,5 @@
-import { OutgoingHttpHeaders } from 'http';
+import { OutgoingHttpHeaders, IncomingMessage } from 'http';
+import { Duplex } from 'stream';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
 import { HttpHeaders, ContentType, ContentTypeCharset } from './HttpHeaders';
@@ -13,9 +14,9 @@ export interface ResponseConstuctorOptions {
 }
 
 export class TumauResponse {
-  public code: HttpStatusCode;
-  public body: Body;
-  public headers: OutgoingHttpHeaders;
+  public readonly code: HttpStatusCode;
+  public readonly body: Body;
+  public readonly headers: OutgoingHttpHeaders;
 
   public constructor(options: ResponseConstuctorOptions = {}) {
     const { code = 200, headers = {}, body = null } = options;
@@ -61,6 +62,12 @@ export class TumauResponse {
     });
   }
 
+  public static switchingProtocols() {
+    // return new TumauResponse({
+    //   code: 101,
+    // });
+  }
+
   public static redirect(to: string, permanent: boolean = false) {
     return new TumauResponse({
       code: permanent ? 301 : 302,
@@ -95,4 +102,21 @@ export class TumauResponse {
     }
     return TumauResponse.fromError(new HttpError.Internal(String(err)));
   }
+
+  public static SwitchingProtocols: typeof SwitchingProtocols;
 }
+
+export type SwitchingProtocolsHandler = (req: IncomingMessage, socket: Duplex, head: Buffer) => Promise<void>;
+
+class SwitchingProtocols extends TumauResponse {
+  public readonly handler: SwitchingProtocolsHandler;
+
+  constructor(handler: SwitchingProtocolsHandler) {
+    super({
+      code: 101,
+    });
+    this.handler = handler;
+  }
+}
+
+TumauResponse.SwitchingProtocols = SwitchingProtocols;

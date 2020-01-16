@@ -1,4 +1,4 @@
-import { TumauResponse, Body, HttpHeaders, ContentEncoding } from '@tumau/core';
+import { TumauResponse, Body, HttpHeaders, ContentEncoding, HttpStatus } from '@tumau/core';
 import { Encoding } from './CompressContext';
 import { OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
@@ -15,7 +15,7 @@ export class CompressResponse extends TumauResponse {
       [HttpHeaders.ContentEncoding]: encodings,
     };
 
-    // remove content length beacause we no longer know the size of the body
+    // remove content length because we no longer know the size of the body
     // (unless we compress first, then send it but that would be quite bad)
     delete headers[HttpHeaders.ContentLength];
 
@@ -51,5 +51,15 @@ export class CompressResponse extends TumauResponse {
       return body.pipe(zlib.createDeflate());
     }
     return body;
+  }
+
+  public static fromResponse(
+    originalResponse: TumauResponse,
+    encodings: Array<Encoding>
+  ): TumauResponse | CompressResponse {
+    if (originalResponse.body === null || HttpStatus.isEmpty(originalResponse.code)) {
+      return originalResponse;
+    }
+    return new CompressResponse(originalResponse, encodings);
   }
 }

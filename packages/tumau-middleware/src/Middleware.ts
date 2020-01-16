@@ -7,11 +7,21 @@ export type Middlewares<R> = Array<Middleware<R>>;
 export const Middleware = {
   compose,
   run: runMiddleware,
+  runWithContexts: runMiddlewareWithContexts,
   provider: createProviderMiddleware,
 };
 
 function runMiddleware<R>(middleware: Middleware<R>, done: () => Result<R>): AsyncResult<R> {
-  return Promise.resolve(middleware(Tools.create(null, done)));
+  return runMiddlewareWithContexts(middleware, [], done);
+}
+
+function runMiddlewareWithContexts<R>(
+  middleware: Middleware<R>,
+  contexts: Array<ContextProvider<any>>,
+  done: () => Result<R>
+): AsyncResult<R> {
+  const baseStack = ContextStack.create(...contexts);
+  return Promise.resolve(middleware(Tools.create(baseStack, done)));
 }
 
 function compose<R>(...middlewares: Array<Middleware<R> | null>): Middleware<R> {

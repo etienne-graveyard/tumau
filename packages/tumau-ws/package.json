@@ -1,0 +1,27 @@
+{
+  "name": "@tumau/ws",
+  "version": "1.0.0-alpha.50",
+  "description": "Websocket handler for tumau using ws",
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/tumau.ws.esm.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --target node"
+  },
+  "dependencies": {
+    "@tumau/core": "^1.0.0-alpha.50"
+  },
+  "devDependencies": {
+    "tsdx": "^0.12.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
