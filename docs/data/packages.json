@@ -1,0 +1,5 @@
+[
+  { "name": "@tumau/core", "slug": "core", "path": "packages/tumau-core" },
+  { "name": "@tumau/json", "slug": "json", "path": "packages/tumau-json" },
+  { "name": "@tumau/middleware", "slug": "middleware", "path": "packages/tumau-middleware" }
+]

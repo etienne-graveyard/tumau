@@ -1,0 +1,43 @@
+html,
+body {
+  font-family: 'Quicksand', sans-serif;
+  overscroll-behavior: contain;
+}
+
+pre,
+code {
+  font-family: 'Fira Code', monospace;
+}
+
+pre code {
+  line-height: 1.6;
+}
+
+pre.hljs {
+  border-radius: 0.5rem;
+}
+
+img {
+  width: 100%;
+  max-height: 90vh;
+  margin: auto;
+}
+
+blockquote {
+  position: relative;
+  display: block;
+  padding: 0.1rem;
+  padding-left: 1rem;
+  margin-left: 0;
+}
+blockquote:before {
+  display: block;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  background: #072231;
+  width: 5px;
+  border-radius: 5px;
+}

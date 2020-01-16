@@ -6,7 +6,8 @@
     "examples/*",
     "benchmarks",
     "scripts",
-    "tests"
+    "tests",
+    "docs"
   ],
   "keywords": [
     "node",
