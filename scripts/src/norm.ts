@@ -6,9 +6,12 @@ import * as sortPackageJson from 'sort-package-json';
 norm();
 
 async function norm() {
-  console.log('Norm in ' + process.env.LERNA_PACKAGE_NAME);
+  const name = process.env.LERNA_PACKAGE_NAME || '';
+  console.log('Norm in ' + name);
   const pkg = await normPackageJson();
-  normReadme(pkg);
+  if (name === 'tumau' || name.startsWith('@tumau/') || name.startsWith('@tumau-example/')) {
+    normReadme(pkg);
+  }
 }
 
 async function normPackageJson() {

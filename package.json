@@ -20,7 +20,6 @@
     "test": "lerna run test --stream",
     "typecheck": "lerna exec --stream --scope '{@tumau,@tumau-example}/**' 'tsc --noEmit'",
     "norm": "lerna exec --stream -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
-    "norm-middleware": "lerna exec --scope '@tumau/middleware' --stream -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
     "pub": "yarn build && yarn test && lerna publish",
     "lint": "eslint ."

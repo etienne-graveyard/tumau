@@ -1,5 +1,8 @@
-# scripts (private)
+# Tumau scripts (private)
 
-## Tumau
+Scripts for managing the tumau monorepo.
 
-This package is part of the [tumau](https://github.com/etienne-dldc/tumau) family. Make sure to read [the documentation of tumau](https://github.com/etienne-dldc/tumau) first !
+For now there are two scripts:
+
+- `norm`: to normalize `package.js` and build `README.md` files
+- `benchmark`: to run benchmark

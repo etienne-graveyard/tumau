@@ -1,5 +1,3 @@
-# tests (private)
+# Tumau tests (private)
 
-## Tumau
-
-This package is part of the [tumau](https://github.com/etienne-dldc/tumau) family. Make sure to read [the documentation of tumau](https://github.com/etienne-dldc/tumau) first !
+Run `tarn test` to start the tests.
