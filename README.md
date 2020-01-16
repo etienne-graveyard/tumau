@@ -13,8 +13,8 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 ```ts
 import { Server, TumauResponse, RequestConsumer } from 'tumau';
 
-const server = Server.create(ctx => {
-  const request = ctx.get(RequestConsumer);
+const server = Server.create(tools => {
+  const request = tools.readContext(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 
@@ -28,7 +28,7 @@ server.listen(3002, () => {
 - Written in Typescript (strong yet easy-to-use types)
 - Almost no external dependency (easy to audit)
 - Simple to extends (using middleware)
-- Minimal (contains only the bare minimum)
+- Modular, cou can take only what you need.
 
 ## Install
 
@@ -49,10 +49,12 @@ The `tumau` package is a proxi for different packages:
 - [`@tumau/router`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-router) for routing (it uses `@tumau/url-parser` for url parsing)
 - [`@tumau/json`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-json) for parsing / sending JSON
 - [`@tumau/compress`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-compress) for Brotli / GZip / Deflate compression
+- [`@tumau/cookie`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-cookie) for readong and setting cookies
 
 ## Dependencies
 
-`@tumau/router` has [`chemin`](https://github.com/etienne-dldc/chemin) as a peer dependency. This is the only dependency the project has and `chemin` itself has zero dependencies.
+`@tumau/router` has [`chemin`](https://github.com/etienne-dldc/chemin) as a dependency and `chemin` itself has zero dependencies.
+`@tumau/ws` depend on [`ws`](https://github.com/websockets/ws).
 
 ## Overview
 
@@ -68,47 +70,48 @@ A middleware can stop the chain and return a response. In that case the next mid
   <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-2.png" width="597">
 </p>
 
-## The context (ctx)
+## Tools
 
-In tumau the context is a way to share data between middleware.
+In tumau the tools is what you get in middleware to interact wth the other middlewares.
 
-Take a look a [this example](https://github.com/etienne-dldc/tumau/blob/master/examples/context/index.ts)
+The tools let you do two things:
+
+- Read / Write a context (Take a look a [this example](https://github.com/etienne-dldc/tumau/blob/master/examples/context/index.ts))
+- Call the next middleware
 
 ### For TypeScript users
 
 Contexts are typed when you create them:
 
 ```ts
+import { Context } from 'tumau';
+
 // here we could omit <number> because it would be infered
-const NumCtx = Context.create<number>('Num', 0);
+const NumCtx = Context.create<number>(0);
 
 // you can omit the default value
-const NameCtx = Context.create<string>('Num');
+const NameCtx = Context.create<string>();
 ```
 
 ## Middleware
 
 A middleare is a function that:
 
-- receives a context from the previous middleware
-- receives a `next` function that will execute the next middleware
+- receives the tools
 - can return a response or null (or a promise of one of them)
 
 ```ts
-type Middleware = (ctx: Context, next: Next) => null | Response | Promise<null | Response>;
+type Middleware = (tools: Tools) => null | Response | Promise<null | Response>;
 ```
 
-<p align="center">
-  <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-3.png" width="597">
-</p>
+Example:
 
 ```js
-const myMiddleware = async (ctx, next) => {
-  // 1. Context from previous middleware
-  // (you need to call `ctx.get(SomeConsumer)` to read data from the context)
-  console.log(ctx); // { get, getOrThrow, set, has }
+const myMiddleware = async tools => {
+  // 1. We receive a tools object
+  console.log(tools); // { readContext, readContextOrFail, hasContext, next, withContext }
   // 2. We call `next` to call the next middleware
-  const response = await next(ctx);
+  const response = await tools.next();
   // 3. The next middleware return a response
   console.log(response);
   // 4. We return that response
@@ -116,13 +119,13 @@ const myMiddleware = async (ctx, next) => {
 };
 ```
 
-### `next`
+### `tools.next`
 
-The `next` function is always async (it return a Promise).
-It take one parameter: the `Context` and return a Promise of a Response or null
+The `tools.next` function is always async (it return a Promise).
+It take np parameter and return a Promise of a Response or null
 
 ```ts
-type Next = (ctx: Context) => Promise<Response | null>;
+type Next = () => Promise<Response | null>;
 ```
 
 ### Some examples
@@ -132,8 +135,8 @@ type Next = (ctx: Context) => Promise<Response | null>;
 const middleware = () => Response.withText('Hello');
 
 // Return a response if the next middleware did not
-const middleware = async (ctx, next) => {
-  const response = await next(ctx);
+const middleware = async tools => {
+  const response = await tools.next();
   if (response === null) {
     return Response.withText('Not found');
   }
@@ -142,9 +145,9 @@ const middleware = async (ctx, next) => {
 
 // Add a item to the context before calling the next middleware
 // return whatever the next middleware return
-const middleware = (ctx, next) => {
-  const nextCtx = ctx.set(ReceivedAtContext.Provide(new Date()));
-  return next(nextCtx);
+const middleware = tools => {
+  const nextTools = tools.withContext(ReceivedAtContext.Provide(new Date()));
+  return nextTools.next();
 };
 ```
 
@@ -155,11 +158,7 @@ The `Server.create` function take only one middleware as parameter. To use multi
 ```js
 import { Middleware } from 'tumau';
 
-const composed = Middleware.compose(
-  logger,
-  cors,
-  main
-);
+const composed = Middleware.compose(logger, cors, main);
 
 const server = Server.create(composed);
 ```
