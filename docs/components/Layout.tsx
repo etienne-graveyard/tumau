@@ -8,6 +8,7 @@ import { PRIMARY_WIDTH } from '../style/constants';
 const Content = styled.main({
   marginLeft: PRIMARY_WIDTH,
   padding: '1rem',
+  paddingLeft: '2rem',
   maxWidth: 800,
 });
 

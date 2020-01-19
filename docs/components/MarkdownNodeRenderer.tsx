@@ -30,7 +30,12 @@ export const MarkdownNodeRenderer: React.FC<Props> = ({ node }) => {
   if (node.type === 'heading') {
     const tag = 'h' + (node.depth as number);
     // TODO: generate href
-    return React.createElement(tag, {}, <MarkdownNodeRenderer node={node.children as Array<Node>} />);
+    return React.createElement(
+      tag,
+      { id: node.id as string },
+      <a href={`#${node.id as string}`}>#</a>,
+      <MarkdownNodeRenderer node={node.children as Array<Node>} />
+    );
   }
   if (node.type === 'text') {
     return <React.Fragment>{node.value as string}</React.Fragment>;
