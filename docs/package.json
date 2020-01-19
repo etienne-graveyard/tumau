@@ -7,7 +7,7 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
     "dev": "next",
-    "build": "next build && next export"
+    "export": "next build && next export"
   },
   "dependencies": {
     "framer-motion": "^1.7.0",

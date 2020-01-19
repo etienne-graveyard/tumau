@@ -17,6 +17,7 @@
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
+    "build:docs": "lerna run export --stream --scope docs",
     "build": "lerna run build --stream",
     "test": "lerna run test --stream",
     "typecheck": "lerna exec --stream --scope '{@tumau,@tumau-example}/**' 'tsc --noEmit'",
