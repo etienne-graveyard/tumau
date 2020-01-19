@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://github.com/etienne-dldc/tumau/blob/master/design/logo.svg" width="597" alt="tumau logo">
+
+![tumau logo](https://github.com/etienne-dldc/tumau/blob/master/design/logo.svg)
+
 </p>
 
 # 🏺 Tumau
@@ -50,13 +52,17 @@ The `tumau` package is a proxi for different packages:
 Like many other server, Tumau is based on middleware. A middleware is like a layer the request has to go though. At some point a response is created by one of the middleware and the response has to travel back to the outside (go through every layer in the opposite order) to be sent.
 
 <p align="center">
-  <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-1.png" width="597">
+
+![middleware](https://github.com/etienne-dldc/tumau/blob/master/design/illu-1.png)
+
 </p>
 
 A middleware can stop the chain and return a response. In that case the next middleware will not be called !
 
 <p align="center">
-  <img src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-2.png" width="597">
+
+![next](https://github.com/etienne-dldc/tumau/blob/master/design/illu-2.png)
+
 </p>
 
 ## Tools
