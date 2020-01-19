@@ -8,6 +8,7 @@ import { Page } from '../data/pages';
 import 'normalize.css';
 import '../style/index.css';
 import 'highlight.js/styles/night-owl.css';
+import { Head } from 'next/document';
 
 type Props = Omit<AppProps, 'pageProps'> & { pageProps: BasePageProps };
 
@@ -25,6 +26,11 @@ const MyApp: NextPage<Props> = ({ Component, pageProps }) => {
 
   return (
     <Layout currentPage={slug}>
+      {page && (
+        <Head>
+          <title>{page.name}</title>
+        </Head>
+      )}
       <AnimatePresence exitBeforeEnter>
         <motion.div
           initial={{ opacity: 0, x: -50 }}
