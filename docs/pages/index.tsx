@@ -3,16 +3,22 @@ import { NextPage } from 'next';
 import { MarkdownNodeRenderer } from '../components/MarkdownNodeRenderer';
 import { PageContent } from '../data';
 import { BasePageProps } from './_app';
+import Head from 'next/head';
 
 type Props = BasePageProps & {
   content: PageContent;
 };
 
-const Home: NextPage<Props> = ({ content }) => {
+const Home: NextPage<Props> = ({ content, page }) => {
   return (
-    <div>
-      <MarkdownNodeRenderer node={content} />
-    </div>
+    <React.Fragment>
+      <Head>
+        <title>{page.name}</title>
+      </Head>
+      <div>
+        <MarkdownNodeRenderer node={content} />
+      </div>
+    </React.Fragment>
   );
 };
 

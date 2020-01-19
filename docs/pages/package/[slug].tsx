@@ -4,13 +4,21 @@ import { PageContent } from '../../data';
 import { MarkdownNodeRenderer } from '../../components/MarkdownNodeRenderer';
 import { PAGES } from '../../data/pages';
 import { BasePageProps } from '../_app';
+import Head from 'next/head';
 
 type Props = BasePageProps & {
   content: PageContent;
 };
 
 const Post: NextPage<Props> = ({ content }) => {
-  return <MarkdownNodeRenderer node={content} />;
+  return (
+    <React.Fragment>
+      <Head>
+        <title>Tumau</title>
+      </Head>
+      <MarkdownNodeRenderer node={content} />
+    </React.Fragment>
+  );
 };
 
 // eslint-disable-next-line @typescript-eslint/camelcase
