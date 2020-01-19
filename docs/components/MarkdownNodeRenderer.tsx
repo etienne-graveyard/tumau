@@ -1,6 +1,8 @@
 import React from 'react';
 import { Node } from 'unist';
 import { CodeHighlight } from './CodeHighlight';
+import Link from 'next/link';
+import { PAGES } from '../data/pages';
 
 interface Props {
   node: Node | Array<Node>;
@@ -65,8 +67,23 @@ export const MarkdownNodeRenderer: React.FC<Props> = ({ node }) => {
     );
   }
   if (node.type === 'link') {
+    const url = node.url as string;
+    if (url.startsWith(`https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-`)) {
+      const packageName = url.substring(`https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-`.length);
+      const p = PAGES.find(p => p.slug === `/package/${packageName}`);
+      if (p) {
+        return (
+          <Link href="/package/[slug]" as={`/package/${packageName}`}>
+            <a>
+              <MarkdownNodeRenderer node={node.children as Array<Node>} />
+            </a>
+          </Link>
+        );
+      }
+    }
+
     return (
-      <a href={node.url as string}>
+      <a href={url} target="_blank" rel="noopener noreferrer">
         <MarkdownNodeRenderer node={node.children as Array<Node>} />
       </a>
     );

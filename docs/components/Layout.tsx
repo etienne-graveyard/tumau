@@ -13,16 +13,16 @@ const Content = styled.main({
 
 interface Props {
   secondaryNav?: number;
-  currentPackage: string;
+  currentPage: string;
 }
 
-export const Layout: React.FC<Props> = ({ children, currentPackage }) => {
+export const Layout: React.FC<Props> = ({ children, currentPage }) => {
   // const rendered = useClientRendered();
   // const width = useWindowSize().width;
 
   return (
     <React.Fragment>
-      <MainMenu currentPackage={currentPackage} />
+      <MainMenu currentPage={currentPage} />
       <Content>{children}</Content>
     </React.Fragment>
   );

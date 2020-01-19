@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
-import PACKAGES from '../data/packages.json';
+import { PAGES } from '../data/pages';
 import Link from 'next/link';
 import { PRIMARY_WIDTH } from '../style/constants';
 import { MainMenuItem } from './MainMenuItem';
@@ -8,6 +8,7 @@ import { MainMenuItem } from './MainMenuItem';
 const Wrapper = styled.nav({
   background: '#072231',
   position: 'fixed',
+  zIndex: 500,
   top: 0,
   bottom: 0,
   left: 0,
@@ -22,25 +23,22 @@ const Items = styled.ul({
 });
 
 interface Props {
-  currentPackage: string;
+  currentPage: string;
 }
 
-export const MainMenu: React.FC<Props> = ({ currentPackage }) => {
+export const MainMenu: React.FC<Props> = ({ currentPage }) => {
   return (
     <Wrapper>
       <Items>
-        <MainMenuItem active={currentPackage === 'tumau'}>
-          <Link href="/" as={`/`}>
-            <a>Tumau</a>
-          </Link>
-        </MainMenuItem>
-        {PACKAGES.map(p => (
-          <MainMenuItem active={currentPackage === p.slug} key={p.slug}>
-            <Link href="/package/[slug]" as={`/package/${p.slug}`}>
-              <a>{p.name}</a>
-            </Link>
-          </MainMenuItem>
-        ))}
+        {PAGES.map(p => {
+          return (
+            <MainMenuItem active={currentPage === p.slug} key={p.slug}>
+              <Link href={p.page} as={p.slug}>
+                <a>{p.name}</a>
+              </Link>
+            </MainMenuItem>
+          );
+        })}
       </Items>
     </Wrapper>
   );

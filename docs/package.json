@@ -10,6 +10,7 @@
     "build": "next build && next export"
   },
   "dependencies": {
+    "framer-motion": "^1.7.0",
     "fs-extra": "^8.1.0",
     "highlight.js": "^9.17.1",
     "isomorphic-unfetch": "^3.0.0",

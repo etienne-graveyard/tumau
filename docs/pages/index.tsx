@@ -1,11 +1,11 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { PageData } from '../data';
 import { MarkdownNodeRenderer } from '../components/MarkdownNodeRenderer';
-import PACKAGES from '../data/packages.json';
+import { PageContent } from '../data';
+import { BasePageProps } from './_app';
 
-type Props = PageData & {
-  packages: ReadonlyArray<{ slug: string; name: string }>;
+type Props = BasePageProps & {
+  content: PageContent;
 };
 
 const Home: NextPage<Props> = ({ content }) => {
@@ -19,11 +19,11 @@ const Home: NextPage<Props> = ({ content }) => {
 // eslint-disable-next-line @typescript-eslint/camelcase
 export async function unstable_getStaticProps() {
   const { packagePageData } = await import('../data');
-  const data = await packagePageData('tumau');
+  const { content, page } = await packagePageData('/');
 
   const props: Props = {
-    packages: PACKAGES,
-    ...data,
+    page,
+    content,
   };
 
   return {
