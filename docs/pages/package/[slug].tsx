@@ -10,11 +10,11 @@ type Props = BasePageProps & {
   content: PageContent;
 };
 
-const Post: NextPage<Props> = ({ content }) => {
+const Post: NextPage<Props> = ({ content, page }) => {
   return (
     <React.Fragment>
       <Head>
-        <title>Tumau</title>
+        <title>{page.name}</title>
       </Head>
       <MarkdownNodeRenderer node={content} />
     </React.Fragment>
