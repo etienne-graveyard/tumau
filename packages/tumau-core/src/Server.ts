@@ -9,22 +9,8 @@ import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
 import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
-import { Context } from '@tumau/middleware';
 import { HttpError } from './HttpError';
-
-// We force a deault value because this context is alway present !
-const RequestContext = Context.create<TumauRequest>(null as any);
-export const RequestConsumer = RequestContext.Consumer;
-
-// Response might not exist in the case of an `upgrade` event (WebSocket)
-const ServerResponseContext = Context.create<ServerResponse>();
-export const ServerResponseConsumer = ServerResponseContext.Consumer;
-
-const UpgradeSocketContext = Context.create<Duplex>();
-export const UpgradeSocketConsumer = UpgradeSocketContext.Consumer;
-
-const UpgradeHeadContext = Context.create<Buffer>();
-export const UpgradeHeadConsumer = UpgradeHeadContext.Consumer;
+import { RequestContext, ServerResponseContext, UpgradeSocketContext, UpgradeHeadContext } from './Contexts';
 
 export interface Server {
   httpServer: http.Server;
@@ -124,10 +110,12 @@ function createServer(opts: Middleware | Options): Server {
           throw new Error('The returned response is not valid (does not inherit the TumauResponse class)');
         }
         if (response.code !== 101) {
+          console.log(response);
+
           throw new Error(`An 'upgrade' event must return null or a 101 response (got a ${response.code})`);
         }
         if (response instanceof TumauResponse.SwitchingProtocols) {
-          response.handler(req, socket, head);
+          return response.handler(req, socket, head);
         }
         // socket handled => do nothing
         return;

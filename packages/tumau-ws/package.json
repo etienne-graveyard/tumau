@@ -16,7 +16,8 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.51"
+    "@tumau/core": "^1.0.0-alpha.51",
+    "@types/ws": "^7.2.0"
   },
   "devDependencies": {
     "tsdx": "^0.12.3"

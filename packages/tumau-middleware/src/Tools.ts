@@ -59,7 +59,7 @@ function createTools<R>(context: ContextStack | null, done: Done<R>): Tools<R> {
         if (ctx[CONTEXT].hasDefault) {
           return ctx[CONTEXT].defaultValue;
         }
-        throw new Error(`Missing context ${ctx[CONTEXT]}`);
+        throw new Error(`Missing context`);
       }
       return res.value;
     },

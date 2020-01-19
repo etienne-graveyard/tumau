@@ -1,4 +1,4 @@
-import { Middleware, TumauResponse, RequestConsumer, Tools } from '@tumau/core';
+import { Middleware, TumauResponse, RequestConsumer, Tools, HttpError } from '@tumau/core';
 import { Route, Routes, FindResult } from './Route';
 import { RouterContext } from './RouterContext';
 import { UrlParserConsumer } from '@tumau/url-parser';
@@ -22,12 +22,20 @@ export function Router(routes: Routes): Middleware {
 
     // const routerCtx = ctx.get(RouterContext.Consumer);
     // all matching routes
-    const parsedUrl = tools.readContextOrFail(UrlParserConsumer);
-    const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
+    const parsedUrl = tools.readContext(UrlParserConsumer);
+    if (!parsedUrl) {
+      throw new HttpError.Internal(`[Router] Missing UrlParser contenxt !`);
+    }
+    const routesWithMatchingPattern = Route.find(flatRoutes, parsedUrl.pathname);
     const request = tools.readContextOrFail(RequestConsumer);
     const requestMethod = request.method;
+    const isUpgrade = request.isUpgrade;
 
-    const matchingRoutes = matchingRoutesAllMethods.filter(findResult => {
+    const matchingRoutes = routesWithMatchingPattern.filter(findResult => {
+      if (findResult.route.upgrade !== null && findResult.route.upgrade !== isUpgrade) {
+        // upgrade did not match
+        return false;
+      }
       const expectedMethod = findResult.route.method;
 
       const methodMatch =

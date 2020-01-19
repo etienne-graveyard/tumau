@@ -1,7 +1,7 @@
 import { Middleware } from './Middleware';
 import { TumauResponse } from './TumauResponse';
 import { HttpError } from './HttpError';
-import { RequestConsumer } from './Server';
+import { RequestConsumer } from './Contexts';
 
 export const HandleInvalidResponse: Middleware = async tools => {
   const request = tools.readContext(RequestConsumer);
