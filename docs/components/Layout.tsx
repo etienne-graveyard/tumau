@@ -14,7 +14,7 @@ const Content = styled.main({
 
 interface Props {
   secondaryNav?: number;
-  currentPage: string;
+  currentPage: string | null;
 }
 
 export const Layout: React.FC<Props> = ({ children, currentPage }) => {

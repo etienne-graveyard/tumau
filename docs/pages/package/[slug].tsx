@@ -17,8 +17,6 @@ const Post: NextPage<Props> = ({ content }) => {
 export async function unstable_getStaticPaths() {
   return PAGES.filter(pkg => pkg.page === '/package/[slug]').map((pkg): { params: { slug: string } } => {
     const slug = pkg.slug.substring('/package/'.length);
-    console.log({ slug });
-
     return { params: { slug } };
   });
 }
@@ -26,10 +24,7 @@ export async function unstable_getStaticPaths() {
 // eslint-disable-next-line @typescript-eslint/camelcase
 export async function unstable_getStaticProps({ params }: { params: { slug: string } }) {
   const { packagePageData } = await import('../../data');
-  console.log(params.slug);
-
   const { content, page } = await packagePageData(`/package/${params.slug}` as any);
-
   const props: Props = {
     content,
     page,

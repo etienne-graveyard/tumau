@@ -23,7 +23,7 @@ const Items = styled.ul({
 });
 
 interface Props {
-  currentPage: string;
+  currentPage: string | null;
 }
 
 export const MainMenu: React.FC<Props> = ({ currentPage }) => {

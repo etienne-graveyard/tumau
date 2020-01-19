@@ -18,15 +18,20 @@ export interface BasePageProps {
 const MyApp: NextPage<Props> = ({ Component, pageProps }) => {
   const page = pageProps.page;
 
+  let slug: string | null = page ? page.slug : null;
+  if (slug === null && 'statusCode' in pageProps) {
+    slug = 'not-found';
+  }
+
   return (
-    <Layout currentPage={page.slug}>
+    <Layout currentPage={slug}>
       <AnimatePresence exitBeforeEnter>
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 100, transition: { ease: 'easeOut', duration: 0.3 } }}
           transition={{ ease: 'easeOut', duration: 0.5 }}
-          key={page.slug}
+          key={slug || ''}
         >
           <Component {...(pageProps as any)} />
         </motion.div>
