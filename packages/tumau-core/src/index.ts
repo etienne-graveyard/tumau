@@ -5,7 +5,7 @@ export { HttpStatus, HttpStatusCode, HttpStatusMessage } from './HttpStatus';
 export { Middleware, Middlewares, Result, Tools } from './Middleware';
 export { TumauRequest } from './TumauRequest';
 export { Body, TumauResponse, ResponseConstuctorOptions } from './TumauResponse';
-export { Server } from './Server';
+export { TumauServer } from './TumauServer';
 export { RequestConsumer, ServerResponseConsumer, UpgradeHeadConsumer, UpgradeSocketConsumer } from './Contexts';
 export { HandleInvalidResponse } from './HandleInvalidResponse';
 export { HandleErrors } from './HandleErrors';

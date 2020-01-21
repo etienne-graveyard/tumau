@@ -9,10 +9,10 @@ This package is part of the [tumau](https://github.com/etienne-dldc/tumau) famil
 ## Gist
 
 ```js
-import { Server, Response, Middleware } from '@tumau/core';
+import { TumauServer, Response, Middleware } from '@tumau/core';
 import { UrlParser } from '@tumau/url-parser';
 
-const server = Server.create(
+const server = TumauServer.create(
   Middleware.compose(UrlParser(), ctx =>
     Response.create({
       body: JSON.stringify(ctx.parsedUrl),

@@ -8,9 +8,9 @@ This package is part of the [tumau](https://github.com/etienne-dldc/tumau) famil
 
 ## API
 
-### Server
+### TumauServer
 
-#### Server.create(opts)
+#### TumauServer.create(opts)
 
 - `opts`: the main middleware or an object
 
@@ -20,7 +20,7 @@ If `opts` is an object it accepts the following properties:
 - `createInitialCtx`: (`optional`) a function used to initialize the Context object. This function will receive the base Context as parameter
 - `httpServer`: (`optional`) a instance of `http.Server`. If ommited, a server will be created (`http.createServer()`)
 
-**return**: A `Server` object with the following properties:
+**return**: A `TumauServer` object with the following properties:
 
 - `httpServer`: The `http.Server` used by Tumau (either passed as option or created by Tumau)
 - `listen(port, listener)`: A function that start the server on a given port

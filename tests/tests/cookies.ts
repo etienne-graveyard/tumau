@@ -1,5 +1,5 @@
 import {
-  Server,
+  TumauServer,
   TumauResponse,
   CookieResponse,
   SetCookie,
@@ -12,7 +12,7 @@ import { Request } from '../utils/Request';
 import koa from 'koa';
 
 test('should set the Set-Cookie header', async () => {
-  const tumauApp = Server.create(() => {
+  const tumauApp = TumauServer.create(() => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
   });
   const tumauRes = await runTumauRequest(tumauApp, new Request());
@@ -25,7 +25,7 @@ test('should set the Set-Cookie header', async () => {
 });
 
 test('should set the Set-Cookie header using Manager', async () => {
-  const tumauApp = Server.create(
+  const tumauApp = TumauServer.create(
     Middleware.compose(CookieManager(), tools => {
       tools.readContextOrFail(CookieManagerConsumer).set('token', 'T55YTRR55554');
       return TumauResponse.noContent();
@@ -41,7 +41,7 @@ test('should set the Set-Cookie header using Manager', async () => {
 });
 
 test('should set two Set-Cookie header using Manager', async () => {
-  const tumauApp = Server.create(
+  const tumauApp = TumauServer.create(
     Middleware.compose(CookieManager(), tools => {
       const cookieManager = tools.readContextOrFail(CookieManagerConsumer);
       cookieManager.set('token', 'T55YTRR55554');
@@ -79,7 +79,7 @@ test('koa multiple cookie', async () => {
 });
 
 test('should return the same result as koa', async () => {
-  const tumauApp = Server.create(() => {
+  const tumauApp = TumauServer.create(() => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
   });
   const koaApp = new koa();

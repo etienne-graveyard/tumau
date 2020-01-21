@@ -1,4 +1,4 @@
-import http, { OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
+import { Server, createServer, OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
 import { Duplex } from 'stream';
 import { Middleware } from './Middleware';
 import { TumauRequest } from './TumauRequest';
@@ -12,16 +12,16 @@ import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { HttpError } from './HttpError';
 import { RequestContext, ServerResponseContext, UpgradeSocketContext, UpgradeHeadContext } from './Contexts';
 
-export interface Server {
-  httpServer: http.Server;
-  listen(port: number, listeningListener?: () => void): Server;
+export interface TumauServer {
+  httpServer: Server;
+  listen(port: number, listeningListener?: () => void): TumauServer;
 }
 
 interface Options {
   mainMiddleware: Middleware;
   // include HandleErrors and HandleInvalidResponse middelwares
   handleErrors?: boolean;
-  httpServer?: http.Server;
+  httpServer?: Server;
   // The server should handle the 'request' event (default true)
   handleServerRequest?: boolean;
   // The server should handle the 'upgrade' event (default false)
@@ -29,11 +29,11 @@ interface Options {
   handleServerUpgrade?: boolean;
 }
 
-export const Server = {
-  create: createServer,
+export const TumauServer = {
+  create: createTumauServer,
 };
 
-function createServer(opts: Middleware | Options): Server {
+function createTumauServer(opts: Middleware | Options): TumauServer {
   const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
   const {
     mainMiddleware,
@@ -43,9 +43,9 @@ function createServer(opts: Middleware | Options): Server {
     handleServerUpgrade = false,
   } = options;
 
-  const resolvedHttpServer: http.Server = httpServer || http.createServer();
+  const resolvedHttpServer: Server = httpServer || createServer();
 
-  const server: Server = {
+  const server: TumauServer = {
     httpServer: resolvedHttpServer,
     listen,
   };
@@ -58,7 +58,7 @@ function createServer(opts: Middleware | Options): Server {
 
   return server;
 
-  function listen(port: number, listeningListener?: () => void): Server {
+  function listen(port: number, listeningListener?: () => void): TumauServer {
     if (handleServerRequest) {
       resolvedHttpServer.on('request', requestHandler);
     }

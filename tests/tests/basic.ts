@@ -1,16 +1,16 @@
-import { Server, TumauResponse, HttpMethod, HttpError } from '@tumau/core';
+import { TumauServer, TumauResponse, HttpMethod, HttpError } from '@tumau/core';
 import { runTumauRequest, runKoaRequest } from '../utils/runRequest';
 import { Request } from '../utils/Request';
 import { BodyResponse } from '../utils/BodyResponse';
 import koa from 'koa';
 
-describe('Server', () => {
-  test('create a Server without crashing', () => {
-    expect(() => Server.create(() => null)).not.toThrowError();
+describe('TumauServer', () => {
+  test('create a TumauServer without crashing', () => {
+    expect(() => TumauServer.create(() => null)).not.toThrowError();
   });
 
   test('simple text response', async () => {
-    const app = Server.create(() => {
+    const app = TumauServer.create(() => {
       return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request());
@@ -25,7 +25,7 @@ describe('Server', () => {
   });
 
   test('response to arbitrary path', async () => {
-    const app = Server.create(() => {
+    const app = TumauServer.create(() => {
       return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request({ path: '/some/path' }));
@@ -40,7 +40,7 @@ describe('Server', () => {
   });
 
   test('response to post method', async () => {
-    const app = Server.create(() => {
+    const app = TumauServer.create(() => {
       return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request({ method: HttpMethod.POST }));
@@ -55,7 +55,7 @@ describe('Server', () => {
   });
 
   test('head request return 204 & empty body', async () => {
-    const app = Server.create(() => {
+    const app = TumauServer.create(() => {
       return TumauResponse.withText('Hey');
     });
     const res = await runTumauRequest(app, new Request({ method: HttpMethod.HEAD }));
@@ -68,7 +68,7 @@ describe('Server', () => {
   });
 
   test('should return the same result as koa', async () => {
-    const tumauApp = Server.create(() => {
+    const tumauApp = TumauServer.create(() => {
       return TumauResponse.withText('Hey');
     });
     const koaApp = new koa();
@@ -96,7 +96,7 @@ describe('Server', () => {
   });
 
   test('throw HttpError return an error', async () => {
-    const app = Server.create(() => {
+    const app = TumauServer.create(() => {
       throw new HttpError.NotFound();
     });
     const res = await runTumauRequest(app, new Request());
@@ -110,7 +110,7 @@ describe('Server', () => {
   });
 
   test('throw return an error', async () => {
-    const app = Server.create(() => {
+    const app = TumauServer.create(() => {
       throw new Error('Oops');
     });
     const res = await runTumauRequest(app, new Request());

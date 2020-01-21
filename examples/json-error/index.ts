@@ -1,12 +1,9 @@
-import { Server, Middleware, HttpError, JsonPackage } from 'tumau';
+import { TumauServer, Middleware, HttpError, JsonPackage } from 'tumau';
 
-const server = Server.create(
-  Middleware.compose(
-    JsonPackage(),
-    () => {
-      throw new HttpError.NotFound();
-    }
-  )
+const server = TumauServer.create(
+  Middleware.compose(JsonPackage(), () => {
+    throw new HttpError.NotFound();
+  })
 );
 
 server.listen(3002, () => {

@@ -1,4 +1,4 @@
-import { Server, Middleware } from '@tumau/core';
+import { TumauServer, Middleware } from '@tumau/core';
 import { runTumauRequest } from '../utils/runRequest';
 import { Request } from '../utils/Request';
 import { JsonResponse } from '@tumau/json';
@@ -7,12 +7,7 @@ import { BodyResponse } from 'tests/utils/BodyResponse';
 
 describe('Compress', () => {
   test('gzip', async () => {
-    const app = Server.create(
-      Middleware.compose(
-        Compress(),
-        () => JsonResponse.with({ hello: 'world' })
-      )
-    );
+    const app = TumauServer.create(Middleware.compose(Compress(), () => JsonResponse.with({ hello: 'world' })));
 
     const res = await runTumauRequest(
       app,
@@ -34,12 +29,7 @@ describe('Compress', () => {
   });
 
   test('brotli over gzip', async () => {
-    const app = Server.create(
-      Middleware.compose(
-        Compress(),
-        () => JsonResponse.with({ hello: 'world' })
-      )
-    );
+    const app = TumauServer.create(Middleware.compose(Compress(), () => JsonResponse.with({ hello: 'world' })));
     const res = await runTumauRequest(
       app,
       new Request({
@@ -60,12 +50,7 @@ describe('Compress', () => {
   });
 
   test('deflate', async () => {
-    const app = Server.create(
-      Middleware.compose(
-        Compress(),
-        () => JsonResponse.with({ hello: 'world' })
-      )
-    );
+    const app = TumauServer.create(Middleware.compose(Compress(), () => JsonResponse.with({ hello: 'world' })));
     const res = await runTumauRequest(
       app,
       new Request({

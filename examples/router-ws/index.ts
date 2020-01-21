@@ -1,4 +1,12 @@
-import { Server, WebsocketProvider, Middleware, HandleWebsocket, Route, TumauResponse, RouterPackage } from 'tumau';
+import {
+  TumauServer,
+  WebsocketProvider,
+  Middleware,
+  HandleWebsocket,
+  Route,
+  TumauResponse,
+  RouterPackage,
+} from 'tumau';
 import WebSocket from 'ws';
 
 const wss = new WebSocket.Server({ noServer: true });
@@ -8,7 +16,7 @@ wss.on('connection', (_ws, request) => {
   console.log('connected', request.url);
 });
 
-const server = Server.create({
+const server = TumauServer.create({
   handleErrors: true,
   handleServerUpgrade: true,
   mainMiddleware: Middleware.compose(
