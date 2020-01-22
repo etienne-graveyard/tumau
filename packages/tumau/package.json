@@ -1,6 +1,6 @@
 {
   "name": "tumau",
-  "version": "1.0.0-alpha.52",
+  "version": "1.0.0-alpha.53",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
@@ -21,16 +21,16 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.52",
-    "@tumau/cookie": "^1.0.0-alpha.52",
-    "@tumau/core": "^1.0.0-alpha.52",
-    "@tumau/cors": "^1.0.0-alpha.52",
-    "@tumau/json": "^1.0.0-alpha.52",
-    "@tumau/rate-limit": "^1.0.0-alpha.52",
-    "@tumau/router": "^1.0.0-alpha.52",
-    "@tumau/static": "^1.0.0-alpha.52",
-    "@tumau/url-parser": "^1.0.0-alpha.52",
-    "@tumau/ws": "^1.0.0-alpha.52"
+    "@tumau/compress": "^1.0.0-alpha.53",
+    "@tumau/cookie": "^1.0.0-alpha.53",
+    "@tumau/core": "^1.0.0-alpha.53",
+    "@tumau/cors": "^1.0.0-alpha.53",
+    "@tumau/json": "^1.0.0-alpha.53",
+    "@tumau/rate-limit": "^1.0.0-alpha.53",
+    "@tumau/router": "^1.0.0-alpha.53",
+    "@tumau/static": "^1.0.0-alpha.53",
+    "@tumau/url-parser": "^1.0.0-alpha.53",
+    "@tumau/ws": "^1.0.0-alpha.53"
   },
   "devDependencies": {
     "tsdx": "^0.12.3"
