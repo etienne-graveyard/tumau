@@ -1,22 +1,17 @@
-import { TumauServer, Middleware } from '@tumau/core';
-import { runTumauRequest } from '../utils/runRequest';
-import { Request } from '../utils/Request';
-import { JsonResponse } from '@tumau/json';
-import { Compress } from '@tumau/compress';
-import { BodyResponse } from 'tests/utils/BodyResponse';
+import { TumauServer, Middleware, JsonResponse, Compress } from 'tumau';
+import { mountTumau } from '../utils/mountTumau';
+import fetch from 'node-fetch';
 
 describe('Compress', () => {
   test('gzip', async () => {
     const app = TumauServer.create(Middleware.compose(Compress(), () => JsonResponse.with({ hello: 'world' })));
 
-    const res = await runTumauRequest(
-      app,
-      new Request({
-        headers: {
-          'accept-encoding': 'gzip',
-        },
-      })
-    );
+    const { close, url } = await mountTumau(app);
+    const res = await fetch(url, {
+      headers: {
+        'accept-encoding': 'gzip',
+      },
+    });
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 200 OK
       Connection: close
@@ -25,19 +20,18 @@ describe('Compress', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
       Transfer-Encoding: chunked
     `);
-    expect(await BodyResponse.fromGzip(res)).toBe('{"hello":"world"}');
+    expect(await res.text()).toBe('{"hello":"world"}');
+    await close();
   });
 
   test('brotli over gzip', async () => {
     const app = TumauServer.create(Middleware.compose(Compress(), () => JsonResponse.with({ hello: 'world' })));
-    const res = await runTumauRequest(
-      app,
-      new Request({
-        headers: {
-          'accept-encoding': 'gzip, br',
-        },
-      })
-    );
+    const { close, url } = await mountTumau(app);
+    const res = await fetch(url, {
+      headers: {
+        'accept-encoding': 'gzip, br',
+      },
+    });
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 200 OK
       Connection: close
@@ -46,19 +40,18 @@ describe('Compress', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
       Transfer-Encoding: chunked
     `);
-    expect(await BodyResponse.fromBrotli(res)).toBe('{"hello":"world"}');
+    expect(await res.text()).toBe('{"hello":"world"}');
+    await close();
   });
 
   test('deflate', async () => {
     const app = TumauServer.create(Middleware.compose(Compress(), () => JsonResponse.with({ hello: 'world' })));
-    const res = await runTumauRequest(
-      app,
-      new Request({
-        headers: {
-          'accept-encoding': 'deflate',
-        },
-      })
-    );
+    const { close, url } = await mountTumau(app);
+    const res = await fetch(url, {
+      headers: {
+        'accept-encoding': 'deflate',
+      },
+    });
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 200 OK
       Connection: close
@@ -67,6 +60,7 @@ describe('Compress', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
       Transfer-Encoding: chunked
     `);
-    expect(await BodyResponse.fromDeflate(res)).toBe('{"hello":"world"}');
+    expect(await res.text()).toBe('{"hello":"world"}');
+    await close();
   });
 });

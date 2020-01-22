@@ -1,4 +1,4 @@
-import { Middleware, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
+import { Middleware, RequestConsumer, HttpError, TumauUpgradeResponse } from '@tumau/core';
 import { WebsocketConsumer } from './WebsocketProvider';
 
 export const HandleWebsocket: Middleware = async tools => {
@@ -8,9 +8,9 @@ export const HandleWebsocket: Middleware = async tools => {
     if (!wss) {
       throw new HttpError.Internal(`Missing WebsocketProvider`);
     }
-    return new TumauResponse.SwitchingProtocols(async (req, socket, head) => {
+    return new TumauUpgradeResponse(async (req, socket, head) => {
       return new Promise(res => {
-        wss.handleUpgrade(req, socket as any, head, function done(ws) {
+        wss.handleUpgrade(req, socket as any, head, ws => {
           wss.emit('connection', ws, request);
           res();
         });

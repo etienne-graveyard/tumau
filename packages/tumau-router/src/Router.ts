@@ -1,4 +1,4 @@
-import { Middleware, TumauResponse, RequestConsumer, Tools, HttpError } from '@tumau/core';
+import { Middleware, RequestConsumer, Tools, HttpError, Result } from '@tumau/core';
 import { Route, Routes, FindResult } from './Route';
 import { RouterContext } from './RouterContext';
 import { UrlParserConsumer } from '@tumau/url-parser';
@@ -10,7 +10,7 @@ import { Chemin } from 'chemin';
 export function Router(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (tools): Promise<null | TumauResponse> => {
+  return async (tools): Promise<Result> => {
     if (tools.hasContext(RouterContext.Consumer)) {
       console.warn(
         [
@@ -20,7 +20,6 @@ export function Router(routes: Routes): Middleware {
       );
     }
 
-    // const routerCtx = ctx.get(RouterContext.Consumer);
     // all matching routes
     const parsedUrl = tools.readContext(UrlParserConsumer);
     if (!parsedUrl) {
@@ -36,17 +35,21 @@ export function Router(routes: Routes): Middleware {
         // upgrade did not match
         return false;
       }
-      const expectedMethod = findResult.route.method;
-
-      const methodMatch =
-        expectedMethod === null ||
-        (Array.isArray(expectedMethod) ? expectedMethod.indexOf(requestMethod) > -1 : expectedMethod === requestMethod);
-      return methodMatch;
+      const routeMethod = findResult.route.method;
+      if (routeMethod === null) {
+        // any method
+        return true;
+      }
+      if (Array.isArray(routeMethod)) {
+        // array of allowed methods
+        return routeMethod.includes(requestMethod);
+      }
+      return routeMethod === requestMethod;
     });
 
     return handleNext(0);
 
-    async function handleNext(index: number): Promise<null | TumauResponse> {
+    async function handleNext(index: number): Promise<Result> {
       const findResult: FindResult | null = matchingRoutes[index] || null;
       const routeMiddleware = findResult ? findResult.route.middleware : null;
       const route = findResult ? findResult.route : null;
@@ -58,6 +61,7 @@ export function Router(routes: Routes): Middleware {
         return patterns.indexOf(chemin) >= 0;
       };
 
+      // create router context
       const routerData: RouterContext = {
         middleware: routeMiddleware,
         notFound: findResult === null,
@@ -85,13 +89,13 @@ export function Router(routes: Routes): Middleware {
 
       if (findResult.route.middleware === null) {
         // route with no middleware, this is still a match
+        // it's like if they was a middleware: tools => tools.next();
         return withRouterDataTools.next();
       }
 
       // call the route with next pointing to the middleware after the router
-      const middleTools = Tools.create(Tools.getContext(withRouterDataTools), nextContext => {
-        return Tools.getDone(tools)(nextContext);
-      });
+      const currentContextStack = Tools.getContext(withRouterDataTools);
+      const middleTools = Tools.create(currentContextStack, Tools.getDone(tools));
       const result = await findResult.route.middleware(middleTools);
 
       // If the match did not return a response

@@ -10,9 +10,9 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "framer-motion": "^1.7.0",
+    "framer-motion": "^1.7.2",
     "fs-extra": "^8.1.0",
-    "highlight.js": "^9.17.1",
+    "highlight.js": "^9.18.0",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.2.0",
     "normalize.css": "^8.0.1",
@@ -27,9 +27,10 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
     "@types/highlight.js": "^9.12.3",
-    "@types/node": "^13.1.7",
-    "@types/react": "^16.9.17",
+    "@types/node": "^13.1.8",
+    "@types/react": "^16.9.18",
     "@types/styled-components": "^4.4.2",
-    "typescript": "^3.7.4"
+    "react-is": "^16.12.0",
+    "typescript": "^3.7.5"
   }
 }

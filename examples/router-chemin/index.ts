@@ -47,14 +47,15 @@ const logRoute: Middleware = tools => {
   return tools.next();
 };
 
-const ROUTE_WITH_PARAM = Chemin.create('static', P.string('app'));
+const SUBROUTE = Chemin.create(P.optionalString('subroute'));
+const STATIC_APP = Chemin.create('static', P.string('app'));
 
 const ROUTES: Routes = [
   Route.GET('/', logRoute, () => {
     return TumauResponse.withHtml(render('Home'));
   }),
-  Route.create({ pattern: ROUTE_WITH_PARAM, exact: false, method: null }, tools => {
-    const params = tools.readContextOrFail(RouterConsumer).getOrFail(ROUTE_WITH_PARAM);
+  Route.create({ pattern: STATIC_APP, exact: false, method: null }, tools => {
+    const params = tools.readContextOrFail(RouterConsumer).getOrFail(STATIC_APP);
     return JsonResponse.with({
       appParam: params.app,
     });
@@ -94,7 +95,7 @@ const ROUTES: Routes = [
     // oops not a real match (return no response => act like this the route didn't match in the first place)
     return null;
   }),
-  Route.GET('/next/:subroute?', tools => {
+  Route.GET(Chemin.create('next', SUBROUTE), tools => {
     // calling next in a route call the middleware after the route
     return tools.next();
   }),
@@ -112,7 +113,8 @@ const server = TumauServer.create(
     tools => {
       const router = tools.readContextOrFail(RouterConsumer);
       const pattern = router.pattern?.stringify();
-      const subroute = (router.params?.subroute as any)?.value;
+      const subrouteParam = router.get(SUBROUTE);
+      const subroute = subrouteParam?.subroute;
 
       if (subroute === 'yolo') {
         // this will go up to the router and pretend it did not match this route

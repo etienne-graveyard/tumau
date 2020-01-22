@@ -35,4 +35,11 @@ export class CookieResponse extends TumauResponse {
       return undefined;
     }
   }
+
+  public static fromResponse(originalResponse: TumauResponse, cookies: SetCookies): TumauResponse | CookieResponse {
+    if (cookies.length === 0) {
+      return originalResponse;
+    }
+    return new CookieResponse(originalResponse, cookies);
+  }
 }

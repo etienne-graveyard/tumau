@@ -1,17 +1,34 @@
 import { TumauResponse, HttpHeaders, HttpError } from '@tumau/core';
-import { CorsContext } from './CorsContext';
+import { CorsConfig } from './CorsConfig';
 import { OutgoingHttpHeaders } from 'http';
 
 export class CorsResponse extends TumauResponse {
   public originalResponse: TumauResponse;
-  public cors: CorsContext;
+  public cors: CorsConfig;
 
-  constructor(originalResponse: TumauResponse, cors: CorsContext) {
-    const headers: OutgoingHttpHeaders = {};
-
+  constructor(originalResponse: TumauResponse, cors: CorsConfig) {
     if (originalResponse instanceof TumauResponse === false) {
       throw new HttpError.Internal('originalResponse is expected to be a TumauResponse instance');
     }
+    super(originalResponse.extends({ headers: CorsResponse.getCorsHeader(cors) }));
+    this.originalResponse = originalResponse;
+    this.cors = cors;
+  }
+
+  public static fromResponse(
+    originalResponse: TumauResponse | null,
+    cors: CorsConfig
+  ): CorsResponse | TumauResponse | null {
+    const resResolved = originalResponse === null ? TumauResponse.noContent() : originalResponse;
+    const headers = CorsResponse.getCorsHeader(cors);
+    if (Object.keys(headers).length === 0) {
+      return originalResponse;
+    }
+    return new CorsResponse(resResolved, cors);
+  }
+
+  public static getCorsHeader(cors: CorsConfig): OutgoingHttpHeaders {
+    const headers: OutgoingHttpHeaders = {};
 
     if (cors.allowOrigin !== null) {
       headers[HttpHeaders.AccessControlAllowOrigin] = cors.allowOrigin;
@@ -31,9 +48,6 @@ export class CorsResponse extends TumauResponse {
     if (cors.exposeHeaders) {
       headers[HttpHeaders.AccessControlExposeHeaders] = Array.from(cors.exposeHeaders).join(', ');
     }
-
-    super(originalResponse.extends({ headers }));
-    this.originalResponse = originalResponse;
-    this.cors = cors;
+    return headers;
   }
 }

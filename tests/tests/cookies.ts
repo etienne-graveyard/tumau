@@ -7,41 +7,46 @@ import {
   CookieManager,
   CookieManagerConsumer,
 } from 'tumau';
-import { runKoaRequest, runTumauRequest } from '../utils/runRequest';
-import { Request } from '../utils/Request';
 import koa from 'koa';
+import { mountTumau } from '../utils/mountTumau';
+import { mountKoa } from '../utils/mountKoa';
+import fetch from 'node-fetch';
 
 test('should set the Set-Cookie header', async () => {
-  const tumauApp = TumauServer.create(() => {
+  const app = TumauServer.create(() => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
   });
-  const tumauRes = await runTumauRequest(tumauApp, new Request());
-  expect(tumauRes).toMatchInlineSnapshot(`
+  const { close, url } = await mountTumau(app);
+  const res = await fetch(url);
+  expect(res).toMatchInlineSnapshot(`
     HTTP/1.1 204 No Content
     Connection: close
     Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     Set-Cookie: token=T55YTRR55554; HttpOnly; Path=/
   `);
+  await close();
 });
 
 test('should set the Set-Cookie header using Manager', async () => {
-  const tumauApp = TumauServer.create(
+  const app = TumauServer.create(
     Middleware.compose(CookieManager(), tools => {
       tools.readContextOrFail(CookieManagerConsumer).set('token', 'T55YTRR55554');
       return TumauResponse.noContent();
     })
   );
-  const tumauRes = await runTumauRequest(tumauApp, new Request());
-  expect(tumauRes).toMatchInlineSnapshot(`
+  const { close, url } = await mountTumau(app);
+  const res = await fetch(url);
+  expect(res).toMatchInlineSnapshot(`
     HTTP/1.1 204 No Content
     Connection: close
     Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     Set-Cookie: token=T55YTRR55554; HttpOnly; Path=/
   `);
+  await close();
 });
 
 test('should set two Set-Cookie header using Manager', async () => {
-  const tumauApp = TumauServer.create(
+  const app = TumauServer.create(
     Middleware.compose(CookieManager(), tools => {
       const cookieManager = tools.readContextOrFail(CookieManagerConsumer);
       cookieManager.set('token', 'T55YTRR55554');
@@ -49,33 +54,16 @@ test('should set two Set-Cookie header using Manager', async () => {
       return TumauResponse.noContent();
     })
   );
-  const tumauRes = await runTumauRequest(tumauApp, new Request());
-  expect(tumauRes).toMatchInlineSnapshot(`
+  const { close, url } = await mountTumau(app);
+  const res = await fetch(url);
+  expect(res).toMatchInlineSnapshot(`
     HTTP/1.1 204 No Content
     Connection: close
     Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     Set-Cookie: token=T55YTRR55554; HttpOnly; Path=/
     Set-Cookie: user=etienne; HttpOnly; Path=/
   `);
-});
-
-test('koa multiple cookie', async () => {
-  const koaApp = new koa();
-  koaApp.use(ctx => {
-    ctx.cookies.set('token', 'T55YTRR55554');
-    ctx.cookies.set('user', 'etienne');
-    ctx.body = null;
-  });
-
-  const koaRes = await runKoaRequest(koaApp, new Request());
-
-  expect(koaRes).toMatchInlineSnapshot(`
-    HTTP/1.1 204 No Content
-    Connection: close
-    Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
-    Set-Cookie: token=T55YTRR55554; path=/; httponly
-    Set-Cookie: user=etienne; path=/; httponly
-  `);
+  await close();
 });
 
 test('should return the same result as koa', async () => {
@@ -88,8 +76,11 @@ test('should return the same result as koa', async () => {
     ctx.body = null;
   });
 
-  const tumauRes = await runTumauRequest(tumauApp, new Request());
-  const koaRes = await runKoaRequest(koaApp, new Request());
+  const tumauServer = await mountTumau(tumauApp);
+  const koaServer = await mountKoa(koaApp);
+
+  const tumauRes = await fetch(tumauServer.url);
+  const koaRes = await fetch(koaServer.url);
 
   expect(koaRes).toMatchInlineSnapshot(`
     HTTP/1.1 204 No Content
@@ -103,4 +94,7 @@ test('should return the same result as koa', async () => {
     Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     Set-Cookie: token=T55YTRR55554; HttpOnly; Path=/
   `);
+
+  await tumauServer.close();
+  await koaServer.close();
 });

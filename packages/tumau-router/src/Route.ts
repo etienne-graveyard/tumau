@@ -41,7 +41,7 @@ export const Route = {
   PUT: withMethod(HttpMethod.PUT),
   DELETE: withMethod(HttpMethod.DELETE),
   PATCH: withMethod(HttpMethod.PATCH),
-  WEBSOCKET: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
+  UPGRADE: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
     createRoute({ method: HttpMethod.GET, upgrade: true, pattern }, middleware),
   all: withMethod(null),
   namespace: (pattern: string | null, routes: Routes) =>

@@ -11,10 +11,11 @@ import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { HttpError } from './HttpError';
 import { RequestContext, ServerResponseContext, UpgradeSocketContext, UpgradeHeadContext } from './Contexts';
+import { TumauUpgradeResponse } from './TumauUpgradeResponse';
 
 export interface TumauServer {
   httpServer: Server;
-  listen(port: number, listeningListener?: () => void): TumauServer;
+  listen(port?: number, listeningListener?: () => void): TumauServer;
 }
 
 interface Options {
@@ -58,7 +59,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
 
   return server;
 
-  function listen(port: number, listeningListener?: () => void): TumauServer {
+  function listen(port?: number, listeningListener?: () => void): TumauServer {
     if (handleServerRequest) {
       resolvedHttpServer.on('request', requestHandler);
     }
@@ -102,23 +103,20 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
           socket.destroy();
           return;
         }
-        if (response instanceof Error || response instanceof HttpError) {
-          // we can't send response so HttpError are fatal
-          throw response;
-        }
-        if (response instanceof TumauResponse === false) {
-          throw new Error('The returned response is not valid (does not inherit the TumauResponse class)');
-        }
-        if (response.code !== 101) {
-          console.log(response);
-
-          throw new Error(`An 'upgrade' event must return null or a 101 response (got a ${response.code})`);
-        }
-        if (response instanceof TumauResponse.SwitchingProtocols) {
+        if (response instanceof TumauUpgradeResponse) {
+          // valid response
           return response.handler(req, socket, head);
         }
-        // socket handled => do nothing
-        return;
+        if (response instanceof TumauResponse) {
+          throw new Error(
+            `Tumau received a TumauResponse on an 'upgrade' event. You should return null or a 'TumauUpgradeResponse'`
+          );
+        }
+        if (response instanceof Error || response instanceof HttpError) {
+          // we can't send response so Error or HttpError are fatal
+          throw response;
+        }
+        throw new Error(`Invalid response`);
       })
       .catch((err): void => {
         // fatal

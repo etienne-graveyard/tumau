@@ -1,12 +1,7 @@
-import { Config } from './CorsMiddleware';
-import { Cors } from './Cors';
+import { Config, Cors } from './Cors';
 import { Middleware, HandleErrors } from '@tumau/core';
 
-export const CorsPackage = {
-  create: (options?: Config) =>
-    Middleware.compose(
-      Cors.create(options),
-      HandleErrors
-    ),
-  setCors: Cors.setCors,
-};
+export function CorsPackage(options?: Config) {
+  // add HandleErrors under Cors so errors still get Cors headers
+  return Middleware.compose(Cors(options), HandleErrors);
+}
