@@ -1,4 +1,4 @@
-# @tumau-example/router (private)
+# @tumau-example/router-chemin (private)
 
 ## Tumau
 

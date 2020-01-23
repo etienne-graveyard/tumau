@@ -8,24 +8,78 @@ This package is part of the [tumau](https://github.com/etienne-dldc/tumau) famil
 
 ## API
 
+Imports:
+
+```ts
+import { TumauServer, Middleware, HandleErrors, HandleInvalidResponse } from '@tumau/core';
+import { createServer } from 'http';
+```
+
 ### TumauServer
 
-#### TumauServer.create(opts)
+The `TumauServer` namespace contains only one function `create` that take a
+Middleware as argument and return an object of type `TumauServer`.
 
-- `opts`: the main middleware or an object
+```ts
+// TumauServer.create(middleware: Middleware)
+const serverA = TumauServer.create(() => null);
+```
 
-If `opts` is an object it accepts the following properties:
+The resulting `TumauServer` has the following properties
 
-- `mainMiddleware`: (`required`) the main middleware of your app
-- `createInitialCtx`: (`optional`) a function used to initialize the Context object. This function will receive the base Context as parameter
-- `httpServer`: (`optional`) a instance of `http.Server`. If ommited, a server will be created (`http.createServer()`)
+```ts
+// The http.Server instance
+serverA.httpServer;
+// proxy to http.Server.listen
+serverA.listen();
+```
 
-**return**: A `TumauServer` object with the following properties:
+You can also pass an object to `TumauServer.create`
 
-- `httpServer`: The `http.Server` used by Tumau (either passed as option or created by Tumau)
-- `listen(port, listener)`: A function that start the server on a given port
-  - `port` (`number required`) the port to listen on
-  - `listener`: (`function optional`) a function executed once the server is up
+```ts
+const serverB = TumauServer.create({
+  mainMiddleware: () => null,
+});
+```
+
+The `handleErrors` options (`true` by default) will add the
+HandleErrors and HandleInvalidResponse middleware before the mainMiddleware
+
+```ts
+const serverC1 = TumauServer.create({
+  handleErrors: true,
+  mainMiddleware: () => null,
+});
+// same as
+const serverC2 = TumauServer.create({
+  handleErrors: false,
+  mainMiddleware: Middleware.compose(HandleErrors, HandleInvalidResponse, () => null),
+});
+```
+
+The `httpServer` option let you provide your own http server
+
+```ts
+const myHttpServer = createServer();
+const serverD = TumauServer.create({
+  mainMiddleware: () => null,
+  httpServer: myHttpServer,
+});
+```
+
+The `handleServerRequest` and `handleServerUpgrade` let you control which events
+the server should respond to.
+
+By default only the `request` event is handled
+but you can turn `upgrade` on if you want to deal with websocket for example.
+
+```ts
+const serverE = TumauServer.create({
+  mainMiddleware: () => null,
+  handleServerRequest: true, // true by default
+  handleServerUpgrade: false, // false by default
+});
+```
 
 ### Middleware
 

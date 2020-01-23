@@ -78,17 +78,19 @@ async function replaceInjectTags(content: string, localRoot: string, pkg: any): 
     injectTags.map(async tag => {
       const { file, isLocal } = resolveFilePath(localRoot, tag.path);
       let content = await fse.readFile(file, 'utf8');
+      // replace import {} from '../src' by import {} from 'packageName'
       if (isLocal) {
         content = content.replace(/from \'\.\.\/src\'/g, `from '${pkg.name}'`);
       }
       const lines = content.split('\n');
+      // remove eslint-disable lines
       while (lines[0].startsWith(`/* eslint-disable`)) {
         lines.shift();
       }
-      content = lines.join('\n');
+      const blocks = parseBlocks(lines);
       return {
         path: tag.path,
-        content,
+        blocks,
         ext: path.extname(file).substring(1),
       };
     })
@@ -99,7 +101,18 @@ async function replaceInjectTags(content: string, localRoot: string, pkg: any): 
     if (!replacer) {
       return match;
     }
-    return ['```' + replacer.ext, replacer.content, '```'].join('\n');
+    return replacer.blocks
+      .map(block => {
+        if (block.type === 'Comment') {
+          // replace comment start/end by empty lines
+          return ['', ...block.lines.slice(1, block.lines.length - 1), ''].join('\n');
+        }
+        if (block.type === 'Code') {
+          return ['```' + replacer.ext, ...block.lines, '```'].join('\n');
+        }
+        throw new Error('Invalid block');
+      })
+      .join('\n\n');
   });
 
   return resutlReplaced;
@@ -141,4 +154,67 @@ function findModuleRoot(pathStr: string): string {
     return pathStr;
   }
   return findModuleRoot(path.dirname(pathStr));
+}
+
+type Lines = Array<string>;
+
+type ContentNode = { type: 'Comment'; lines: Lines } | { type: 'Code'; lines: Lines };
+
+function parseBlocks(lines: Lines): Array<ContentNode> {
+  const queue = [...lines];
+  const nodes: Array<ContentNode> = [];
+  let current: Lines = [];
+  while (queue.length > 0) {
+    const maybeEmptyStart = notNil(queue.shift());
+    const isEmptyStart = maybeEmptyStart === '';
+    if (isEmptyStart && queue.length > 0) {
+      const maybeStart = notNil(queue.shift());
+      const isCommentStart = maybeStart.startsWith('/*');
+      if (isCommentStart && queue.length > 0) {
+        const comment = parseComment(maybeStart);
+        const maybeEmptyEnd = notNil(queue.shift());
+        const isEmptyEnd = maybeEmptyEnd === '';
+        if (isEmptyEnd) {
+          if (current.length > 0) {
+            nodes.push({ type: 'Code', lines: current });
+          }
+          nodes.push({ type: 'Comment', lines: comment });
+          current = [];
+        } else {
+          current.push(...comment);
+          queue.unshift(maybeEmptyEnd);
+        }
+      } else {
+        current.push(maybeStart);
+      }
+    } else {
+      current.push(maybeEmptyStart);
+    }
+  }
+
+  if (current.length > 0) {
+    nodes.push({ type: 'Code', lines: current });
+  }
+
+  return nodes;
+
+  function parseComment(firstLine: string): Lines {
+    const lines: Lines = [firstLine];
+    while (queue.length > 0) {
+      const next = notNil(queue.shift());
+      const isCommentEnd = next.endsWith('*/');
+      lines.push(next);
+      if (isCommentEnd) {
+        break;
+      }
+    }
+    return lines;
+  }
+}
+
+function notNil<T>(val: T | null | undefined): T {
+  if (val === null || val === undefined) {
+    throw new Error('Invariant');
+  }
+  return val;
 }

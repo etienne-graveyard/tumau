@@ -1,15 +1,17 @@
 import React from 'react';
-// import { useWindowSize } from '../hooks/useWindowSize';
-// import { useClientRendered } from '../hooks/useClientRendered';
 import { MainMenu } from './MainMenu';
 import styled from 'styled-components';
-import { PRIMARY_WIDTH } from '../style/constants';
+import { PRIMARY_WIDTH, MOBILE_MENU_MQ } from '../style/constants';
 
 const Content = styled.main({
   marginLeft: PRIMARY_WIDTH,
   padding: '1rem',
   paddingLeft: '2rem',
   maxWidth: 800,
+  [MOBILE_MENU_MQ]: {
+    marginLeft: 0,
+    padding: '1rem',
+  },
 });
 
 interface Props {

@@ -11,6 +11,16 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
+    "@tumau/compress": "^1.0.0-alpha.53",
+    "@tumau/cookie": "^1.0.0-alpha.53",
+    "@tumau/core": "^1.0.0-alpha.53",
+    "@tumau/cors": "^1.0.0-alpha.53",
+    "@tumau/json": "^1.0.0-alpha.53",
+    "@tumau/rate-limit": "^1.0.0-alpha.53",
+    "@tumau/router": "^1.0.0-alpha.53",
+    "@tumau/static": "^1.0.0-alpha.53",
+    "@tumau/url-parser": "^1.0.0-alpha.53",
+    "@tumau/ws": "^1.0.0-alpha.53",
     "tumau": "^1.0.0-alpha.53"
   },
   "devDependencies": {

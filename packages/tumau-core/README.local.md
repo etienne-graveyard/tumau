@@ -1,23 +1,6 @@
 ## API
 
-### TumauServer
-
-#### TumauServer.create(opts)
-
-- `opts`: the main middleware or an object
-
-If `opts` is an object it accepts the following properties:
-
-- `mainMiddleware`: (`required`) the main middleware of your app
-- `createInitialCtx`: (`optional`) a function used to initialize the Context object. This function will receive the base Context as parameter
-- `httpServer`: (`optional`) a instance of `http.Server`. If ommited, a server will be created (`http.createServer()`)
-
-**return**: A `TumauServer` object with the following properties:
-
-- `httpServer`: The `http.Server` used by Tumau (either passed as option or created by Tumau)
-- `listen(port, listener)`: A function that start the server on a given port
-  - `port` (`number required`) the port to listen on
-  - `listener`: (`function optional`) a function executed once the server is up
+[[@tumau-example/docs/src/api/core.ts]]
 
 ### Middleware
 

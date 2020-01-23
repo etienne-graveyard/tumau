@@ -1,4 +1,4 @@
-# @tumau-example/websocket (private)
+# @tumau-example/ws (private)
 
 > Websocket example for tumau
 

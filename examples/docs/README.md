@@ -1,6 +1,6 @@
-# @tumau-example/router-ws (private)
+# @tumau-example/docs (private)
 
-> Websocket example for tumau
+> Examples used for the docs
 
 ## Tumau
 

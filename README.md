@@ -14,12 +14,10 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 
 ```ts
 import { TumauServer, TumauResponse, RequestConsumer } from 'tumau';
-
 const server = TumauServer.create(tools => {
   const request = tools.readContext(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
-
 server.listen(3002, () => {
   console.log(`Server is up at http://localhost:3002`);
 });
@@ -91,10 +89,8 @@ Contexts are typed when you create them:
 
 ```ts
 import { Context } from 'tumau';
-
 // here we could omit <number> because it would be infered
 const NumCtx = Context.create<number>(0);
-
 // you can omit the default value
 const NameCtx = Context.create<string>();
 ```
