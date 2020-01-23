@@ -1,9 +1,7 @@
-import { Server, TumauResponse, CookieResponse, Cookie } from 'tumau';
+import { TumauServer, TumauResponse, CookieResponse, SetCookie } from 'tumau';
 
-console.log(Cookie);
-
-const server = Server.create(() => {
-  return new CookieResponse(TumauResponse.noContent(), [Cookie.create('token', 'T55YTRR55554')]);
+const server = TumauServer.create(() => {
+  return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
 });
 
 server.listen(3002, () => {

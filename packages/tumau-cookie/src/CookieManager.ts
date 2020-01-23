@@ -1,4 +1,4 @@
-import { Middleware, Context, TumauResponse } from '@tumau/core';
+import { Middleware, Context, Result, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
 import { CreateCookieOptions, SetCookie, SetCookies } from './Cookie';
 import { CookieResponse } from './CookieResponse';
 
@@ -16,7 +16,8 @@ export const CookieManagerConsumer = CookieManagerCtx.Consumer;
  *
  */
 export function CookieManager(): Middleware {
-  return async (tools): Promise<null | TumauResponse> => {
+  return async (tools): Promise<Result> => {
+    const isUpgrade = tools.readContextOrFail(RequestConsumer).isUpgrade;
     let cookies: SetCookies = [];
     const manager: CookieManager = {
       set: (name, value, options) => {
@@ -34,12 +35,19 @@ export function CookieManager(): Middleware {
       },
     };
     const response = await tools.withContext(CookieManagerCtx.Provider(manager)).next();
+    if (isUpgrade) {
+      return response;
+    }
     if (response === null) {
       // If the next did not respond we don't set cookies
       // If you want to send cookies even when the server dis not respond
       // you can use the `HandleInvalidResponse` middleware
       return null;
     }
-    return new CookieResponse(response, cookies);
+    if (response instanceof TumauResponse === false) {
+      throw new HttpError.Internal(`CookieManager received an invalid response !`);
+    }
+    const res = response as TumauResponse;
+    return CookieResponse.fromResponse(res, cookies);
   };
 }

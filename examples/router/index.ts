@@ -1,5 +1,5 @@
 import {
-  Server,
+  TumauServer,
   TumauResponse,
   Middleware,
   HttpMethod,
@@ -34,6 +34,7 @@ const render = (content: string) => `<!DOCTYPE html>
     <a href="/search">/search</a><br />
     <a href="/next">/next</a><br />
     <a href="/next/demo">/next/demo</a><br />
+    <a href="/next/yolo">/next/yolo</a><br />
     <a href="/static/hey">/static/hey</a><br />
     <a href="/static/yolo">/static/yolo</a><br />
     <p>${content}</p>
@@ -93,26 +94,33 @@ const ROUTES: Routes = [
     // oops not a real match (return no response => act like this the route didn't match in the first place)
     return null;
   }),
-  Route.GET('/next/*?', tools => {
+  Route.GET('/next/:subroute?', tools => {
     // calling next in a route call the middleware after the route
     return tools.next();
+  }),
+  Route.GET('/next/yolo', () => {
+    return TumauResponse.withHtml(render('Welcome on /next/yolo'));
   }),
   Route.GET(null, () => TumauResponse.withHtml(render('Not found'))),
   Route.create({ pattern: '/all' }, () => null),
 ];
 
-console.log(Route.flatten(ROUTES).map(route => route.pattern && route.pattern.parts));
-
-const server = Server.create(
+const server = TumauServer.create(
   Middleware.compose(
     RouterPackage(ROUTES),
     // this middleware is executed if next is called inside a route middleware
     tools => {
-      const router = tools.readContext(RouterConsumer);
-      const pattern = router && router.pattern;
-      const params = router && router.params && router.params.wild;
+      const router = tools.readContextOrFail(RouterConsumer);
+      const pattern = router.pattern?.stringify();
+      const subroute = (router.params?.subroute as any)?.value;
 
-      return TumauResponse.withHtml(render(`Next was called on ${pattern} with ${params}`));
+      if (subroute === 'yolo') {
+        // this will go up to the router and pretend it did not match this route
+        // then the router will run the next matching route (/next/yolo)
+        return null;
+      }
+
+      return TumauResponse.withHtml(render(`Next was called on ${pattern} with subroute: ${subroute}`));
     }
   )
 );

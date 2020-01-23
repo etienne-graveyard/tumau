@@ -1,6 +1,6 @@
-import { Server, TumauResponse, RequestConsumer } from 'tumau';
+import { TumauServer, TumauResponse, RequestConsumer } from 'tumau';
 
-const server = Server.create(tools => {
+const server = TumauServer.create(tools => {
   const request = tools.readContext(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });

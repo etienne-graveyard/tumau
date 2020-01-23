@@ -17,7 +17,8 @@ export async function parseJsonBody(
     return {};
   }
 
-  if (str && str.length !== expectedLength) {
+  // Note we allow content-length to be greater than the actual length, is thi OK ?
+  if (expectedLength !== null && str && str.length > expectedLength) {
     throw new HttpError.PayloadTooLarge();
   }
 

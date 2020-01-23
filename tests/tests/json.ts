@@ -1,17 +1,27 @@
-import { Server, HttpError, Middleware, HttpHeaders, HttpMethod } from '@tumau/core';
-import { JsonParser, ErrorToJson, JsonResponse, JsonParserConsumer } from '@tumau/json';
-import { runTumauRequest } from '../utils/runRequest';
-import { Request } from '../utils/Request';
-import { BodyResponse } from '../utils/BodyResponse';
+import {
+  TumauServer,
+  HttpError,
+  Middleware,
+  HttpMethod,
+  HttpHeaders,
+  ContentType,
+  JsonParser,
+  ErrorToJson,
+  JsonResponse,
+  JsonParserConsumer,
+} from 'tumau';
+import { mountTumau } from '../utils/mountTumau';
+import fetch from 'node-fetch';
 
 describe('Server', () => {
   test('convert HTTPError to JsonResponse', async () => {
-    const app = Server.create(
+    const app = TumauServer.create(
       Middleware.compose(ErrorToJson, JsonParser(), () => {
         throw new HttpError.NotFound();
       })
     );
-    const res = await runTumauRequest(app, new Request());
+    const { close, url } = await mountTumau(app);
+    const res = await fetch(url);
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 404 Not Found
       Connection: close
@@ -19,31 +29,32 @@ describe('Server', () => {
       Content-Type: application/json
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
-    expect(await BodyResponse.fromJson(res)).toEqual({ code: 404, message: 'Not Found' });
+    expect(await res.json()).toEqual({ code: 404, message: 'Not Found' });
+    await close();
   });
 
   test('parse JSON body', async () => {
-    const app = Server.create(
+    const app = TumauServer.create(
       Middleware.compose(ErrorToJson, JsonParser(), tools => {
-        console.log(tools.readContext(JsonParserConsumer));
         return JsonResponse.with({ body: tools.readContext(JsonParserConsumer) });
       })
     );
-    const body = JSON.stringify({ name: 'Perceval', alias: 'Provençal le Gaulois' });
-    const res = await runTumauRequest(
-      app,
-      new Request({
-        method: HttpMethod.POST,
-        body,
-        headers: { [HttpHeaders.ContentLength]: body.length.toString(), [HttpHeaders.ContentType]: 'application/json' },
-      })
-    );
+    const { close, url } = await mountTumau(app);
+    const res = await fetch(url, {
+      method: HttpMethod.POST,
+      body: JSON.stringify({ name: 'Perceval', alias: 'Provençal le Gaulois' }),
+      headers: {
+        [HttpHeaders.ContentType]: ContentType.Json,
+      },
+    });
     expect(res).toMatchInlineSnapshot(`
-      HTTP/1.1 400 Bad Request
+      HTTP/1.1 200 OK
       Connection: close
+      Content-Length: 60
+      Content-Type: application/json
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
-    // console.log(await BodyResponse.asText(res));
-
-    // expect(await BodyResponse.fromJson(res)).toEqual({ name: 'Perceval', alias: 'Provençal le Gaulois' });
+    expect(await res.json()).toEqual({ body: { name: 'Perceval', alias: 'Provençal le Gaulois' } });
+    await close();
   });
 });

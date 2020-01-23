@@ -1,4 +1,4 @@
-import { Middleware, HttpMethod, TumauResponse, RequestConsumer } from '@tumau/core';
+import { Middleware, HttpMethod, TumauResponse, RequestConsumer, Result, HttpError } from '@tumau/core';
 import { Routes, Route } from './Route';
 import { UrlParserConsumer } from '@tumau/url-parser';
 import { RouterAllowedMethodsContext } from './RouterContext';
@@ -7,7 +7,7 @@ import { AllowedMethodsResponse } from './AllowedMethodsResponse';
 export function AllowedMethods(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (tools): Promise<null | TumauResponse> => {
+  return async (tools): Promise<Result> => {
     const request = tools.readContextOrFail(RequestConsumer);
     if (request.method !== HttpMethod.OPTIONS) {
       return tools.next();
@@ -30,8 +30,11 @@ export function AllowedMethods(routes: Routes): Middleware {
     }, new Set<HttpMethod>());
 
     const methods = allowedMethods || HttpMethod.__ALL;
-    const result = await tools.withContext(RouterAllowedMethodsContext.Provider(methods)).next();
-    const response = result || new TumauResponse({ code: 204 });
-    return new AllowedMethodsResponse(response, methods);
+    const response = await tools.withContext(RouterAllowedMethodsContext.Provider(methods)).next();
+    if (response instanceof TumauResponse === false) {
+      throw new HttpError.Internal(`AllowedMethods received an invalid response !`);
+    }
+    const res = response === null ? new TumauResponse({ code: 204 }) : (response as TumauResponse);
+    return new AllowedMethodsResponse(res, methods);
   };
 }

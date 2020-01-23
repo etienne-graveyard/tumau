@@ -17,6 +17,15 @@ pre.hljs {
   border-radius: 0.5rem;
 }
 
+code {
+  font-family: 'Fira Code', monospace;
+  background: #e7f2f8;
+  color: #072231;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 0.1rem 0.3rem;
+}
+
 img {
   width: 100%;
   max-height: 90vh;

@@ -1,8 +1,8 @@
 import * as TumauMiddleware from '@tumau/middleware';
-import { TumauResponse } from './TumauResponse';
+import { TumauBaseResponse } from './TumauBaseResponse';
 import { ContextStack, ContextProvider } from '@tumau/middleware';
 
-export type Result = TumauResponse | null;
+export type Result = TumauBaseResponse | null;
 export type Middleware = TumauMiddleware.Middleware<Result>;
 export type Middlewares = TumauMiddleware.Middlewares<Result>;
 export type Tools = TumauMiddleware.Tools<Result>;

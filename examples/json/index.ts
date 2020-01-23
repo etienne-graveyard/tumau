@@ -1,6 +1,6 @@
-import { Server, Middleware, JsonParser, JsonResponse, JsonParserConsumer } from 'tumau';
+import { TumauServer, Middleware, JsonParser, JsonResponse, JsonParserConsumer } from 'tumau';
 
-const server = Server.create(
+const server = TumauServer.create(
   Middleware.compose(JsonParser(), tools => {
     const jsonBody = tools.readContextOrFail(JsonParserConsumer);
     if (jsonBody) {

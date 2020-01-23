@@ -1,8 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { PageContent } from '../../data';
-import { MarkdownNodeRenderer } from '../../components/MarkdownNodeRenderer';
-import { PAGES } from '../../data/pages';
+import { PageContent } from '../../src/data';
+import { MarkdownNodeRenderer } from '../../src/components/MarkdownNodeRenderer';
+import { PAGES } from '../../src/data/pages';
 import { BasePageProps } from '../_app';
 import Head from 'next/head';
 
@@ -31,7 +31,7 @@ export async function unstable_getStaticPaths() {
 
 // eslint-disable-next-line @typescript-eslint/camelcase
 export async function unstable_getStaticProps({ params }: { params: { slug: string } }) {
-  const { packagePageData } = await import('../../data');
+  const { packagePageData } = await import('../../src/data');
   const { content, page } = await packagePageData(`/package/${params.slug}` as any);
   const props: Props = {
     content,

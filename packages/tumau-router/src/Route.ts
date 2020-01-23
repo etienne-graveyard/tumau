@@ -11,6 +11,7 @@ export interface Route {
   exact: boolean;
   middleware: Array<Middleware>;
   method: Method;
+  upgrade: boolean | null;
   children: Array<Route>;
 }
 
@@ -22,6 +23,7 @@ export interface RouteResolved {
   exact: boolean;
   middleware: Middleware | null;
   method: Method;
+  upgrade: boolean | null;
   children: Array<Route>;
 }
 
@@ -39,12 +41,15 @@ export const Route = {
   PUT: withMethod(HttpMethod.PUT),
   DELETE: withMethod(HttpMethod.DELETE),
   PATCH: withMethod(HttpMethod.PATCH),
+  UPGRADE: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
+    createRoute({ method: HttpMethod.GET, upgrade: true, pattern }, middleware),
   all: withMethod(null),
   namespace: (pattern: string | null, routes: Routes) =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
 };
 
 interface RouteOptions {
+  upgrade?: boolean | null;
   method?: Method;
   pattern?: Chemin | string | null;
   exact?: boolean;
@@ -55,7 +60,7 @@ function createRoute(
   middleware: null | Middleware | Array<Middleware>,
   children: Routes = []
 ): Route {
-  const { exact = true, method = null, pattern = null } = options;
+  const { exact = true, method = null, pattern = null, upgrade = null } = options;
   const patternResolved = typeof pattern === 'string' ? Chemin.parse(pattern) : pattern;
   return {
     [ROUTE_TOKEN]: true,
@@ -63,6 +68,7 @@ function createRoute(
     exact,
     middleware: resolveMiddleware(middleware),
     method,
+    upgrade,
     children,
   };
 }
@@ -81,7 +87,12 @@ function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
   const flat = flattenRoutes(routes);
   return flat.map(route => {
     return {
-      ...route,
+      [ROUTE_TOKEN]: true,
+      children: route.children,
+      pattern: route.pattern,
+      exact: route.exact,
+      method: route.method,
+      upgrade: route.upgrade,
       patterns: route.pattern ? route.pattern.extract() : null,
       middleware:
         route.middleware.length === 0
@@ -169,6 +180,7 @@ export interface FindResult {
   params: { [key: string]: any };
 }
 
+// fins all routes matching the pattern (ignoring methods & upgrade)
 function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult> {
   const parts = CheminUtils.splitPathname(pathname);
   return routes

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import React from 'react';
+import { MOBILE_MENU_MQ } from '../style/constants';
 
-const Item = styled.li<{ isActive: boolean }>(props => ({
+const Item = styled.li<{ isActive: boolean; isOdd: boolean }>(props => ({
   color: 'white',
   cursor: 'pointer',
   listStyle: 'none',
@@ -11,6 +12,9 @@ const Item = styled.li<{ isActive: boolean }>(props => ({
   paddingLeft: props.isActive ? '1.5rem' : 0,
   transitionDuration: '0.2s',
   position: 'relative',
+  [MOBILE_MENU_MQ]: {
+    backgroundColor: props.isOdd ? `rgba(0, 0, 0, 0.2)` : 'transparent',
+  },
   '& a': {
     display: 'block',
     color: 'inherit',
@@ -41,8 +45,13 @@ const Item = styled.li<{ isActive: boolean }>(props => ({
 
 interface Props {
   active: boolean;
+  odd: boolean;
 }
 
-export const MainMenuItem: React.FC<Props> = ({ active, children }) => {
-  return <Item isActive={active}>{children}</Item>;
+export const MainMenuItem: React.FC<Props> = ({ active, children, odd }) => {
+  return (
+    <Item isActive={active} isOdd={odd}>
+      {children}
+    </Item>
+  );
 };

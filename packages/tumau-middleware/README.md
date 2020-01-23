@@ -32,9 +32,7 @@ import {
 
 ```ts
 import { Middleware, Context } from '@tumau/middleware';
-
 const ACtx = Context.create<string>('A');
-
 const mid = Middleware.compose<string>(
   tools => {
     console.log('middleware 1');
@@ -53,13 +51,11 @@ const mid = Middleware.compose<string>(
     return tools.withContext(ACtx.Provider('a3')).next();
   }
 );
-
 const mid2 = Middleware.compose(mid, async tools => {
   console.log('done');
   console.log((tools as any).debug());
   return tools.next();
 });
-
 Middleware.run(mid2, () => {
   console.log('done 2');
   return 'nope2';

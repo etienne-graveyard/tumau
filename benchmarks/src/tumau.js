@@ -2,7 +2,7 @@
 
 const tumau = require('@tumau/core');
 
-const app = tumau.Server.create(() => {
+const app = tumau.TumauServer.create(() => {
   return new tumau.TumauResponse({
     body: JSON.stringify({ hello: 'world (tumau)' }),
     headers: {

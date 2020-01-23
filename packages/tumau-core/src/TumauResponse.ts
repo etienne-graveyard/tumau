@@ -1,9 +1,9 @@
-import { OutgoingHttpHeaders, IncomingMessage } from 'http';
-import { Duplex } from 'stream';
+import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
 import { HttpHeaders, ContentType, ContentTypeCharset } from './HttpHeaders';
 import { Readable } from 'stream';
+import { TumauBaseResponse } from './TumauBaseResponse';
 
 export type Body = Readable | string | null;
 
@@ -11,24 +11,33 @@ export interface ResponseConstuctorOptions {
   code?: HttpStatusCode;
   body?: Body;
   headers?: OutgoingHttpHeaders;
+  originalResponse?: TumauResponse | null;
 }
 
-export class TumauResponse {
+/**
+ * Note: the correct name for this class is TumauRequestResponse
+ * This is named TumauResponse because the vast majority of apps only handle the 'request' event
+ */
+export class TumauResponse extends TumauBaseResponse {
   public readonly code: HttpStatusCode;
   public readonly body: Body;
   public readonly headers: OutgoingHttpHeaders;
+  public readonly originalResponse: TumauResponse | null;
 
   public constructor(options: ResponseConstuctorOptions = {}) {
-    const { code = 200, headers = {}, body = null } = options;
+    super();
+    const { code = 200, headers = {}, body = null, originalResponse = null } = options;
     this.code = code;
     this.body = body;
     this.headers = headers;
+    this.originalResponse = originalResponse;
   }
 
   public extends(overrides: ResponseConstuctorOptions = {}): ResponseConstuctorOptions {
     return {
       body: overrides.body || this.body,
       code: overrides.code || this.code,
+      originalResponse: this,
       headers: {
         ...this.headers,
         ...(overrides.headers || {}),
@@ -60,12 +69,6 @@ export class TumauResponse {
     return new TumauResponse({
       code: 204,
     });
-  }
-
-  public static switchingProtocols() {
-    // return new TumauResponse({
-    //   code: 101,
-    // });
   }
 
   public static redirect(to: string, permanent: boolean = false) {
@@ -102,21 +105,4 @@ export class TumauResponse {
     }
     return TumauResponse.fromError(new HttpError.Internal(String(err)));
   }
-
-  public static SwitchingProtocols: typeof SwitchingProtocols;
 }
-
-export type SwitchingProtocolsHandler = (req: IncomingMessage, socket: Duplex, head: Buffer) => Promise<void>;
-
-class SwitchingProtocols extends TumauResponse {
-  public readonly handler: SwitchingProtocolsHandler;
-
-  constructor(handler: SwitchingProtocolsHandler) {
-    super({
-      code: 101,
-    });
-    this.handler = handler;
-  }
-}
-
-TumauResponse.SwitchingProtocols = SwitchingProtocols;

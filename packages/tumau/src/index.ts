@@ -7,3 +7,4 @@ export * from '@tumau/router';
 export * from '@tumau/cookie';
 // export * from '@tumau/static';
 export * from '@tumau/url-parser';
+export * from '@tumau/ws';

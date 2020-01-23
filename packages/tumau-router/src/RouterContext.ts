@@ -2,7 +2,7 @@ import { Middleware, HttpMethod, Context } from '@tumau/core';
 import { Chemin } from 'chemin';
 
 export interface Params {
-  [key: string]: string;
+  [key: string]: unknown;
 }
 
 export interface RouterContext {
