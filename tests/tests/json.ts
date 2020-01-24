@@ -17,7 +17,7 @@ describe('Server', () => {
   test('convert HTTPError to JsonResponse', async () => {
     const app = TumauServer.create(
       Middleware.compose(ErrorToJson, JsonParser(), () => {
-        throw new HttpError.NotFound();
+        return new HttpError.NotFound();
       })
     );
     const { close, url } = await mountTumau(app);
