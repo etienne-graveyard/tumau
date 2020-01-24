@@ -1,6 +1,6 @@
 {
   "name": "@tumau/compress",
-  "version": "1.0.0-alpha.53",
+  "version": "1.0.0-alpha.54",
   "description": "Compress middleware (gzip, deflate & brotli) for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.53"
+    "@tumau/core": "^1.0.0-alpha.54"
   },
   "devDependencies": {
     "tsdx": "^0.12.3"
