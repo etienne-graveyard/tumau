@@ -10,16 +10,10 @@ function formatHeaderName(name) {
 }
 
 function formatValue(key, value) {
+  // hide date to match every time
   if (key.toLowerCase() === 'date') {
     return `${formatHeaderName(key)}: Xxx, XX Xxx XXXX XX:XX:XX GMT`;
   }
-  if (key.toLowerCase() === 'set-cookie') {
-    return value
-      .split(/, ?/)
-      .map(v => `${formatHeaderName(key)}: ${v}`)
-      .join('\n');
-  }
-  // hide date to match every time
   return `${formatHeaderName(key)}: ${value}`;
 }
 

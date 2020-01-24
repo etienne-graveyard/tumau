@@ -36,12 +36,13 @@ export function CookieManager(): Middleware {
     };
     const response = await tools.withContext(CookieManagerCtx.Provider(manager)).next();
     if (isUpgrade) {
-      return response;
+      if (cookies.length) {
+        console.warn(`Cookies set/deleted in an upgrade event are ignored`);
+      }
+      return tools.next();
     }
     if (response === null) {
       // If the next did not respond we don't set cookies
-      // If you want to send cookies even when the server dis not respond
-      // you can use the `HandleInvalidResponse` middleware
       return null;
     }
     if (response instanceof TumauResponse === false) {

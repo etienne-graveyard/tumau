@@ -155,13 +155,13 @@ describe('Server', () => {
 
     const res = await fetch(url);
     expect(res).toMatchInlineSnapshot(`
-      HTTP/1.1 200 OK
-      Connection: close
-      Content-Length: 13
-      Content-Type: application/json
-      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
-      Set-Cookie: token=AZERTYUIO; HttpOnly; Path=/
-    `);
+HTTP/1.1 200 OK
+Connection: close
+Content-Length: 13
+Content-Type: application/json
+Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+Set-Cookie: token=AZERTYUIO; Path=/; HttpOnly
+`);
     expect(await res.json()).toEqual({ foo: 'bar' });
 
     await close();

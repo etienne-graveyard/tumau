@@ -9,7 +9,6 @@ import {
   HttpError,
   CookieManager,
   Compress,
-  CookieManagerConsumer,
 } from 'tumau';
 import WebSocket from 'ws';
 import { mountTumau } from '../utils/mountTumau';
@@ -33,14 +32,7 @@ test('real life', async () => {
       CookieManager(),
       WebsocketProvider(wss),
       RouterPackage([
-        Route.UPGRADE(
-          'connect',
-          tools => {
-            tools.readContextOrFail(CookieManagerConsumer).set('demo', 'demo');
-            return tools.next();
-          },
-          HandleWebsocket
-        ),
+        Route.UPGRADE('connect', HandleWebsocket),
         Route.GET('login', () => {
           return TumauResponse.withText('TODO');
         }),
