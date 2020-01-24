@@ -43,9 +43,6 @@ export class JsonResponse<T = any> extends TumauResponse {
   }
 
   public static fromResponse(res: any): JsonResponse | TumauResponse {
-    if (res instanceof JsonResponse) {
-      return res;
-    }
     if (res === null) {
       return JsonResponse.fromError(new HttpError.ServerDidNotRespond());
     }
@@ -53,11 +50,19 @@ export class JsonResponse<T = any> extends TumauResponse {
       return JsonResponse.fromError(res);
     }
     if (res instanceof TumauResponse) {
+      if (res instanceof JsonResponse) {
+        return res;
+      }
       const tumauRes = res as TumauResponse;
       if (HttpStatus.isEmpty(tumauRes.code)) {
         // No content are OK
         return tumauRes;
       }
+      const isJson = tumauRes.headers[HttpHeaders.ContentType] === ContentType.Json;
+      if (isJson) {
+        return res;
+      }
+      // try to convert to JSON
       const body = tumauRes.body;
       if (body === null) {
         return new JsonResponse({
@@ -73,6 +78,7 @@ export class JsonResponse<T = any> extends TumauResponse {
           json: body,
         });
       }
+      // failed to convert, throw error
       return JsonResponse.fromError(
         new HttpError.Internal(`Invalid response: Expected a JsonResponse got a TumauResponse`)
       );

@@ -11,6 +11,8 @@ import {
   JsonParserConsumer,
   JsonPackage,
   TumauResponse,
+  CookieManager,
+  CookieManagerConsumer,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -138,6 +140,29 @@ describe('Server', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
     expect(await res4.json()).toEqual({ code: 500, message: 'Internal Server Error: Oops' });
+
+    await close();
+  });
+
+  test('JsonPackage works with Cookies', async () => {
+    const app = TumauServer.create(
+      Middleware.compose(JsonPackage(), CookieManager(), tools => {
+        tools.readContextOrFail(CookieManagerConsumer).set('token', 'AZERTYUIO');
+        return JsonResponse.with({ foo: 'bar' });
+      })
+    );
+    const { close, url } = await mountTumau(app);
+
+    const res = await fetch(url);
+    expect(res).toMatchInlineSnapshot(`
+      HTTP/1.1 200 OK
+      Connection: close
+      Content-Length: 13
+      Content-Type: application/json
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+      Set-Cookie: token=AZERTYUIO; HttpOnly; Path=/
+    `);
+    expect(await res.json()).toEqual({ foo: 'bar' });
 
     await close();
   });
