@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/compose",
-  "version": "1.0.0-alpha.54",
+  "version": "1.0.0-alpha.55",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "^1.0.0-alpha.54"
+    "tumau": "^1.0.0-alpha.55"
   },
   "devDependencies": {
     "ts-node": "^8.6.2"
