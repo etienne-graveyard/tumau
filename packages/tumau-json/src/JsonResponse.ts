@@ -1,14 +1,14 @@
-import { TumauResponse, HttpStatusCode, HttpHeaders, ContentType, HttpError } from '@tumau/core';
+import { TumauResponse, HttpStatusCode, HttpHeaders, ContentType, HttpError, HttpStatus } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
 
-interface Options<T extends object> {
+interface Options<T> {
   json: T;
   code?: HttpStatusCode;
   headers?: OutgoingHttpHeaders;
 }
 
-export class JsonResponse<T extends object = object> extends TumauResponse {
-  public json: object;
+export class JsonResponse<T = any> extends TumauResponse {
+  public json: any;
 
   public constructor(options: Options<T>) {
     const { code = 200, headers = {}, json } = options;
@@ -42,7 +42,7 @@ export class JsonResponse<T extends object = object> extends TumauResponse {
     return JsonResponse.fromError(new HttpError.Internal(String(err.message)));
   }
 
-  public static fromResponse(res: any): JsonResponse {
+  public static fromResponse(res: any): JsonResponse | TumauResponse {
     if (res instanceof JsonResponse) {
       return res;
     }
@@ -53,6 +53,26 @@ export class JsonResponse<T extends object = object> extends TumauResponse {
       return JsonResponse.fromError(res);
     }
     if (res instanceof TumauResponse) {
+      const tumauRes = res as TumauResponse;
+      if (HttpStatus.isEmpty(tumauRes.code)) {
+        // No content are OK
+        return tumauRes;
+      }
+      const body = tumauRes.body;
+      if (body === null) {
+        return new JsonResponse({
+          code: tumauRes.code,
+          headers: { ...tumauRes.headers },
+          json: {},
+        });
+      }
+      if (typeof body === 'string') {
+        return new JsonResponse({
+          code: tumauRes.code,
+          headers: { ...tumauRes.headers },
+          json: body,
+        });
+      }
       return JsonResponse.fromError(
         new HttpError.Internal(`Invalid response: Expected a JsonResponse got a TumauResponse`)
       );
