@@ -11,4 +11,4 @@ export { TumauServer } from './TumauServer';
 export { RequestConsumer, ServerResponseConsumer, UpgradeHeadConsumer, UpgradeSocketConsumer } from './Contexts';
 export { HandleInvalidResponse } from './HandleInvalidResponse';
 export { HandleErrors } from './HandleErrors';
-export { Context, ContextConsumer, ContextProvider, ContextProviderFn } from '@tumau/middleware';
+export { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'Miid';

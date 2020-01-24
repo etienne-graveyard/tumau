@@ -1,4 +1,4 @@
-import { Context } from '@tumau/middleware';
+import { Context } from 'Miid';
 import { TumauRequest } from './TumauRequest';
 import { ServerResponse } from 'http';
 import { Duplex } from 'stream';

@@ -1,30 +1,26 @@
-import * as TumauMiddleware from '@tumau/middleware';
+import * as Miid from 'miid';
 import { TumauBaseResponse } from './TumauBaseResponse';
-import { ContextStack, ContextProvider } from '@tumau/middleware';
 
 export type Result = TumauBaseResponse | null;
-export type Middleware = TumauMiddleware.Middleware<Result>;
-export type Middlewares = TumauMiddleware.Middlewares<Result>;
-export type Tools = TumauMiddleware.Tools<Result>;
-export type Done = TumauMiddleware.Done<Result>;
+export type Middleware = Miid.Middleware<Result>;
+export type Middlewares = Miid.Middlewares<Result>;
+export type Tools = Miid.Tools<Result>;
+export type Done = Miid.Done<Result>;
 
 export const Tools = {
-  getContext: (tools: Tools): ContextStack | null => TumauMiddleware.Tools.getContext(tools),
-  getDone: (tools: Tools): Done => TumauMiddleware.Tools.getDone(tools),
-  create: (context: ContextStack | null, done: Done): Tools => TumauMiddleware.Tools.create(context, done),
+  getContext: (tools: Tools): Miid.ContextStack | null => Miid.Tools.getContext(tools),
+  getDone: (tools: Tools): Done => Miid.Tools.getDone(tools),
+  create: (context: Miid.ContextStack | null, done: Done): Tools => Miid.Tools.create(context, done),
 };
 
 export const Middleware = {
-  compose: (...middleware: Array<Middleware | null>): Middleware => TumauMiddleware.Middleware.compose(...middleware),
-  run: (middleware: Middleware, done: () => Result): Promise<Result> =>
-    TumauMiddleware.Middleware.run(middleware, done),
+  compose: (...middleware: Array<Middleware | null>): Middleware => Miid.Middleware.compose(...middleware),
+  run: (middleware: Middleware, done: () => Result): Promise<Result> => Miid.Middleware.run(middleware, done),
   runWithContexts: (
     middleware: Middleware,
-    contexts: Array<ContextProvider<any>>,
+    contexts: Array<Miid.ContextProvider<any>>,
     done: () => Result
-  ): Promise<Result> => TumauMiddleware.Middleware.runWithContexts(middleware, contexts, done),
-  provider: (
-    first: TumauMiddleware.ContextProvider<any>,
-    ...contexts: Array<TumauMiddleware.ContextProvider<any>>
-  ): Middleware => TumauMiddleware.Middleware.provider(first, ...contexts),
+  ): Promise<Result> => Miid.Middleware.runWithContexts(middleware, contexts, done),
+  provider: (first: Miid.ContextProvider<any>, ...contexts: Array<Miid.ContextProvider<any>>): Middleware =>
+    Miid.Middleware.provider(first, ...contexts),
 };
