@@ -1,6 +1,6 @@
-import { Middleware, HandleInvalidResponse, HandleErrors } from '@tumau/core';
+import { Middleware } from '@tumau/core';
+import { EnsureJsonResponse } from './EnsureJsonResponse';
 import { JsonParser } from './JsonParser';
-import { ErrorToJson } from './ErrorToJson';
 
 interface Options {
   // limit in byte
@@ -9,9 +9,7 @@ interface Options {
 
 export function JsonPackage(options: Options = {}): Middleware {
   return Middleware.compose(
-    ErrorToJson, // 3. if the response is an HttpError convert it to json
-    HandleErrors, // 2. if an error occure catch it and return an HttpError
-    HandleInvalidResponse, // 1. make sure the rerver respond
+    EnsureJsonResponse, // if the response is not Json convert it to json
     JsonParser(options) // parse json body
   );
 }

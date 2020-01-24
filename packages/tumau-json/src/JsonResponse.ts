@@ -41,4 +41,22 @@ export class JsonResponse<T extends object = object> extends TumauResponse {
     }
     return JsonResponse.fromError(new HttpError.Internal(String(err.message)));
   }
+
+  public static fromResponse(res: any): JsonResponse {
+    if (res instanceof JsonResponse) {
+      return res;
+    }
+    if (res === null) {
+      return JsonResponse.fromError(new HttpError.ServerDidNotRespond());
+    }
+    if (res instanceof HttpError || res instanceof Error) {
+      return JsonResponse.fromError(res);
+    }
+    if (res instanceof TumauResponse) {
+      return JsonResponse.fromError(
+        new HttpError.Internal(`Invalid response: Expected a JsonResponse got a TumauResponse`)
+      );
+    }
+    return JsonResponse.fromError(new HttpError.Internal(`Invalid response: Expected a JsonResponse`));
+  }
 }

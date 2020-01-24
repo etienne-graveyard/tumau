@@ -8,6 +8,7 @@ export const ErrorToJson: Middleware = async tools => {
     return tools.next();
   }
   const res = await tools.next();
+
   if (res instanceof HttpError) {
     return JsonResponse.fromError(res);
   }
