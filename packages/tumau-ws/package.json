@@ -1,6 +1,6 @@
 {
   "name": "@tumau/ws",
-  "version": "1.0.0-alpha.54",
+  "version": "1.0.0-alpha.56",
   "description": "Websocket handler for tumau using ws",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.54",
+    "@tumau/core": "^1.0.0-alpha.56",
     "@types/ws": "^7.2.0"
   },
   "devDependencies": {
