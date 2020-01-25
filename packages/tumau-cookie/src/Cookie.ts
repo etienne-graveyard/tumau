@@ -19,7 +19,7 @@ export interface SetCookie {
 
 export type SetCookies = Array<SetCookie>;
 
-export type Cookies = { [name: string]: string };
+export type Cookies = { [name: string]: string | undefined };
 
 export interface CreateCookieOptions {
   expires?: Date;
