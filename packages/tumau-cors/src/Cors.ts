@@ -56,6 +56,9 @@ export function Cors(config: Config = {}): Middleware {
     const manager = CorsManager.create(corsConf);
 
     const response = await tools.withContext(CorsContext.Provider(manager)).next();
+    if (request.isUpgrade) {
+      return response;
+    }
     if (response instanceof TumauResponse === false) {
       throw new HttpError.Internal(`Cors received an invalid response !`);
     }
