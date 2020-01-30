@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.0.2",
-    "framer-motion": "^1.7.2",
+    "framer-motion": "^1.8.3",
     "fs-extra": "^8.1.0",
     "highlight.js": "^9.18.0",
     "isomorphic-unfetch": "^3.0.0",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
     "@types/highlight.js": "^9.12.3",
-    "@types/node": "^13.5.0",
+    "@types/node": "^13.5.2",
     "@types/react": "^16.9.19",
     "@types/styled-components": "^4.4.2",
     "eslint-plugin-react-hooks": "^2.3.0",

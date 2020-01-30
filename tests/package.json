@@ -15,7 +15,7 @@
     "@tumau/core": "^1.0.0-alpha.59",
     "@tumau/json": "^1.0.0-alpha.59",
     "@tumau/router": "^1.0.0-alpha.59",
-    "got": "^10.2.2",
+    "got": "^10.3.0",
     "jest": "^25.1.0",
     "node-fetch": "^2.6.0",
     "tumu": "^1.0.0-alpha.52",
@@ -25,9 +25,9 @@
     "@types/jest": "^24.9.1",
     "@types/koa": "^2.0.51",
     "@types/node-fetch": "^2.5.4",
-    "@types/ws": "^7.2.0",
+    "@types/ws": "^7.2.1",
     "jest": "^25.1.0",
     "koa": "^2.10.0",
-    "ts-jest": "^25.0.0"
+    "ts-jest": "^25.1.0"
   }
 }
