@@ -1,6 +1,6 @@
 {
   "name": "@tumau/url-parser",
-  "version": "1.0.0-alpha.59",
+  "version": "1.0.0-alpha.60",
   "description": "Url parser for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.59"
+    "@tumau/core": "^1.0.0-alpha.60"
   },
   "devDependencies": {
     "tsdx": "^0.12.3"
