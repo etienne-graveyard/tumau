@@ -1,6 +1,6 @@
 {
   "name": "@tumau/core",
-  "version": "1.0.0-alpha.56",
+  "version": "1.0.0-alpha.59",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
