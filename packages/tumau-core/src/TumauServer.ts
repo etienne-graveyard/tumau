@@ -10,7 +10,13 @@ import { isWritableStream } from './utils';
 import { HandleErrors } from './HandleErrors';
 import { HandleInvalidResponse } from './HandleInvalidResponse';
 import { HttpError } from './HttpError';
-import { RequestContext, ServerResponseContext, UpgradeSocketContext, UpgradeHeadContext } from './Contexts';
+import {
+  RequestContext,
+  ServerResponseContext,
+  UpgradeSocketContext,
+  UpgradeHeadContext,
+  DebugContext,
+} from './Contexts';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
 
 export interface TumauServer {
@@ -28,6 +34,9 @@ interface Options {
   // The server should handle the 'upgrade' event (default false)
   // this is used for websocket
   handleServerUpgrade?: boolean;
+  // In debug mode error stack are returned
+  // the default value is false
+  debug?: boolean;
 }
 
 export const TumauServer = {
@@ -42,6 +51,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     httpServer,
     handleServerRequest = true,
     handleServerUpgrade = false,
+    debug = false,
   } = options;
 
   const resolvedHttpServer: Server = httpServer || createServer();
@@ -75,8 +85,9 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
 
     const requestCtx = RequestContext.Provider(request);
     const resCtx = ServerResponseContext.Provider(res);
+    const debugCtx = DebugContext.Provider(debug);
 
-    return Middleware.runWithContexts(rootMiddleware, [requestCtx, resCtx], () => null)
+    return Middleware.runWithContexts(rootMiddleware, [requestCtx, resCtx, debugCtx], () => null)
       .then(response => {
         sendResponseAny(response, res, request);
       })
@@ -95,8 +106,9 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     const requestCtx = RequestContext.Provider(request);
     const socketCtx = UpgradeSocketContext.Provider(socket);
     const headCtx = UpgradeHeadContext.Provider(head);
+    const debugCtx = DebugContext.Provider(debug);
 
-    return Middleware.runWithContexts(rootMiddleware, [requestCtx, socketCtx, headCtx], () => null)
+    return Middleware.runWithContexts(rootMiddleware, [requestCtx, socketCtx, headCtx, debugCtx], () => null)
       .then(response => {
         // On upgrade if no response we just destroy the socket.
         if (response === null) {

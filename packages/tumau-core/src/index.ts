@@ -8,7 +8,13 @@ export { Body, TumauResponse, ResponseConstuctorOptions } from './TumauResponse'
 export { TumauBaseResponse } from './TumauBaseResponse';
 export { TumauUpgradeResponse, UpgradeResponseHandler } from './TumauUpgradeResponse';
 export { TumauServer } from './TumauServer';
-export { RequestConsumer, ServerResponseConsumer, UpgradeHeadConsumer, UpgradeSocketConsumer } from './Contexts';
+export {
+  RequestConsumer,
+  ServerResponseConsumer,
+  UpgradeHeadConsumer,
+  UpgradeSocketConsumer,
+  DebugConsumer,
+} from './Contexts';
 export { HandleInvalidResponse } from './HandleInvalidResponse';
 export { HandleErrors } from './HandleErrors';
 export { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'Miid';

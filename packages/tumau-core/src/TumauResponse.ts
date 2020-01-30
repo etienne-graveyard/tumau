@@ -93,16 +93,28 @@ export class TumauResponse extends TumauBaseResponse {
     return maybe && maybe instanceof TumauResponse;
   }
 
-  public static fromError(err: any): TumauResponse {
+  public static fromError(err: any, debug: boolean): TumauResponse {
     if (err instanceof HttpError) {
       return new TumauResponse({
         code: err.code,
-        body: err.message,
+        body: errorToString(err, debug),
       });
     }
     if (err instanceof Error) {
-      return TumauResponse.fromError(new HttpError.Internal(err.message));
+      return TumauResponse.fromError(new HttpError.Internal(err.message), debug);
     }
-    return TumauResponse.fromError(new HttpError.Internal(String(err)));
+    return TumauResponse.fromError(new HttpError.Internal(String(err)), debug);
   }
+}
+
+function errorToString(err: HttpError, debug: boolean): string {
+  if (debug === false) {
+    return `Error ${err.code}: ${err.message}`;
+  }
+  let stack = '';
+  if (err.stack) {
+    stack = `\n\n` + err.stack;
+  }
+
+  return `Error ${err.code}: ${err.message}` + stack;
 }

@@ -16,3 +16,6 @@ export const UpgradeSocketConsumer = UpgradeSocketContext.Consumer;
 
 export const UpgradeHeadContext = Context.create<Buffer>();
 export const UpgradeHeadConsumer = UpgradeHeadContext.Consumer;
+
+export const DebugContext = Context.create<boolean>(false);
+export const DebugConsumer = DebugContext.Consumer;
