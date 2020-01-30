@@ -1,6 +1,6 @@
 {
   "name": "@tumau/cors",
-  "version": "1.0.0-alpha.56",
+  "version": "1.0.0-alpha.58",
   "description": "CORS for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
