@@ -9,7 +9,7 @@ import {
   HttpError,
   CookieManager,
   Compress,
-  CookieManagerConsumer,
+  CorsPackage,
 } from 'tumau';
 import WebSocket from 'ws';
 import { mountTumau } from '../utils/mountTumau';
@@ -30,17 +30,11 @@ test('real life', async () => {
     handleServerUpgrade: true,
     mainMiddleware: Middleware.compose(
       Compress(),
+      CorsPackage(),
       CookieManager(),
       WebsocketProvider(wss),
       RouterPackage([
-        Route.UPGRADE(
-          'connect',
-          tools => {
-            tools.readContextOrFail(CookieManagerConsumer).set('demo', 'demo');
-            return tools.next();
-          },
-          HandleWebsocket
-        ),
+        Route.UPGRADE('connect', HandleWebsocket),
         Route.GET('login', () => {
           return TumauResponse.withText('TODO');
         }),
@@ -60,6 +54,7 @@ test('real life', async () => {
   expect(res).toMatchInlineSnapshot(`
     HTTP/1.1 404 Not Found
     Connection: close
+    Content-Encoding: gzip
     Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     Transfer-Encoding: chunked
   `);
@@ -68,6 +63,7 @@ test('real life', async () => {
   expect(res2).toMatchInlineSnapshot(`
     HTTP/1.1 404 Not Found
     Connection: close
+    Content-Encoding: gzip
     Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     Transfer-Encoding: chunked
   `);

@@ -1,4 +1,4 @@
-import { TumauResponse, HttpHeaders } from '@tumau/core';
+import { TumauResponse, HttpHeaders, HttpStatus } from '@tumau/core';
 import { SetCookies, SetCookie } from './Cookie';
 
 export class CookieResponse extends TumauResponse {
@@ -38,6 +38,9 @@ export class CookieResponse extends TumauResponse {
 
   public static fromResponse(originalResponse: TumauResponse, cookies: SetCookies): TumauResponse | CookieResponse {
     if (cookies.length === 0) {
+      return originalResponse;
+    }
+    if (HttpStatus.isError(originalResponse.code)) {
       return originalResponse;
     }
     return new CookieResponse(originalResponse, cookies);

@@ -11,12 +11,6 @@ export const PAGES = [
   },
   {
     page: '/package/[slug]',
-    slug: '/package/middleware',
-    name: '@tumau/middleware',
-    file: 'packages/tumau-middleware/README.md',
-  },
-  {
-    page: '/package/[slug]',
     slug: '/package/core',
     name: '@tumau/core',
     file: 'packages/tumau-core/README.md',

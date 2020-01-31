@@ -15,7 +15,7 @@ interface Options {
   limit?: number;
 }
 
-export const JsonParserContext = Context.create<object | null>();
+export const JsonParserContext = Context.create<any>();
 export const JsonParserConsumer = JsonParserContext.Consumer;
 
 export function JsonParser(options: Options = {}): Middleware {

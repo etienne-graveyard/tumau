@@ -19,7 +19,7 @@ export interface SetCookie {
 
 export type SetCookies = Array<SetCookie>;
 
-export type Cookies = { [name: string]: string };
+export type Cookies = { [name: string]: string | undefined };
 
 export interface CreateCookieOptions {
   expires?: Date;
@@ -84,11 +84,9 @@ function toString(name: string, cookie: SetCookie): string {
     delete cookie.domain;
   }
 
-  if (cookie.secure) {
-    out.push('Secure');
-  }
-  if (cookie.httpOnly) {
-    out.push('HttpOnly');
+  if (cookie.expires) {
+    const dateString = toIMF(cookie.expires);
+    out.push(`Expires=${dateString}`);
   }
   if (cookie.maxAge && Number.isInteger(cookie.maxAge)) {
     if (cookie.maxAge <= 0) {
@@ -99,15 +97,17 @@ function toString(name: string, cookie: SetCookie): string {
   if (cookie.domain) {
     out.push(`Domain=${cookie.domain}`);
   }
-  if (cookie.sameSite) {
-    out.push(`SameSite=${cookie.sameSite}`);
-  }
   if (cookie.path) {
     out.push(`Path=${cookie.path}`);
   }
-  if (cookie.expires) {
-    const dateString = toIMF(cookie.expires);
-    out.push(`Expires=${dateString}`);
+  if (cookie.secure) {
+    out.push('Secure');
+  }
+  if (cookie.httpOnly) {
+    out.push('HttpOnly');
+  }
+  if (cookie.sameSite) {
+    out.push(`SameSite=${cookie.sameSite}`);
   }
   return out.join('; ');
 }

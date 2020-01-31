@@ -1,6 +1,6 @@
 {
   "name": "scripts",
-  "version": "1.0.0-alpha.52",
+  "version": "1.0.0-alpha.60",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -9,9 +9,9 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
     "@types/prettier": "^1.18.3",
-    "autocannon": "^4.4.2",
+    "autocannon": "^4.5.2",
     "fs-extra": "^8.1.0",
     "prettier": "^1.18.2",
-    "sort-package-json": "^1.39.0"
+    "sort-package-json": "^1.39.1"
   }
 }

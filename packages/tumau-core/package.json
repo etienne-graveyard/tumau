@@ -1,6 +1,6 @@
 {
   "name": "@tumau/core",
-  "version": "1.0.0-alpha.53",
+  "version": "1.0.0-alpha.60",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
@@ -21,7 +21,7 @@
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/middleware": "^1.0.0-alpha.52"
+    "miid": "^1.1.2"
   },
   "devDependencies": {
     "tsdx": "^0.12.3"

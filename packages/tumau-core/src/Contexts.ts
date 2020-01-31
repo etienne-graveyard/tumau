@@ -1,4 +1,4 @@
-import { Context } from '@tumau/middleware';
+import { Context } from 'Miid';
 import { TumauRequest } from './TumauRequest';
 import { ServerResponse } from 'http';
 import { Duplex } from 'stream';
@@ -16,3 +16,6 @@ export const UpgradeSocketConsumer = UpgradeSocketContext.Consumer;
 
 export const UpgradeHeadContext = Context.create<Buffer>();
 export const UpgradeHeadConsumer = UpgradeHeadContext.Consumer;
+
+export const DebugContext = Context.create<boolean>(false);
+export const DebugConsumer = DebugContext.Consumer;

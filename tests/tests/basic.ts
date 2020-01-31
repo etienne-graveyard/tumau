@@ -149,7 +149,7 @@ describe('TumauServer', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
       Transfer-Encoding: chunked
     `);
-    expect(await res.text()).toEqual('Not Found');
+    expect(await res.text()).toEqual('Error 404: Not Found');
     await close();
   });
 
@@ -165,7 +165,28 @@ describe('TumauServer', () => {
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
       Transfer-Encoding: chunked
     `);
-    expect(await res.text()).toEqual('Internal Server Error: Oops');
+    expect(await res.text()).toEqual('Error 500: Internal Server Error: Oops');
+    await close();
+  });
+
+  test('error contains stack when debug is true', async () => {
+    const app = TumauServer.create({
+      mainMiddleware: () => {
+        throw new Error('Oops');
+      },
+      debug: true,
+    });
+    const { close, url } = await mountTumau(app);
+    const res = await fetch(url);
+    expect(res).toMatchInlineSnapshot(`
+      HTTP/1.1 500 Internal Server Error
+      Connection: close
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+      Transfer-Encoding: chunked
+    `);
+    const body = await res.text();
+    expect(body).toMatch('Function.fromError');
+    expect(body).toMatch('HandleErrors.ts:');
     await close();
   });
 });

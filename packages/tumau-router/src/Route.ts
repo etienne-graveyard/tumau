@@ -30,7 +30,7 @@ export interface RouteResolved {
 export type Routes = Array<Route>;
 
 const withMethod = (method: Method) => (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
-  createRoute({ method, pattern }, middleware);
+  createRoute({ method, pattern, upgrade: false }, middleware);
 
 export const Route = {
   flatten: flattenAllRoutes,
@@ -144,7 +144,9 @@ function flattenRoutes(routes: Routes): Array<Route> {
     }, [])
     .filter(route => {
       if (route.middleware.length === 0) {
-        console.warn(`Route ${route.pattern} has no middleware, it will be ignored`);
+        console.warn(
+          `Route ${route.pattern === null ? 'null' : route.pattern.serialize()} has no middleware, it will be ignored`
+        );
         return false;
       }
       if (route.children.length !== 0) {

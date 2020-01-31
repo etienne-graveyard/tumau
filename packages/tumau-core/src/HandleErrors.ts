@@ -1,10 +1,11 @@
 import { Middleware } from './Middleware';
 import { TumauResponse } from './TumauResponse';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
-import { RequestConsumer } from './Contexts';
+import { RequestConsumer, DebugConsumer } from './Contexts';
 
 export const HandleErrors: Middleware = async tools => {
   const isUpgrade = tools.readContextOrFail(RequestConsumer).isUpgrade;
+  const debug = tools.readContext(DebugConsumer);
   try {
     return await tools.next();
   } catch (error) {
@@ -12,6 +13,6 @@ export const HandleErrors: Middleware = async tools => {
       return TumauUpgradeResponse.fromError(error);
     }
     // console.error(error);
-    return TumauResponse.fromError(error);
+    return TumauResponse.fromError(error, debug);
   }
 };

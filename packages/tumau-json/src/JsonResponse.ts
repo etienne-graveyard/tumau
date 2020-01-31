@@ -1,14 +1,14 @@
-import { TumauResponse, HttpStatusCode, HttpHeaders, ContentType, HttpError } from '@tumau/core';
+import { TumauResponse, HttpStatusCode, HttpHeaders, ContentType, HttpError, HttpStatus } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
 
-interface Options<T extends object> {
+interface Options<T> {
   json: T;
   code?: HttpStatusCode;
   headers?: OutgoingHttpHeaders;
 }
 
-export class JsonResponse<T extends object = object> extends TumauResponse {
-  public json: object;
+export class JsonResponse<T = any> extends TumauResponse {
+  public json: any;
 
   public constructor(options: Options<T>) {
     const { code = 200, headers = {}, json } = options;
@@ -40,5 +40,49 @@ export class JsonResponse<T extends object = object> extends TumauResponse {
       return JsonResponse.fromError(new HttpError.Internal(err.message));
     }
     return JsonResponse.fromError(new HttpError.Internal(String(err.message)));
+  }
+
+  public static fromResponse(res: any): JsonResponse | TumauResponse {
+    if (res === null) {
+      return JsonResponse.fromError(new HttpError.ServerDidNotRespond());
+    }
+    if (res instanceof HttpError || res instanceof Error) {
+      return JsonResponse.fromError(res);
+    }
+    if (res instanceof TumauResponse) {
+      if (res instanceof JsonResponse) {
+        return res;
+      }
+      const tumauRes = res as TumauResponse;
+      if (HttpStatus.isEmpty(tumauRes.code)) {
+        // No content are OK
+        return tumauRes;
+      }
+      const isJson = tumauRes.headers[HttpHeaders.ContentType] === ContentType.Json;
+      if (isJson) {
+        return res;
+      }
+      // try to convert to JSON
+      const body = tumauRes.body;
+      if (body === null) {
+        return new JsonResponse({
+          code: tumauRes.code,
+          headers: { ...tumauRes.headers },
+          json: {},
+        });
+      }
+      if (typeof body === 'string') {
+        return new JsonResponse({
+          code: tumauRes.code,
+          headers: { ...tumauRes.headers },
+          json: body,
+        });
+      }
+      // failed to convert, throw error
+      return JsonResponse.fromError(
+        new HttpError.Internal(`Invalid response: Expected a JsonResponse got a TumauResponse`)
+      );
+    }
+    return JsonResponse.fromError(new HttpError.Internal(`Invalid response: Expected a JsonResponse`));
   }
 }
