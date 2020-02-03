@@ -1,6 +1,7 @@
 export const SameSite = {
   Strict: 'Strict',
   Lax: 'Lax',
+  None: 'None',
 } as const;
 
 export type SameSite = typeof SameSite[keyof typeof SameSite];
