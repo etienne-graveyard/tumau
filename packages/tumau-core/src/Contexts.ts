@@ -1,4 +1,4 @@
-import { Context } from 'Miid';
+import { Context } from 'miid';
 import { TumauRequest } from './TumauRequest';
 import { ServerResponse } from 'http';
 import { Duplex } from 'stream';
