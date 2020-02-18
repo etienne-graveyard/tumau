@@ -6,7 +6,7 @@ export interface CookieManager {
   set(name: string, value: string, options?: CreateCookieOptions): void;
   has(name: string): boolean;
   unset(name: string): void;
-  delete(name: string): void;
+  delete(name: string, options?: CreateCookieOptions): void;
 }
 
 export const CookieManagerCtx = Context.create<CookieManager>();
@@ -27,8 +27,8 @@ export function CookieManager(): Middleware {
         const found = cookies.find(c => c.name === name);
         return found !== undefined;
       },
-      delete: name => {
-        cookies.push(SetCookie.delete(name));
+      delete: (name, options) => {
+        cookies.push(SetCookie.delete(name, options));
       },
       unset: name => {
         cookies = cookies.filter(c => c.name !== name);

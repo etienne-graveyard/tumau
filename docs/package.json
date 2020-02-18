@@ -11,28 +11,28 @@
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.0.2",
-    "framer-motion": "^1.8.3",
+    "framer-motion": "^1.8.4",
     "fs-extra": "^8.1.0",
-    "highlight.js": "^9.18.0",
+    "highlight.js": "^9.18.1",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.2.1",
+    "next": "^9.2.2",
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scrollbars-custom": "^4.0.21",
     "rehype-parse": "^6.0.2",
     "remark-parse": "^7.0.2",
-    "styled-components": "^5.0.0",
+    "styled-components": "^5.0.1",
     "unified": "^8.4.2",
-    "unist-util-visit": "^2.0.1"
+    "unist-util-visit": "^2.0.2"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.1",
+    "@types/fs-extra": "^8.1.0",
     "@types/highlight.js": "^9.12.3",
-    "@types/node": "^13.5.2",
-    "@types/react": "^16.9.19",
-    "@types/styled-components": "^4.4.2",
-    "eslint-plugin-react-hooks": "^2.3.0",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16.9.20",
+    "@types/styled-components": "^4.4.3",
+    "eslint-plugin-react-hooks": "^2.4.0",
     "react-is": "^16.12.0",
     "typescript": "^3.7.5"
   }
