@@ -5,12 +5,12 @@
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
-  "files": [
-    "dist"
-  ],
   "main": "dist/index.js",
   "module": "dist/tumau.cookie.esm.js",
   "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdx build --target node",
     "start": "tsdx watch --target node"
