@@ -1,6 +1,6 @@
 {
   "name": "tests",
-  "version": "1.0.0-alpha.65",
+  "version": "1.0.0-alpha.66",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@tumau/compress": "^1.0.0-alpha.65",
     "@tumau/core": "^1.0.0-alpha.65",
-    "@tumau/json": "^1.0.0-alpha.65",
+    "@tumau/json": "^1.0.0-alpha.66",
     "@tumau/router": "^1.0.0-alpha.65",
     "got": "^10.6.0",
     "jest": "^25.1.0",
