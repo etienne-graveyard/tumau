@@ -4,9 +4,9 @@ const server = TumauServer.create(
   Middleware.compose(JsonParser(), tools => {
     const jsonBody = tools.readContextOrFail(JsonParserConsumer);
     if (jsonBody) {
-      return JsonResponse.with({ you: '<- are here !', received: jsonBody });
+      return JsonResponse.withJson({ you: '<- are here !', received: jsonBody });
     }
-    return JsonResponse.with({ you: '<- are here !' });
+    return JsonResponse.withJson({ you: '<- are here !' });
   })
 );
 

@@ -22,7 +22,7 @@ export class JsonResponse<T = any> extends TumauResponse {
     this.json = json;
   }
 
-  public static with<T extends object>(json: T): JsonResponse {
+  public static withJson<T extends object>(json: T): JsonResponse {
     return new JsonResponse({ json });
   }
 

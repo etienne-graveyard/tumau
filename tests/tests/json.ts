@@ -21,7 +21,7 @@ describe('Server', () => {
   test('parse JSON body', async () => {
     const app = TumauServer.create(
       Middleware.compose(ErrorToJson, JsonParser(), tools => {
-        return JsonResponse.with({ body: tools.readContext(JsonParserConsumer) });
+        return JsonResponse.withJson({ body: tools.readContext(JsonParserConsumer) });
       })
     );
     const { close, url } = await mountTumau(app);
@@ -46,7 +46,7 @@ describe('Server', () => {
   test('JsonPackage handle JsonResponse', async () => {
     const app = TumauServer.create(
       Middleware.compose(JsonPackage(), () => {
-        return JsonResponse.with({ foo: 'bar' });
+        return JsonResponse.withJson({ foo: 'bar' });
       })
     );
     const { close, url } = await mountTumau(app);
@@ -148,7 +148,7 @@ describe('Server', () => {
     const app = TumauServer.create(
       Middleware.compose(JsonPackage(), CookieManager(), tools => {
         tools.readContextOrFail(CookieManagerConsumer).set('token', 'AZERTYUIO');
-        return JsonResponse.with({ foo: 'bar' });
+        return JsonResponse.withJson({ foo: 'bar' });
       })
     );
     const { close, url } = await mountTumau(app);

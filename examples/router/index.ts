@@ -55,7 +55,7 @@ const ROUTES: Routes = [
   }),
   Route.create({ pattern: ROUTE_WITH_PARAM, exact: false, method: null }, tools => {
     const params = tools.readContextOrFail(RouterConsumer).getOrFail(ROUTE_WITH_PARAM);
-    return JsonResponse.with({
+    return JsonResponse.withJson({
       appParam: params.app,
     });
   }),

@@ -56,7 +56,7 @@ const ROUTES: Routes = [
   }),
   Route.create({ pattern: STATIC_APP, exact: false, method: null }, tools => {
     const params = tools.readContextOrFail(RouterConsumer).getOrFail(STATIC_APP);
-    return JsonResponse.with({
+    return JsonResponse.withJson({
       appParam: params.app,
     });
   }),
