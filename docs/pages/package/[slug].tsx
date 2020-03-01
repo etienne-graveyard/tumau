@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextPage } from 'next';
+import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import { PageContent } from '../../src/data';
 import { MarkdownNodeRenderer } from '../../src/components/MarkdownNodeRenderer';
 import { PAGES } from '../../src/data/pages';
@@ -21,26 +21,30 @@ const Post: NextPage<Props> = ({ content, page }) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/camelcase
-export async function unstable_getStaticPaths() {
-  return PAGES.filter(pkg => pkg.page === '/package/[slug]').map((pkg): { params: { slug: string } } => {
-    const slug = pkg.slug.substring('/package/'.length);
-    return { params: { slug } };
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = PAGES.filter(pkg => pkg.page === '/package/[slug]').map((pkg): string => {
+    return pkg.slug;
   });
-}
 
-// eslint-disable-next-line @typescript-eslint/camelcase
-export async function unstable_getStaticProps({ params }: { params: { slug: string } }) {
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (!params) {
+    throw new Error('Oops');
+  }
   const { packagePageData } = await import('../../src/data');
   const { content, page } = await packagePageData(`/package/${params.slug}` as any);
   const props: Props = {
     content,
     page,
   };
-
   return {
     props,
   };
-}
+};
 
 export default Post;

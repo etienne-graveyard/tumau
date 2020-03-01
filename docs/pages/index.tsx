@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextPage } from 'next';
+import { NextPage, GetStaticProps } from 'next';
 import { MarkdownNodeRenderer } from '../src/components/MarkdownNodeRenderer';
 import { PageContent } from '../src/data';
 import { BasePageProps } from './_app';
@@ -22,8 +22,7 @@ const Home: NextPage<Props> = ({ content, page }) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/camelcase
-export async function unstable_getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const { packagePageData } = await import('../src/data');
   const { content, page } = await packagePageData('/');
 
@@ -35,6 +34,6 @@ export async function unstable_getStaticProps() {
   return {
     props,
   };
-}
+};
 
 export default Home;
