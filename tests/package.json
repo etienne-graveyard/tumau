@@ -1,6 +1,6 @@
 {
   "name": "tests",
-  "version": "1.0.0-alpha.66",
+  "version": "1.0.0-alpha.67",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,10 +11,10 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.65",
-    "@tumau/core": "^1.0.0-alpha.65",
-    "@tumau/json": "^1.0.0-alpha.66",
-    "@tumau/router": "^1.0.0-alpha.65",
+    "@tumau/compress": "^1.0.0-alpha.67",
+    "@tumau/core": "^1.0.0-alpha.67",
+    "@tumau/json": "^1.0.0-alpha.67",
+    "@tumau/router": "^1.0.0-alpha.67",
     "got": "^10.6.0",
     "jest": "^25.1.0",
     "node-fetch": "^2.6.0",
