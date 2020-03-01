@@ -1,16 +1,18 @@
 import { Middleware, RequestConsumer, HttpError } from '@tumau/core';
 import { JsonResponse } from './JsonResponse';
 
-export const ErrorToJson: Middleware = async tools => {
+export const HttpErrorToJson: Middleware = async tools => {
   const isUpgrade = tools.readContextOrFail(RequestConsumer).isUpgrade;
   if (isUpgrade) {
     // If Upgrade ignore this since upgrade can't return a response
     return tools.next();
   }
-  const res = await tools.next();
-
-  if (res instanceof HttpError) {
-    return JsonResponse.fromError(res);
+  try {
+    return await tools.next();
+  } catch (error) {
+    if (error instanceof HttpError) {
+      return JsonResponse.fromError(error);
+    }
+    throw error;
   }
-  return res;
 };

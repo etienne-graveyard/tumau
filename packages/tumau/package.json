@@ -1,6 +1,6 @@
 {
   "name": "tumau",
-  "version": "1.0.0-alpha.60",
+  "version": "1.0.0-alpha.67",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
@@ -10,27 +10,27 @@
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
-  "files": [
-    "dist"
-  ],
   "main": "dist/index.js",
   "module": "dist/tumau.esm.js",
   "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdx build --target node",
     "start": "tsdx watch --target node"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.60",
-    "@tumau/cookie": "^1.0.0-alpha.60",
-    "@tumau/core": "^1.0.0-alpha.60",
-    "@tumau/cors": "^1.0.0-alpha.60",
-    "@tumau/json": "^1.0.0-alpha.60",
-    "@tumau/rate-limit": "^1.0.0-alpha.60",
-    "@tumau/router": "^1.0.0-alpha.60",
-    "@tumau/static": "^1.0.0-alpha.60",
-    "@tumau/url-parser": "^1.0.0-alpha.60",
-    "@tumau/ws": "^1.0.0-alpha.60"
+    "@tumau/compress": "^1.0.0-alpha.67",
+    "@tumau/cookie": "^1.0.0-alpha.67",
+    "@tumau/core": "^1.0.0-alpha.67",
+    "@tumau/cors": "^1.0.0-alpha.67",
+    "@tumau/json": "^1.0.0-alpha.67",
+    "@tumau/rate-limit": "^1.0.0-alpha.67",
+    "@tumau/router": "^1.0.0-alpha.67",
+    "@tumau/static": "^1.0.0-alpha.67",
+    "@tumau/url-parser": "^1.0.0-alpha.67",
+    "@tumau/ws": "^1.0.0-alpha.67"
   },
   "devDependencies": {
     "tsdx": "^0.12.3"

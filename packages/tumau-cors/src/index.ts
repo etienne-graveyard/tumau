@@ -1,6 +1,5 @@
-export { CorsContextConsumer } from './CorsContext';
-export { Cors } from './Cors';
-export { CorsConfig } from './CorsConfig';
-export { CorsManager } from './CorsManager';
+export { CorsActual, CorsActualConfig } from './CorsActual';
+export { CorsPreflight, CorsPreflightConfig } from './CorsPreflight';
 export { CorsPackage } from './CorsPackage';
-export { CorsResponse } from './CorsResponse';
+export { CorsActualResponse } from './CorsActualResponse';
+export { CorsPreflightResponse } from './CorsPreflightResponse';

@@ -1,6 +1,6 @@
 {
   "name": "@tumau/core",
-  "version": "1.0.0-alpha.60",
+  "version": "1.0.0-alpha.67",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
@@ -10,12 +10,12 @@
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
-  "files": [
-    "dist"
-  ],
   "main": "dist/index.js",
   "module": "dist/tumau.core.esm.js",
   "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdx build --target node",
     "start": "tsdx watch --target node"

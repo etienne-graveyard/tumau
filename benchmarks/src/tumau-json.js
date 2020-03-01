@@ -5,7 +5,7 @@ const json = require('@tumau/json');
 
 const app = tumau.TumauServer.create(
   tumau.Middleware.compose(json.JsonPackage(), () => {
-    return json.JsonResponse.with({ hello: 'world (tumau-json)' });
+    return json.JsonResponse.withJson({ hello: 'world (tumau-json)' });
   })
 );
 

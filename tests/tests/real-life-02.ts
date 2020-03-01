@@ -5,7 +5,7 @@ import {
   Route,
   HttpError,
   CookieManager,
-  Compress,
+  CompressPackage,
   CorsPackage,
   JsonPackage,
   CookieParser,
@@ -19,13 +19,13 @@ test('real life 2', async () => {
     handleServerUpgrade: true,
     mainMiddleware: Middleware.compose(
       CorsPackage(),
-      Compress(),
+      CompressPackage,
       JsonPackage(),
       CookieParser(),
       CookieManager(),
       RouterPackage([
         Route.POST('login', () => {
-          return JsonResponse.with({ success: true });
+          return JsonResponse.withJson({ success: true });
         }),
         Route.all(null, () => {
           throw new HttpError.NotFound();

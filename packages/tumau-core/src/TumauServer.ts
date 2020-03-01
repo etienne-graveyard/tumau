@@ -7,8 +7,7 @@ import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
 import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
-import { HandleErrors } from './HandleErrors';
-import { HandleInvalidResponse } from './HandleInvalidResponse';
+import { ErrorHandlerPackage } from './ErrorHandlerPackage';
 import { HttpError } from './HttpError';
 import {
   RequestContext,
@@ -26,7 +25,7 @@ export interface TumauServer {
 
 interface Options {
   mainMiddleware: Middleware;
-  // include HandleErrors and HandleInvalidResponse middelwares
+  // include ErrorHandlerPackage
   handleErrors?: boolean;
   httpServer?: Server;
   // The server should handle the 'request' event (default true)
@@ -61,11 +60,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     listen,
   };
 
-  const rootMiddleware: Middleware = Middleware.compose(
-    handleErrors ? HandleErrors : null,
-    handleErrors ? HandleInvalidResponse : null,
-    mainMiddleware
-  );
+  const rootMiddleware: Middleware = Middleware.compose(handleErrors ? ErrorHandlerPackage : null, mainMiddleware);
 
   return server;
 

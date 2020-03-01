@@ -169,10 +169,14 @@ describe('TumauServer', () => {
     await close();
   });
 
-  test('error contains stack when debug is true', async () => {
+  test.only('error contains stack when debug is true', async () => {
+    function throwError(): never {
+      throw new Error('Oops');
+    }
+
     const app = TumauServer.create({
       mainMiddleware: () => {
-        throw new Error('Oops');
+        throwError();
       },
       debug: true,
     });
@@ -185,8 +189,8 @@ describe('TumauServer', () => {
       Transfer-Encoding: chunked
     `);
     const body = await res.text();
-    expect(body).toMatch('Function.fromError');
-    expect(body).toMatch('HandleErrors.ts:');
+    expect(body).toMatch('Error: Oops');
+    expect(body).toMatch('at throwError');
     await close();
   });
 });

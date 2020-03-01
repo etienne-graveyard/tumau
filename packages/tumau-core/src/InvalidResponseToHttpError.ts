@@ -4,7 +4,10 @@ import { HttpError } from './HttpError';
 import { RequestConsumer } from './Contexts';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
 
-export const HandleInvalidResponse: Middleware = async tools => {
+/**
+ * Return a Valid Repsonse or throw an HttpError
+ */
+export const InvalidResponseToHttpError: Middleware = async tools => {
   const request = tools.readContext(RequestConsumer);
   const isUpgrade = request.isUpgrade;
   const response = await tools.next();

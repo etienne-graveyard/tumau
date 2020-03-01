@@ -8,7 +8,7 @@ import {
   TumauResponse,
   HttpError,
   CookieManager,
-  Compress,
+  CompressPackage,
   CorsPackage,
 } from 'tumau';
 import WebSocket from 'ws';
@@ -29,7 +29,7 @@ test('real life', async () => {
   const app = TumauServer.create({
     handleServerUpgrade: true,
     mainMiddleware: Middleware.compose(
-      Compress(),
+      CompressPackage,
       CorsPackage(),
       CookieManager(),
       WebsocketProvider(wss),

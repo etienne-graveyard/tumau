@@ -15,6 +15,8 @@ export {
   UpgradeSocketConsumer,
   DebugConsumer,
 } from './Contexts';
-export { HandleInvalidResponse } from './HandleInvalidResponse';
-export { HandleErrors } from './HandleErrors';
-export { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'Miid';
+export { InvalidResponseToHttpError } from './InvalidResponseToHttpError';
+export { ErrorToHttpError } from './ErrorToHttpError';
+export { ErrorHandlerPackage } from './ErrorHandlerPackage';
+export { HttpErrorToTextResponse } from './HttpErrorToTextResponse';
+export { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'miid';

@@ -9,7 +9,7 @@ const app = tumau.TumauServer.create(
     json.JsonPackage(),
     router.RouterPackage([
       router.Route.GET('/', () => {
-        return json.JsonResponse.with({ hello: 'world (tumau-json)' });
+        return json.JsonResponse.withJson({ hello: 'world (tumau-json)' });
       }),
     ])
   )

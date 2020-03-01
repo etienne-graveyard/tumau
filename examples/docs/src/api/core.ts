@@ -4,7 +4,7 @@
 Imports:
 */
 
-import { TumauServer, Middleware, HandleErrors, HandleInvalidResponse } from '@tumau/core';
+import { TumauServer, Middleware, ErrorHandlerPackage } from '@tumau/core';
 import { createServer } from 'http';
 
 /*
@@ -36,7 +36,7 @@ const serverB = TumauServer.create({
 
 /*
 The `handleErrors` options (`true` by default) will add the 
-HandleErrors and HandleInvalidResponse middleware before the mainMiddleware
+ErrorHandlerPackage middleware before the mainMiddleware
 */
 
 const serverC1 = TumauServer.create({
@@ -46,7 +46,7 @@ const serverC1 = TumauServer.create({
 // same as
 const serverC2 = TumauServer.create({
   handleErrors: false,
-  mainMiddleware: Middleware.compose(HandleErrors, HandleInvalidResponse, () => null),
+  mainMiddleware: Middleware.compose(ErrorHandlerPackage, () => null),
 });
 
 /*

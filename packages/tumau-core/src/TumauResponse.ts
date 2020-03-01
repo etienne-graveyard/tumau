@@ -95,9 +95,10 @@ export class TumauResponse extends TumauBaseResponse {
 
   public static fromError(err: any, debug: boolean): TumauResponse {
     if (err instanceof HttpError) {
+      const stack = err instanceof HttpError.Internal ? err.internalStack || err.stack : err.stack;
       return new TumauResponse({
         code: err.code,
-        body: errorToString(err, debug),
+        body: errorToString(err, stack, debug),
       });
     }
     if (err instanceof Error) {
@@ -107,14 +108,14 @@ export class TumauResponse extends TumauBaseResponse {
   }
 }
 
-function errorToString(err: HttpError, debug: boolean): string {
+function errorToString(err: HttpError, stack: string | undefined, debug: boolean): string {
   if (debug === false) {
     return `Error ${err.code}: ${err.message}`;
   }
-  let stack = '';
-  if (err.stack) {
-    stack = `\n\n` + err.stack;
+  let stackContent = '';
+  if (stack) {
+    stackContent = `\n\n` + stack;
   }
 
-  return `Error ${err.code}: ${err.message}` + stack;
+  return `Error ${err.code}: ${err.message}` + stackContent;
 }

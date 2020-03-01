@@ -1,17 +1,17 @@
 {
   "name": "scripts",
-  "version": "1.0.0-alpha.60",
+  "version": "1.0.0-alpha.65",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "devDependencies": {
-    "@types/fs-extra": "^8.0.1",
+    "@types/fs-extra": "^8.1.0",
     "@types/prettier": "^1.18.3",
-    "autocannon": "^4.5.2",
+    "autocannon": "^4.6.0",
     "fs-extra": "^8.1.0",
     "prettier": "^1.18.2",
-    "sort-package-json": "^1.39.1"
+    "sort-package-json": "^1.40.0"
   }
 }

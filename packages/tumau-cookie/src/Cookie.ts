@@ -1,6 +1,7 @@
 export const SameSite = {
   Strict: 'Strict',
   Lax: 'Lax',
+  None: 'None',
 } as const;
 
 export type SameSite = typeof SameSite[keyof typeof SameSite];
@@ -63,9 +64,10 @@ function createCookie(name: string, value: string, options: CreateCookieOptions 
   };
 }
 
-function deleteCookie(name: string): SetCookie {
+function deleteCookie(name: string, options: CreateCookieOptions = {}): SetCookie {
   return createCookie(name, '', {
     expires: new Date(0),
+    ...options,
   });
 }
 
