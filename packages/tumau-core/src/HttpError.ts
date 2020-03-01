@@ -92,8 +92,15 @@ class TooManyRequests extends HttpError {
 }
 
 class Internal extends HttpError {
-  public constructor(message: string = '') {
+  public constructor(message: string = '', public internalStack?: string) {
     super(500, `${HttpStatus.getMessage(500)}: ${message}`);
+  }
+
+  public static fromError(error: any): Internal {
+    if (error instanceof Error) {
+      throw new HttpError.Internal(error.message, error.stack);
+    }
+    throw new HttpError.Internal(String(error));
   }
 }
 

@@ -6,7 +6,7 @@ import {
   HttpHeaders,
   ContentType,
   JsonParser,
-  ErrorToJson,
+  HttpErrorToJson,
   JsonResponse,
   JsonParserConsumer,
   JsonPackage,
@@ -20,7 +20,7 @@ import fetch from 'node-fetch';
 describe('Server', () => {
   test('parse JSON body', async () => {
     const app = TumauServer.create(
-      Middleware.compose(ErrorToJson, JsonParser(), tools => {
+      Middleware.compose(HttpErrorToJson, JsonParser(), tools => {
         return JsonResponse.withJson({ body: tools.readContext(JsonParserConsumer) });
       })
     );
@@ -81,7 +81,7 @@ describe('Server', () => {
     await close();
   });
 
-  test('JsonPackage convert text to Json', async () => {
+  test('JsonPackage does not convert text to Json', async () => {
     const app = TumauServer.create(
       Middleware.compose(JsonPackage(), () => {
         return TumauResponse.withText('Hello');
@@ -93,11 +93,11 @@ describe('Server', () => {
     expect(res2).toMatchInlineSnapshot(`
       HTTP/1.1 200 OK
       Connection: close
-      Content-Length: 7
-      Content-Type: application/json
+      Content-Length: 5
+      Content-Type: text/plain; charset=utf-8
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
-    expect(await res2.json()).toEqual('Hello');
+    expect(await res2.text()).toEqual('Hello');
 
     await close();
   });

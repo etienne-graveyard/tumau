@@ -7,7 +7,7 @@ import {
   CookieManager,
   CookieManagerConsumer,
   HttpError,
-  HandleErrors,
+  ErrorHandlerPackage,
 } from 'tumau';
 import koa from 'koa';
 import { mountTumau } from '../utils/mountTumau';
@@ -158,7 +158,7 @@ test('Cookie manager should set and delete cookies', async () => {
 
 test('Cookies should not be set on error response', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), HandleErrors, tools => {
+    Middleware.compose(CookieManager(), ErrorHandlerPackage, tools => {
       const manager = tools.readContextOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');
       manager.delete('deleted-cookie');

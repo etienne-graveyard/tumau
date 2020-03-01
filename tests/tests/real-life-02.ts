@@ -5,7 +5,7 @@ import {
   Route,
   HttpError,
   CookieManager,
-  Compress,
+  CompressPackage,
   CorsPackage,
   JsonPackage,
   CookieParser,
@@ -19,7 +19,7 @@ test('real life 2', async () => {
     handleServerUpgrade: true,
     mainMiddleware: Middleware.compose(
       CorsPackage(),
-      Compress(),
+      CompressPackage,
       JsonPackage(),
       CookieParser(),
       CookieManager(),

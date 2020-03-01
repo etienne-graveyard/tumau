@@ -1,5 +1,5 @@
-import { Middleware } from '@tumau/core';
-import { EnsureJsonResponse } from './EnsureJsonResponse';
+import { Middleware, ErrorToHttpError, InvalidResponseToHttpError } from '@tumau/core';
+import { HttpErrorToJson } from './HttpErrorToJson';
 import { JsonParser } from './JsonParser';
 
 interface Options {
@@ -9,7 +9,9 @@ interface Options {
 
 export function JsonPackage(options: Options = {}): Middleware {
   return Middleware.compose(
-    EnsureJsonResponse, // if the response is not Json convert it to json
+    HttpErrorToJson,
+    ErrorToHttpError,
+    InvalidResponseToHttpError,
     JsonParser(options) // parse json body
   );
 }
