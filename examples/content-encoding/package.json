@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/content-encoding",
-  "version": "1.0.0-alpha.69",
+  "version": "1.0.0-alpha.70",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -17,11 +17,11 @@
     "@tumau/cors": "^1.0.0-alpha.68",
     "@tumau/json": "^1.0.0-alpha.68",
     "@tumau/rate-limit": "^1.0.0-alpha.68",
-    "@tumau/router": "^1.0.0-alpha.69",
+    "@tumau/router": "^1.0.0-alpha.70",
     "@tumau/static": "^1.0.0-alpha.68",
     "@tumau/url-parser": "^1.0.0-alpha.68",
     "@tumau/ws": "^1.0.0-alpha.68",
-    "tumau": "^1.0.0-alpha.69"
+    "tumau": "^1.0.0-alpha.70"
   },
   "devDependencies": {
     "ts-node": "^8.6.2",
