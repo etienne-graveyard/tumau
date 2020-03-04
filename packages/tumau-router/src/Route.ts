@@ -46,7 +46,7 @@ export const Route = {
   all: withMethod(null),
   namespace: (pattern: Chemin | string | null, routes: Routes) =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
-  fallback: (routes: Routes) => createRoute({ method: null, exact: false }, null, routes),
+  fallback: (...middlewares: Array<Middleware>) => createRoute({ method: null, exact: false }, middlewares),
 };
 
 interface RouteOptions {
