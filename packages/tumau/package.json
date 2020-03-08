@@ -1,6 +1,6 @@
 {
   "name": "tumau",
-  "version": "1.0.0-alpha.71",
+  "version": "1.0.0-alpha.72",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
@@ -24,7 +24,7 @@
     "@tumau/compress": "^1.0.0-alpha.68",
     "@tumau/cookie": "^1.0.0-alpha.68",
     "@tumau/core": "^1.0.0-alpha.68",
-    "@tumau/cors": "^1.0.0-alpha.68",
+    "@tumau/cors": "^1.0.0-alpha.72",
     "@tumau/json": "^1.0.0-alpha.68",
     "@tumau/rate-limit": "^1.0.0-alpha.68",
     "@tumau/router": "^1.0.0-alpha.71",
