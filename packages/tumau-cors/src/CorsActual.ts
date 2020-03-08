@@ -45,7 +45,7 @@ export function CorsActual(config: CorsActualConfig = {}): Middleware {
     // If either no origin was set, or the origin isn't supported, continue
     // without setting any headers
     if (!origin || !originMatcher(origin)) {
-      return tools.next();
+      return response;
     }
     const res = response as TumauResponse | null;
 
