@@ -1,27 +1,33 @@
 export const HttpHeaders = {
-  ContentLength: 'content-length',
-  ContentType: 'content-type',
-  ContentEncoding: 'content-encoding',
+  Accept: 'accept',
   AcceptEncoding: 'accept-encoding',
-  AccessControlRequestMethod: 'access-control-request-method',
-  AccessControlRequestHeaders: 'access-control-request-headers',
-  AccessControlAllowOrigin: 'access-control-allow-origin',
+  AccessControlAllowCredentials: 'access-control-allow-credentials',
   AccessControlAllowHeaders: 'access-control-allow-headers',
   AccessControlAllowMethods: 'access-control-allow-methods',
-  AccessControlAllowCredentials: 'access-control-allow-credentials',
+  AccessControlAllowOrigin: 'access-control-allow-origin',
   AccessControlExposeHeaders: 'access-control-expose-headers',
   AccessControlMaxAge: 'access-control-max-age',
+  AccessControlRequestHeaders: 'access-control-request-headers',
+  AccessControlRequestMethod: 'access-control-request-method',
+  Allow: 'allow',
+  Authorization: 'authorization',
+  ContentEncoding: 'content-encoding',
+  ContentLength: 'content-length',
+  ContentType: 'content-type',
+  Cookie: 'cookie',
   Location: 'location',
   Origin: 'origin',
-  Allow: 'allow',
-  Cookie: 'cookie',
   SetCookie: 'set-cookie',
+  XHTTPMethodOverride: 'x-http-method-override',
+  XRequestedWith: 'x-requested-with',
 } as const;
 
+export type HttpHeadersName = typeof HttpHeaders[keyof typeof HttpHeaders];
+
 export const ContentType = {
+  Html: 'text/html',
   Json: 'application/json',
   Text: 'text/plain',
-  Html: 'text/html',
 } as const;
 
 export const ContentTypeCharset = {
@@ -29,8 +35,8 @@ export const ContentTypeCharset = {
 } as const;
 
 export const ContentEncoding = {
-  Identity: 'identity',
   Brotli: 'br',
   Deflate: 'deflate',
   Gzip: 'gzip',
+  Identity: 'identity',
 } as const;

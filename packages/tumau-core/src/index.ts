@@ -1,5 +1,5 @@
 export { HttpError } from './HttpError';
-export { HttpHeaders, ContentEncoding, ContentType } from './HttpHeaders';
+export { HttpHeaders, ContentEncoding, ContentType, ContentTypeCharset, HttpHeadersName } from './HttpHeaders';
 export { HttpMethod } from './HttpMethod';
 export { HttpStatus, HttpStatusCode, HttpStatusMessage } from './HttpStatus';
 export { Middleware, Middlewares, Result, Tools } from './Middleware';

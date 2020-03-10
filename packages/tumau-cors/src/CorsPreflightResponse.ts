@@ -1,25 +1,17 @@
 import { TumauResponse, HttpHeaders } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
-
-interface CorsConfigResolved {
-  allowOrigin: string;
-  allowCredentials: boolean;
-  exposeHeaders: Array<string> | null;
-  allowHeaders: Array<string> | null;
-  allowMethods: Array<string> | null;
-  maxAge: number | null;
-}
+import { CorsPreflightConfigResolved } from './utils';
 
 export class CorsPreflightResponse extends TumauResponse {
-  public cors: CorsConfigResolved;
+  public cors: CorsPreflightConfigResolved;
 
-  constructor(cors: CorsConfigResolved) {
-    super({ headers: getCorsHeader(cors) });
-    this.cors = cors;
+  constructor(config: CorsPreflightConfigResolved) {
+    super({ headers: getCorsHeader(config) });
+    this.cors = config;
   }
 }
 
-function getCorsHeader(cors: CorsConfigResolved): OutgoingHttpHeaders {
+function getCorsHeader(cors: CorsPreflightConfigResolved): OutgoingHttpHeaders {
   const headers: OutgoingHttpHeaders = {};
 
   if (cors.allowOrigin) {
