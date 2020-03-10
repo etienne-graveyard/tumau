@@ -10,12 +10,12 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "@juggle/resize-observer": "^3.1.0",
-    "framer-motion": "^1.8.4",
+    "@juggle/resize-observer": "^3.1.1",
+    "framer-motion": "^1.9.1",
     "fs-extra": "^8.1.0",
     "highlight.js": "^9.18.1",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.2.3-canary.18",
+    "next": "^9.3.0",
     "normalize.css": "^8.0.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/fs-extra": "^8.1.0",
     "@types/highlight.js": "^9.12.3",
-    "@types/node": "^13.7.7",
+    "@types/node": "^13.9.0",
     "@types/react": "^16.9.23",
     "@types/styled-components": "^5.0.1",
     "eslint-plugin-react-hooks": "^2.5.0",

@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "tumau": "^1.0.0-alpha.72",
-    "ws": "^7.2.1"
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "@types/ws": "^7.2.2",

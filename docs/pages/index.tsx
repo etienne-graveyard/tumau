@@ -28,7 +28,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const props: Props = {
     page,
-    content,
+    content: JSON.parse(JSON.stringify(content)),
   };
 
   return {

@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { packagePageData } = await import('../../src/data');
   const { content, page } = await packagePageData(`/package/${params.slug}` as any);
   const props: Props = {
-    content,
+    content: JSON.parse(JSON.stringify(content)),
     page,
   };
   return {
