@@ -1,4 +1,4 @@
-import { TumauServer, TumauResponse, RequestConsumer } from 'tumau';
+import { TumauServer, TumauResponse, RequestConsumer, TumauUpgradeResponse } from 'tumau';
 import WebSocket from 'ws';
 
 const wss1 = new WebSocket.Server({ noServer: true });
@@ -18,7 +18,7 @@ const server = TumauServer.create({
     console.log(request);
     console.log(request.isUpgrade, request.url);
     if (request.isUpgrade) {
-      return new TumauResponse.SwitchingProtocols(async (req, socket, head) => {
+      return new TumauUpgradeResponse(async (req, socket, head) => {
         wss1.handleUpgrade(req, socket as any, head, function done(ws) {
           wss1.emit('connection', ws, request);
         });

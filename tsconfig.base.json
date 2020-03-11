@@ -20,6 +20,7 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
+    "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
     "esModuleInterop": true
   }

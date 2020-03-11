@@ -20,7 +20,7 @@
     "build:docs": "lerna run export --stream --scope docs",
     "build": "lerna run build",
     "test": "lerna run test --stream",
-    "typecheck": "lerna exec --stream --scope '{@tumau,@tumau-example}/**' 'tsc --noEmit'",
+    "typecheck": "lerna exec --stream --scope 'tumau' --scope '{@tumau,@tumau-example}/**' 'tsc --noEmit'",
     "norm": "lerna exec --stream -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
     "norm:core": "lerna exec --stream --scope '@tumau/core' -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
