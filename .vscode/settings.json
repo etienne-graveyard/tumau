@@ -4,5 +4,29 @@
     "**/.rts2_cache_esm": true
   },
   "eslint.enable": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.tokenColorCustomizations": {
+    "[One Dark Pro]": {
+      "textMateRules": [
+        {
+          "scope": "source.docsy",
+          "settings": {
+            "foreground": "#ffffff"
+          }
+        },
+        {
+          "scope": ["punctuation.definition.tag.begin.docsy", "punctuation.definition.tag.end.docsy"],
+          "settings": {
+            "foreground": "#545457"
+          }
+        },
+        {
+          "scope": "support.class.docsy",
+          "settings": {
+            "foreground": "#a78957"
+          }
+        }
+      ]
+    }
+  }
 }

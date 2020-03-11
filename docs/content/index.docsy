@@ -1,0 +1,175 @@
+<|Center>
+<|Image src="https://github.com/etienne-dldc/tumau/blob/master/design/logo.svg" alt="tumau logo"|>
+<Center|>
+
+<|Title>🏺 Tumau|>
+
+<|Quote>A node HTTP framework written in Typescript|>
+
+Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with almost no external dependencies and written in TypeScript.
+
+<|SubTitle>Gist|>
+
+<|File src="@tumau-example/basic/index.ts" |>
+
+<|SubTitle>Benefits over Express/Koa/Other|>
+
+<|List parse>
+- Written in Typescript (strong yet easy-to-use types)
+- Almost no external dependency (easy to audit)
+- Simple to extends (using middleware)
+- Modular, you can take only what you need.
+<List|>
+
+<|SubTitle>Install|>
+
+<|Code language="bash">
+# npm
+npm install tumau
+
+# yarn
+yarn add tumau
+<Code|>
+
+<|SubTitle>Packages|>
+
+The <|InlineCode>tumau|> package is a proxy for different packages:
+
+<|List parse>
+- <|PackageLink package="@tumau/core"|>
+- <|PackageLink package="@tumau/url-parser"|> for parsing url (pathname, query...)
+- <|PackageLink package="@tumau/router"|> for routing (it uses `@tumau/url-parser` for url parsing)
+- <|PackageLink package="@tumau/json"|> for parsing / sending JSON
+- <|PackageLink package="@tumau/compress"|> for Brotli / GZip / Deflate compression
+- <|PackageLink package="@tumau/cookie"|> for reading and setting cookies
+<List|>
+
+<|SubTitle>Dependencies|>
+
+<|List parse>
+- <|PackageLink package="@tumau/router"|> has <|Link href="https://github.com/etienne-dldc/chemin"><|InlineCode>chemin|>|> as a dependency and <|InlineCode>chemin|> itself has zero dependencies.
+- <|PackageLink package="@tumau/ws"|> depend on <|Link href="https://github.com/websockets/ws"><|InlineCode>ws|>|>.
+<List|>
+
+<|SubTitle>Overview|>
+
+Like many other server, Tumau is based on middleware. A middleware is like a layer the request has to go though. At some point a response is created by one of the middleware and the response has to travel back to the outside (go through every layer in the opposite order) to be sent.
+
+<|Center>
+<|Image src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-1.png" alt="middleware"|>
+<Center|>
+
+A middleware can stop the chain and return a response. In that case the next middleware will not be called !
+
+<|Center>
+<|Image src="https://github.com/etienne-dldc/tumau/blob/master/design/illu-2.png" alt="next"|>
+<Center|>
+
+<|SubTitle>Tools|>
+
+In tumau the tools is what you get in middleware to interact wth the other middlewares.
+
+The tools let you do two things:
+
+<|List parse>
+- Read / Write a context (Take a look a [this example](https://github.com/etienne-dldc/tumau/blob/master/examples/context/index.ts))
+- Call the next middleware
+<List|>
+
+<|H3>For TypeScript users|>
+
+Contexts are typed when you create them:
+
+<|File src="@tumau-example/context/create.ts"|>
+
+<|SubTitle>Middleware|>
+
+A middleare is a function that:
+
+<|List parse>
+- receives the tools
+- can return a response or null (or a promise of one of them)
+<List|>
+
+<|Code language="typescript">
+type Middleware = (tools: Tools) => null | Response | Promise<null | Response>;
+<Code|>
+
+Example:
+
+<|Code language="typescript">
+const myMiddleware = async tools => {
+  // 1. We receive a tools object
+  console.log(tools); // { readContext, readContextOrFail, hasContext, next, withContext }
+  // 2. We call `next` to call the next middleware
+  const response = await tools.next();
+  // 3. The next middleware return a response
+  console.log(response);
+  // 4. We return that response
+  return response;
+};
+<Code|>
+
+<|H3><|InlineCode>tools.next|>|>
+
+The <|InlineCode>tools.next|> function is always async (it return a Promise).
+It take np parameter and return a Promise of a Response or null
+
+<|Code language="typescript">
+type Next = () => Promise<Response | null>;
+<Code|>
+
+<|H3>Some examples|>
+
+<|Code language="typescript">
+// Return a response, ignore next middleware
+const middleware = () => Response.withText('Hello');
+
+// Return a response if the next middleware did not
+const middleware = async tools => {
+  const response = await tools.next();
+  if (response === null) {
+    return Response.withText('Not found');
+  }
+  return response;
+};
+
+// Add a item to the context before calling the next middleware
+// return whatever the next middleware return
+const middleware = tools => {
+  const nextTools = tools.withContext(ReceivedAtContext.Provide(new Date()));
+  return nextTools.next();
+};
+<Code|>
+
+<|H3>Conbining multiple Middlewares|>
+
+The <|InlineCode>Server.create|> function take only one middleware as parameter. To use multiple middleware you need to combine them with <|InlineCode>Middleware.compose|>:
+
+<|Code language="typescript">
+import { TumauServer, Middleware } from 'tumau';
+
+const composed = Middleware.compose(logger, cors, main);
+
+const server = TumauServer.create(composed);
+<Code|>
+
+<|Note>
+Middlewares are executed in the order they are passed to `compose`. In the example above: `logger`, then `cors`, then `main` (then the reverse order on the way up).
+<Note|>
+
+<|SubTitle>More Examples|>
+
+Take a look a the <|Link href="https://github.com/etienne-dldc/tumau/tree/master/examples">Examples|> folder !
+
+<|SubTitle>Performance|>
+
+<|Quote>Is it fast ?|>
+
+I'm no expert in benchmarks but from <|Link href="https://github.com/etienne-dldc/tumau/tree/master/benchmarks">my attempt to measure it|> it's a bit faster than Koa and Express but not as fast as <|Link href="https://github.com/fastify/fastify">fastify|>.
+
+You can run the benchmark yourself by running <|InlineCode>yarn benchmark|> in the root folder of the monorepo. Fell free to add more framework or more complex cases !
+
+<|SubTitle>What does "Tumau" means|>
+
+<|Link href="https://translate.google.com/?source=osdd#view=home&op=translate&sl=en&tl=mi&text=server">According to Google Traduction|> it is the translation of "server" in Maori but I'm not sure which definition it apply to. Anyway I thought it would make a cool name and it was not used on NPM so...

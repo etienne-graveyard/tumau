@@ -6,12 +6,18 @@
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
+  "scripts": {
+    "build-readme": "ts-node ./src/buildReadme.ts"
+  },
+  "dependencies": {},
   "devDependencies": {
     "@types/fs-extra": "^8.1.0",
     "@types/prettier": "^1.18.3",
     "autocannon": "^4.6.0",
+    "docsy": "^0.3.0",
     "fs-extra": "^8.1.0",
     "prettier": "^1.18.2",
-    "sort-package-json": "^1.40.0"
+    "sort-package-json": "^1.40.0",
+    "ts-node": "^8.6.2"
   }
 }
