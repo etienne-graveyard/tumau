@@ -42,7 +42,7 @@ function getCorsHeader(cors: CorsConfigResolved): OutgoingHttpHeaders {
   if (cors.allowCredentials) {
     headers[HttpHeaders.AccessControlAllowCredentials] = 'true';
   }
-  if (cors.exposeHeaders) {
+  if (cors.exposeHeaders && cors.exposeHeaders.length > 0) {
     headers[HttpHeaders.AccessControlExposeHeaders] = cors.exposeHeaders.join(', ');
   }
   return headers;
