@@ -155,14 +155,79 @@ describe('Server', () => {
 
     const res = await fetch(url);
     expect(res).toMatchInlineSnapshot(`
-HTTP/1.1 200 OK
-Connection: close
-Content-Length: 13
-Content-Type: application/json
-Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
-Set-Cookie: token=AZERTYUIO; Path=/; HttpOnly
-`);
+      HTTP/1.1 200 OK
+      Connection: close
+      Content-Length: 13
+      Content-Type: application/json
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+      Set-Cookie: token=AZERTYUIO; Path=/; HttpOnly
+    `);
     expect(await res.json()).toEqual({ foo: 'bar' });
+
+    await close();
+  });
+
+  test('JsonPackage can read Json body', async () => {
+    const app = TumauServer.create(
+      Middleware.compose(JsonPackage(), tools => {
+        const body = tools.readContextOrFail(JsonParserConsumer);
+        return JsonResponse.withJson(body);
+      })
+    );
+    const { close, url } = await mountTumau(app);
+
+    const res = await fetch(url, {
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: '{"done":false}',
+      method: 'POST',
+    });
+
+    expect(res).toMatchInlineSnapshot(`
+      HTTP/1.1 200 OK
+      Connection: close
+      Content-Length: 14
+      Content-Type: application/json
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+    `);
+    expect(await res.json()).toEqual({ done: false });
+
+    await close();
+  });
+
+  test('JsonPackage can read Json with Axio PUT', async () => {
+    const app = TumauServer.create(
+      Middleware.compose(JsonPackage(), tools => {
+        const body = tools.readContextOrFail(JsonParserConsumer);
+        return JsonResponse.withJson(body);
+      })
+    );
+    const { close, url } = await mountTumau(app);
+
+    const res = await fetch(url, {
+      headers: {
+        accept: 'application/json, text/plain, */*',
+        'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+        'cache-control': 'no-cache',
+        'content-type': 'application/json;charset=UTF-8',
+        pragma: 'no-cache',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site',
+      },
+      body: '{"done":false}',
+      method: 'PUT',
+    });
+
+    expect(res).toMatchInlineSnapshot(`
+      HTTP/1.1 200 OK
+      Connection: close
+      Content-Length: 14
+      Content-Type: application/json
+      Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
+    `);
+    expect(await res.json()).toEqual({ done: false });
 
     await close();
   });
