@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/content-encoding",
-  "version": "1.0.0-alpha.73",
+  "version": "1.0.0-alpha.74",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,17 +11,17 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.73",
-    "@tumau/cookie": "^1.0.0-alpha.73",
-    "@tumau/core": "^1.0.0-alpha.73",
-    "@tumau/cors": "^1.0.0-alpha.73",
-    "@tumau/json": "^1.0.0-alpha.73",
-    "@tumau/rate-limit": "^1.0.0-alpha.73",
-    "@tumau/router": "^1.0.0-alpha.73",
-    "@tumau/static": "^1.0.0-alpha.73",
-    "@tumau/url-parser": "^1.0.0-alpha.73",
-    "@tumau/ws": "^1.0.0-alpha.73",
-    "tumau": "^1.0.0-alpha.73"
+    "@tumau/compress": "^1.0.0-alpha.74",
+    "@tumau/cookie": "^1.0.0-alpha.74",
+    "@tumau/core": "^1.0.0-alpha.74",
+    "@tumau/cors": "^1.0.0-alpha.74",
+    "@tumau/json": "^1.0.0-alpha.74",
+    "@tumau/rate-limit": "^1.0.0-alpha.74",
+    "@tumau/router": "^1.0.0-alpha.74",
+    "@tumau/static": "^1.0.0-alpha.74",
+    "@tumau/url-parser": "^1.0.0-alpha.74",
+    "@tumau/ws": "^1.0.0-alpha.74",
+    "tumau": "^1.0.0-alpha.74"
   },
   "devDependencies": {
     "ts-node": "^8.6.2",
