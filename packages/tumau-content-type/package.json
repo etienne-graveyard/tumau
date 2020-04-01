@@ -1,22 +1,21 @@
 {
-  "name": "@tumau/compress",
+  "name": "@tumau/content-type",
   "version": "1.0.0-alpha.74",
-  "description": "Compress middleware (gzip, deflate & brotli) for @tumau/core",
+  "description": "Content Type utils made for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "dist/index.js",
-  "module": "dist/tumau.compress.esm.js",
+  "module": "dist/tumau.content-type.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsdx build --target node",
-    "start": "tsdx watch --target node"
-  },
-  "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.74"
+    "start": "tsdx watch --target node",
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watch"
   },
   "devDependencies": {
     "tsdx": "^0.13.1"

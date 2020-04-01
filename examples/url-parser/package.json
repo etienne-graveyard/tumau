@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/url-parser",
-  "version": "1.0.0-alpha.72",
+  "version": "1.0.0-alpha.74",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -10,9 +10,9 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "^1.0.0-alpha.72"
+    "tumau": "^1.0.0-alpha.74"
   },
   "devDependencies": {
-    "ts-node": "^8.6.2"
+    "ts-node": "^8.8.1"
   }
 }

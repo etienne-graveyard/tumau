@@ -5,6 +5,7 @@
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     "declaration": true,
+    "declarationDir": "dist",
     "sourceMap": true,
     "rootDir": "./",
     "strict": true,
@@ -20,6 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
+    "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
     "esModuleInterop": true
   }

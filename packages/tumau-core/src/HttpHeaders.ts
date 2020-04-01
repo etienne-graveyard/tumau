@@ -23,20 +23,3 @@ export const HttpHeaders = {
 } as const;
 
 export type HttpHeadersName = typeof HttpHeaders[keyof typeof HttpHeaders];
-
-export const ContentType = {
-  Html: 'text/html',
-  Json: 'application/json',
-  Text: 'text/plain',
-} as const;
-
-export const ContentTypeCharset = {
-  Utf8: 'charset=utf-8',
-} as const;
-
-export const ContentEncoding = {
-  Brotli: 'br',
-  Deflate: 'deflate',
-  Gzip: 'gzip',
-  Identity: 'identity',
-} as const;

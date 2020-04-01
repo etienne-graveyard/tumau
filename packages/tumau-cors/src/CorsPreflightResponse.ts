@@ -20,16 +20,16 @@ function getCorsHeader(cors: CorsPreflightConfigResolved): OutgoingHttpHeaders {
   if (cors.allowCredentials) {
     headers[HttpHeaders.AccessControlAllowCredentials] = 'true';
   }
-  if (cors.maxAge) {
+  if (cors.maxAge !== null) {
     headers[HttpHeaders.AccessControlMaxAge] = cors.maxAge;
   }
-  if (cors.allowMethods) {
+  if (cors.allowMethods && cors.allowMethods.length > 0) {
     headers[HttpHeaders.AccessControlAllowMethods] = cors.allowMethods.join(', ');
   }
-  if (cors.allowHeaders) {
+  if (cors.allowHeaders && cors.allowHeaders.length > 0) {
     headers[HttpHeaders.AccessControlAllowHeaders] = cors.allowHeaders.join(', ');
   }
-  if (cors.exposeHeaders) {
+  if (cors.exposeHeaders && cors.exposeHeaders.length > 0) {
     headers[HttpHeaders.AccessControlExposeHeaders] = cors.exposeHeaders.join(', ');
   }
   return headers;

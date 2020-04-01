@@ -1,14 +1,14 @@
-import { TumauResponse, Body, HttpHeaders, ContentEncoding, HttpStatus } from '@tumau/core';
-import { Encoding } from './CompressContext';
+import { TumauResponse, Body, HttpHeaders, HttpStatus } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { StringStream } from './StringStream';
 import zlib from 'zlib';
+import { ContentEncoding } from './ContentEnconding';
 
 export class CompressResponse extends TumauResponse {
   public originalResponse: TumauResponse;
 
-  constructor(originalResponse: TumauResponse, encodings: Array<Encoding>) {
+  constructor(originalResponse: TumauResponse, encodings: Array<ContentEncoding>) {
     const body = CompressResponse.encodeBodyWithEncodings(originalResponse.body, encodings);
     const headers: OutgoingHttpHeaders = {
       ...originalResponse.headers,
@@ -27,20 +27,20 @@ export class CompressResponse extends TumauResponse {
     this.originalResponse = originalResponse;
   }
 
-  public static encodeBodyWithEncodings(body: Body, encodings: Array<Encoding>): Readable | null {
+  public static encodeBodyWithEncodings(body: Body, encodings: Array<ContentEncoding>): Readable | null {
     if (body === null) {
       return null;
     }
     let bodyStream = typeof body === 'string' ? new StringStream(body) : body;
 
-    encodings.forEach(encoding => {
+    encodings.forEach((encoding) => {
       bodyStream = CompressResponse.encodeBodyWithEncoding(bodyStream, encoding);
     });
 
     return bodyStream;
   }
 
-  public static encodeBodyWithEncoding(body: Readable, encoding: Encoding): Readable {
+  public static encodeBodyWithEncoding(body: Readable, encoding: ContentEncoding): Readable {
     if (encoding === ContentEncoding.Brotli) {
       return body.pipe(zlib.createBrotliCompress());
     }
@@ -55,7 +55,7 @@ export class CompressResponse extends TumauResponse {
 
   public static fromResponse(
     originalResponse: TumauResponse,
-    encodings: Array<Encoding>
+    encodings: Array<ContentEncoding>
   ): TumauResponse | CompressResponse {
     if (originalResponse.body === null || HttpStatus.isEmpty(originalResponse.code)) {
       return originalResponse;

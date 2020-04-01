@@ -1,12 +1,13 @@
-import { Middleware, HttpHeaders, ContentEncoding, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
-import { CompressContext, Encoding } from './CompressContext';
+import { Middleware, HttpHeaders, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
+import { CompressContext } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
+import { ContentEncoding } from './ContentEnconding';
 
-export const Compress: Middleware = async tools => {
+export const Compress: Middleware = async (tools) => {
   const request = tools.readContextOrFail(RequestConsumer);
   const isUpgrade = request.isUpgrade;
   const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];
-  const acceptedEncoding: Array<Encoding> =
+  const acceptedEncoding: Array<ContentEncoding> =
     typeof acceptedEncodingHeader === 'string'
       ? (acceptedEncodingHeader.split(/, ?/) as any)
       : Array.isArray(acceptedEncodingHeader)
@@ -32,7 +33,7 @@ export const Compress: Middleware = async tools => {
   }
   const res = response as TumauResponse;
 
-  const usedEncoding: Array<Encoding> = (() => {
+  const usedEncoding: Array<ContentEncoding> = (() => {
     if (compressCtx.acceptedEncoding.indexOf(ContentEncoding.Brotli) >= 0) {
       return [ContentEncoding.Brotli];
     }
