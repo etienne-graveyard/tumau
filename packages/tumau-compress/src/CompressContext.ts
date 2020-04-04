@@ -1,12 +1,9 @@
-import { ContentEncoding, Context } from '@tumau/core';
-
-type EncodingType = typeof ContentEncoding;
-
-export type Encoding = EncodingType[keyof EncodingType];
+import { Context } from '@tumau/core';
+import { ContentEncoding } from './ContentEnconding';
 
 export const CompressContext = Context.create<{
-  acceptedEncoding: Array<Encoding>;
-  usedEncoding: null | Array<Encoding>;
+  acceptedEncoding: Array<ContentEncoding>;
+  usedEncoding: null | Array<ContentEncoding>;
 }>();
 
 export const CompressConsumer = CompressContext.Consumer;

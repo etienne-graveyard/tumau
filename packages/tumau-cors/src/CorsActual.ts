@@ -1,34 +1,16 @@
 import { Middleware, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
 import { CorsActualResponse } from './CorsActualResponse';
-import { createOriginMatcher } from './utils';
-
-export interface CorsActualConfig {
-  allowOrigin?: Array<string | RegExp>;
-  allowCredentials?: boolean;
-  exposeHeaders?: Array<string> | null;
-
-  // allowMethods?: ValOrFn<Set<HttpMethod> | null>;
-  // allowHeaders?: ValOrFn<Set<string> | null>;
-  // maxAge?: ValOrFn<number | null>;
-}
-
-// const DEFAULT_ALLOW_METHODS = new Set([
-//   HttpMethod.GET,
-//   HttpMethod.HEAD,
-//   HttpMethod.PUT,
-//   HttpMethod.POST,
-//   HttpMethod.DELETE,
-//   HttpMethod.PATCH,
-// ]);
+import { CorsActualConfig, createActualConfigResolver } from './utils';
+import { DEFAULT_ALLOW_ORIGIN, DEFAULT_ALLOW_CREDENTIALS } from './defaults';
 
 export function CorsActual(config: CorsActualConfig = {}): Middleware {
-  const { allowOrigin = ['*'], allowCredentials = false, exposeHeaders = null } = config;
+  const { allowOrigin = DEFAULT_ALLOW_ORIGIN, allowCredentials = DEFAULT_ALLOW_CREDENTIALS } = config;
 
   if (allowOrigin.indexOf('*') >= 0 && allowCredentials === true) {
     throw new Error(`credentials not supported with wildcard`);
   }
 
-  const originMatcher = createOriginMatcher(allowOrigin);
+  const resolver = createActualConfigResolver(config);
 
   return async tools => {
     const request = tools.readContextOrFail(RequestConsumer);
@@ -36,23 +18,21 @@ export function CorsActual(config: CorsActualConfig = {}): Middleware {
 
     const response = await tools.next();
 
+    // Can't respond on upgrade
     if (request.isUpgrade) {
       return response;
     }
     if (response instanceof TumauResponse === false) {
       throw new HttpError.Internal(`Cors received an invalid response !`);
     }
-    // If either no origin was set, or the origin isn't supported, continue
-    // without setting any headers
-    if (!origin || !originMatcher(origin)) {
-      return tools.next();
+
+    const cors = resolver(origin);
+    // invalid origin, continue without any cors header
+    if (cors === false) {
+      return response;
     }
     const res = response as TumauResponse | null;
 
-    return CorsActualResponse.fromResponse(res, {
-      allowOrigin: origin,
-      allowCredentials,
-      exposeHeaders,
-    });
+    return CorsActualResponse.fromResponse(res, cors);
   };
 }

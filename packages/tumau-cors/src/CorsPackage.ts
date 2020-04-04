@@ -1,8 +1,16 @@
-import { CorsActualConfig, CorsActual } from './CorsActual';
-import { CorsPreflight, CorsPreflightConfig } from './CorsPreflight';
+import { CorsActual } from './CorsActual';
+import { CorsPreflight } from './CorsPreflight';
 import { Middleware, ErrorHandlerPackage } from '@tumau/core';
+import { CorsPreflightConfig } from './utils';
 
-export function CorsPackage(options?: CorsActualConfig & CorsPreflightConfig) {
+export function CorsPackage(options?: CorsPreflightConfig) {
   // add HandleErrors under Cors so errors still get Cors headers
-  return Middleware.compose(CorsPreflight(options), CorsActual(options), ErrorHandlerPackage);
+  return Middleware.compose(
+    // handle preflight
+    CorsPreflight(options),
+    // handle GET
+    CorsActual(options),
+    // Handle errors to add CORS even in case of error
+    ErrorHandlerPackage
+  );
 }

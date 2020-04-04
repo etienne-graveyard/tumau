@@ -44,8 +44,9 @@ export const Route = {
   UPGRADE: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
     createRoute({ method: HttpMethod.GET, upgrade: true, pattern }, middleware),
   all: withMethod(null),
-  namespace: (pattern: string | null, routes: Routes) =>
+  namespace: (pattern: Chemin | string | null, routes: Routes) =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
+  fallback: (...middlewares: Array<Middleware>) => createRoute({ method: null, exact: false }, middlewares),
 };
 
 interface RouteOptions {

@@ -7,6 +7,7 @@ import {
   Context,
   RequestConsumer,
   Result,
+  ContentTypeUtils,
 } from '@tumau/core';
 import { parseJsonBody } from './parseJsonBody';
 
@@ -37,7 +38,13 @@ export function JsonParser(options: Options = {}): Middleware {
 
     const contentType = headers[HttpHeaders.ContentType];
 
-    if (contentType !== ContentType.Json) {
+    if (!contentType) {
+      return noBodyTools.next();
+    }
+
+    const parsed = ContentTypeUtils.parse(contentType);
+
+    if (parsed.type !== ContentType.Json) {
       return noBodyTools.next();
     }
 

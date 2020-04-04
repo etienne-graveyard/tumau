@@ -1,25 +1,17 @@
 import { TumauResponse, HttpHeaders } from '@tumau/core';
 import { OutgoingHttpHeaders } from 'http';
-
-interface CorsConfigResolved {
-  allowOrigin: string;
-  allowCredentials: boolean;
-  exposeHeaders: Array<string> | null;
-  allowHeaders: Array<string> | null;
-  allowMethods: Array<string> | null;
-  maxAge: number | null;
-}
+import { CorsPreflightConfigResolved } from './utils';
 
 export class CorsPreflightResponse extends TumauResponse {
-  public cors: CorsConfigResolved;
+  public cors: CorsPreflightConfigResolved;
 
-  constructor(cors: CorsConfigResolved) {
-    super({ headers: getCorsHeader(cors) });
-    this.cors = cors;
+  constructor(config: CorsPreflightConfigResolved) {
+    super({ headers: getCorsHeader(config) });
+    this.cors = config;
   }
 }
 
-function getCorsHeader(cors: CorsConfigResolved): OutgoingHttpHeaders {
+function getCorsHeader(cors: CorsPreflightConfigResolved): OutgoingHttpHeaders {
   const headers: OutgoingHttpHeaders = {};
 
   if (cors.allowOrigin) {
@@ -28,16 +20,16 @@ function getCorsHeader(cors: CorsConfigResolved): OutgoingHttpHeaders {
   if (cors.allowCredentials) {
     headers[HttpHeaders.AccessControlAllowCredentials] = 'true';
   }
-  if (cors.maxAge) {
+  if (cors.maxAge !== null) {
     headers[HttpHeaders.AccessControlMaxAge] = cors.maxAge;
   }
-  if (cors.allowMethods) {
+  if (cors.allowMethods && cors.allowMethods.length > 0) {
     headers[HttpHeaders.AccessControlAllowMethods] = cors.allowMethods.join(', ');
   }
-  if (cors.allowHeaders) {
+  if (cors.allowHeaders && cors.allowHeaders.length > 0) {
     headers[HttpHeaders.AccessControlAllowHeaders] = cors.allowHeaders.join(', ');
   }
-  if (cors.exposeHeaders) {
+  if (cors.exposeHeaders && cors.exposeHeaders.length > 0) {
     headers[HttpHeaders.AccessControlExposeHeaders] = cors.exposeHeaders.join(', ');
   }
   return headers;

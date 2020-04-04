@@ -1,9 +1,10 @@
 import { OutgoingHttpHeaders } from 'http';
 import { HttpStatusCode } from './HttpStatus';
 import { HttpError } from './HttpError';
-import { HttpHeaders, ContentType, ContentTypeCharset } from './HttpHeaders';
+import { HttpHeaders } from './HttpHeaders';
 import { Readable } from 'stream';
 import { TumauBaseResponse } from './TumauBaseResponse';
+import { ContentType, ContentTypeCharset, ContentTypeUtils } from '@tumau/content-type';
 
 export type Body = Readable | string | null;
 
@@ -50,7 +51,12 @@ export class TumauResponse extends TumauBaseResponse {
       body: text,
       headers: {
         [HttpHeaders.ContentLength]: text.length,
-        [HttpHeaders.ContentType]: [ContentType.Text, ContentTypeCharset.Utf8].join('; '),
+        [HttpHeaders.ContentType]: ContentTypeUtils.format({
+          type: ContentType.Text,
+          parameters: {
+            charset: ContentTypeCharset.Utf8,
+          },
+        }),
       },
     });
   }

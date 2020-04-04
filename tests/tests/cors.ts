@@ -292,9 +292,10 @@ describe('CORS: preflight requests', () => {
     });
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 204 No Content
-      Access-Control-Allow-Credentials: true
-      Access-Control-Allow-Methods: GET, OPTIONS
+      Access-Control-Allow-Headers: x-requested-with, access-control-allow-origin, x-http-method-override, content-type, authorization, accept
+      Access-Control-Allow-Methods: POST, GET, PUT, PATCH, DELETE, OPTIONS
       Access-Control-Allow-Origin: http://api.myapp.com
+      Access-Control-Max-Age: 86400
       Connection: close
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
@@ -404,9 +405,10 @@ describe('CorsPackage', () => {
     });
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 204 No Content
-      Access-Control-Allow-Credentials: true
-      Access-Control-Allow-Methods: GET, OPTIONS
+      Access-Control-Allow-Headers: x-requested-with, access-control-allow-origin, x-http-method-override, content-type, authorization, accept
+      Access-Control-Allow-Methods: POST, GET, PUT, PATCH, DELETE, OPTIONS
       Access-Control-Allow-Origin: http://api.myapp.com
+      Access-Control-Max-Age: 86400
       Connection: close
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
@@ -451,9 +453,10 @@ describe('CorsPackage', () => {
     });
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 204 No Content
-      Access-Control-Allow-Credentials: true
-      Access-Control-Allow-Methods: POST, OPTIONS
+      Access-Control-Allow-Headers: x-requested-with, access-control-allow-origin, x-http-method-override, content-type, authorization, accept
+      Access-Control-Allow-Methods: POST, GET, PUT, PATCH, DELETE, OPTIONS
       Access-Control-Allow-Origin: http://api.myapp.com
+      Access-Control-Max-Age: 86400
       Connection: close
       Date: Xxx, XX Xxx XXXX XX:XX:XX GMT
     `);
