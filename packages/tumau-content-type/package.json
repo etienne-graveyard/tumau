@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "tsdx build --target node",
-    "start": "tsdx watch --target node",
+    "start": "tsdx watch --noClean --target node",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch"
   },

@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "tsdx build --target node",
-    "start": "tsdx watch --target node"
+    "start": "tsdx watch --noClean --target node"
   },
   "dependencies": {
     "@tumau/core": "^1.0.0-alpha.74",
