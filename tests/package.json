@@ -16,7 +16,7 @@
     "@tumau/json": "^1.0.0-alpha.75",
     "@tumau/router": "^1.0.0-alpha.75",
     "got": "^10.7.0",
-    "jest": "^25.2.7",
+    "jest": "^25.3.0",
     "node-fetch": "^2.6.0",
     "tumu": "^1.0.0-alpha.52",
     "ws": "^7.2.3"

@@ -11,11 +11,11 @@
     "@types/prettier": "^2.0.0",
     "autocannon": "^4.6.0",
     "fs-extra": "^9.0.0",
-    "prettier": "^2.0.2",
-    "sort-package-json": "^1.40.0"
+    "prettier": "^2.0.4",
+    "sort-package-json": "^1.41.0"
   },
   "dependencies": {
-    "docsy": "^0.4.0",
+    "docsy": "^0.5.0",
     "runtypes": "^4.2.0"
   }
 }
