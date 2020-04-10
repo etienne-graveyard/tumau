@@ -5184,6 +5184,11 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+docsy@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/docsy/-/docsy-0.4.0.tgz#70f8de7b041cc26067e3a94bf735fac921bf62f5"
+  integrity sha512-/4XYfMP9pHq3WoipyvjpQ9uAcd92f0Udy8KhS2gj8lsJQnlDVF9H8/WjPtGLzZvJafBGs8e9AL1kKdDsv+0Dxw==
+
 doctrine@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-1.5.0.tgz#379dce730f6166f76cefa4e6707a159b02c5a6fa"
@@ -11434,6 +11439,11 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   integrity sha1-6Eg5bwV9Ij8kOGkkYY4laUFh7Ec=
   dependencies:
     aproba "^1.1.1"
+
+runtypes@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/runtypes/-/runtypes-4.2.0.tgz#6bb01a4683c1ac76015de8669df32a034c6cb0fe"
+  integrity sha512-s89DYbxI7qKSpDMmdKQCGg61nH45tYA5LJMR0pWfJ/1nwPdpww75fusQqGzXE7llpk+rwe8fNPSx78FRGKenJg==
 
 rxjs@^6.4.0, rxjs@^6.5.3:
   version "6.5.5"
