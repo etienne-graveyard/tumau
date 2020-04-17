@@ -23,15 +23,15 @@ export function CookieManager(): Middleware {
       set: (name, value, options) => {
         cookies.push(SetCookie.create(name, value, options));
       },
-      has: name => {
-        const found = cookies.find(c => c.name === name);
+      has: (name) => {
+        const found = cookies.find((c) => c.name === name);
         return found !== undefined;
       },
       delete: (name, options) => {
         cookies.push(SetCookie.delete(name, options));
       },
-      unset: name => {
-        cookies = cookies.filter(c => c.name !== name);
+      unset: (name) => {
+        cookies = cookies.filter((c) => c.name !== name);
       },
     };
     const response = await tools.withContext(CookieManagerCtx.Provider(manager)).next();
@@ -39,7 +39,7 @@ export function CookieManager(): Middleware {
       if (cookies.length) {
         console.warn(`Cookies set/deleted in an upgrade event are ignored`);
       }
-      return tools.next();
+      return response;
     }
     if (response === null) {
       // If the next did not respond we don't set cookies
