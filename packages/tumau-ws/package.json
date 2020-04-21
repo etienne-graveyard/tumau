@@ -17,10 +17,10 @@
   },
   "dependencies": {
     "@tumau/core": "^1.0.0-alpha.75",
-    "@types/ws": "^7.2.3"
+    "@types/ws": "^7.2.4"
   },
   "devDependencies": {
-    "tsdx": "^0.13.1"
+    "tsdx": "^0.13.2"
   },
   "publishConfig": {
     "access": "public"

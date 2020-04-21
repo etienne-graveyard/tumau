@@ -1,6 +1,6 @@
 import * as fse from 'fs-extra';
 import * as path from 'path';
-import { parse, resolve } from 'docsy';
+import { DocsyParser, DocsyResolver } from 'docsy';
 import * as MDComponents from './utils/MDComponents';
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
@@ -20,8 +20,8 @@ async function generateReadme(sourcePath: string, destPath: string) {
     sourceResolved,
     destResolved,
   });
-  const parsed = parse(content);
-  const resolved = resolve(parsed, {
+  const { document } = DocsyParser.parseDocument(content);
+  const resolved = DocsyResolver.resolve(document, {
     createElement: (type: any, props: any, ...children: any) => {
       try {
         return type({ ...props, children });
