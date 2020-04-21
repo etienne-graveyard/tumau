@@ -30,7 +30,7 @@ export function Router(routes: Routes): Middleware {
     const requestMethod = request.method;
     const isUpgrade = request.isUpgrade;
 
-    const matchingRoutes = routesWithMatchingPattern.filter(findResult => {
+    const matchingRoutes = routesWithMatchingPattern.filter((findResult) => {
       if (findResult.route.upgrade !== null && findResult.route.upgrade !== isUpgrade) {
         // upgrade did not match
         return false;

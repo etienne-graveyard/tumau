@@ -19,7 +19,7 @@ process.once('SIGINT', async () => {
   await wait(500);
 });
 
-const wait = (time: number) => new Promise(r => setTimeout(r, time));
+const wait = (time: number) => new Promise((r) => setTimeout(r, time));
 
 const results: Array<any> = [];
 

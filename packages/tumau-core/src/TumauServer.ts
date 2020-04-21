@@ -83,7 +83,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     const debugCtx = DebugContext.Provider(debug);
 
     return Middleware.runWithContexts(rootMiddleware, [requestCtx, resCtx, debugCtx], () => null)
-      .then(response => {
+      .then((response) => {
         sendResponseAny(response, res, request);
       })
       .catch((err): void => {
@@ -104,7 +104,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     const debugCtx = DebugContext.Provider(debug);
 
     return Middleware.runWithContexts(rootMiddleware, [requestCtx, socketCtx, headCtx, debugCtx], () => null)
-      .then(response => {
+      .then((response) => {
         // On upgrade if no response we just destroy the socket.
         if (response === null) {
           socket.destroy();

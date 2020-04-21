@@ -45,7 +45,7 @@ export const Cookies = {
 function parseCookies(cookiesStr: string): Cookies {
   const pairs = cookiesStr.split(/\s*;\s*/);
   const cookies: Cookies = {};
-  pairs.forEach(pair => {
+  pairs.forEach((pair) => {
     const [name, value] = pair.split('=');
     const trimedName = name.trim();
     cookies[trimedName] = value;

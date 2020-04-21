@@ -7,7 +7,7 @@ import { TumauUpgradeResponse } from './TumauUpgradeResponse';
 /**
  * Return a Valid Repsonse or throw an HttpError
  */
-export const InvalidResponseToHttpError: Middleware = async tools => {
+export const InvalidResponseToHttpError: Middleware = async (tools) => {
   const request = tools.readContext(RequestConsumer);
   const isUpgrade = request.isUpgrade;
   const response = await tools.next();

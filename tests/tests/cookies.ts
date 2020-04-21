@@ -31,7 +31,7 @@ test('should set the Set-Cookie header', async () => {
 
 test('should set the Set-Cookie header using Manager', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), tools => {
+    Middleware.compose(CookieManager(), (tools) => {
       tools.readContextOrFail(CookieManagerConsumer).set('token', 'T55YTRR55554');
       return TumauResponse.noContent();
     })
@@ -49,7 +49,7 @@ test('should set the Set-Cookie header using Manager', async () => {
 
 test('should set two Set-Cookie header using Manager', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), tools => {
+    Middleware.compose(CookieManager(), (tools) => {
       const cookieManager = tools.readContextOrFail(CookieManagerConsumer);
       cookieManager.set('token', 'T55YTRR55554');
       cookieManager.set('user', 'etienne');
@@ -72,7 +72,7 @@ test('should return the same result as koa', async () => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
   });
   const koaApp = new koa();
-  koaApp.use(ctx => {
+  koaApp.use((ctx) => {
     ctx.cookies.set('token', 'T55YTRR55554');
     ctx.body = null;
   });
@@ -105,7 +105,7 @@ test('should return the same result as koa when deleting cookie', async () => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.delete('token')]);
   });
   const koaApp = new koa();
-  koaApp.use(ctx => {
+  koaApp.use((ctx) => {
     ctx.cookies.set('token');
     ctx.body = null;
   });
@@ -135,7 +135,7 @@ test('should return the same result as koa when deleting cookie', async () => {
 
 test('Cookie manager should set and delete cookies', async () => {
   const tumauApp = TumauServer.create(
-    Middleware.compose(CookieManager(), tools => {
+    Middleware.compose(CookieManager(), (tools) => {
       const manager = tools.readContextOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');
       manager.delete('deleted-cookie');
@@ -158,7 +158,7 @@ test('Cookie manager should set and delete cookies', async () => {
 
 test('Cookies should not be set on error response', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), ErrorHandlerPackage, tools => {
+    Middleware.compose(CookieManager(), ErrorHandlerPackage, (tools) => {
       const manager = tools.readContextOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');
       manager.delete('deleted-cookie');

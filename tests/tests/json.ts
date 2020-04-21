@@ -20,7 +20,7 @@ import fetch from 'node-fetch';
 describe('Server', () => {
   test('parse JSON body', async () => {
     const app = TumauServer.create(
-      Middleware.compose(HttpErrorToJson, JsonParser(), tools => {
+      Middleware.compose(HttpErrorToJson, JsonParser(), (tools) => {
         return JsonResponse.withJson({ body: tools.readContext(JsonParserConsumer) });
       })
     );
@@ -146,7 +146,7 @@ describe('Server', () => {
 
   test('JsonPackage works with Cookies', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), CookieManager(), tools => {
+      Middleware.compose(JsonPackage(), CookieManager(), (tools) => {
         tools.readContextOrFail(CookieManagerConsumer).set('token', 'AZERTYUIO');
         return JsonResponse.withJson({ foo: 'bar' });
       })
@@ -169,7 +169,7 @@ describe('Server', () => {
 
   test('JsonPackage can read Json body', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), tools => {
+      Middleware.compose(JsonPackage(), (tools) => {
         const body = tools.readContextOrFail(JsonParserConsumer);
         return JsonResponse.withJson(body);
       })
@@ -198,7 +198,7 @@ describe('Server', () => {
 
   test('JsonPackage can read Json with Axio PUT', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), tools => {
+      Middleware.compose(JsonPackage(), (tools) => {
         const body = tools.readContextOrFail(JsonParserConsumer);
         return JsonResponse.withJson(body);
       })

@@ -37,7 +37,7 @@ function create<K, S>(options: RateLimitOptions<K, S>): RateLimit<K, S> {
   const store: Map<K, StoreState<S>> = new Map<K, StoreState<S>>();
 
   return {
-    hit: key => {
+    hit: (key) => {
       const now = Date.now();
       let prevState: StoreState<S> | undefined = store.get(key);
       if (prevState && prevState.expireAt !== null && prevState.expireAt < now) {
@@ -52,7 +52,7 @@ function create<K, S>(options: RateLimitOptions<K, S>): RateLimit<K, S> {
             keysToDelete.push(key);
           }
         });
-        keysToDelete.forEach(key => {
+        keysToDelete.forEach((key) => {
           store.delete(key);
         });
       }
@@ -80,7 +80,7 @@ function createGlobal<S>(options: GlobalRateLimitOptions<S>): GlobalRateLimit<S>
 function createByIp<S>(options: RateLimitOptions<string, S>): RateLimit<string, S> {
   const { errorMessage, storeCleanupSize, strategy } = options;
   return create({
-    errorMessage: errorMessage || (ip => `too many request from ${ip}`),
+    errorMessage: errorMessage || ((ip) => `too many request from ${ip}`),
     storeCleanupSize,
     strategy,
   });

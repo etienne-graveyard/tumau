@@ -20,7 +20,7 @@ export function AllowedMethods(routes: Routes): Middleware {
         return null;
       }
       if (Array.isArray(findResult.route.method)) {
-        findResult.route.method.forEach(m => {
+        findResult.route.method.forEach((m) => {
           acc.add(m);
         });
       } else {

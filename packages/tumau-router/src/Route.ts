@@ -86,7 +86,7 @@ function resolveMiddleware(middleware: null | Middleware | Array<Middleware>): A
 
 function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
   const flat = flattenRoutes(routes);
-  return flat.map(route => {
+  return flat.map((route) => {
     return {
       [ROUTE_TOKEN]: true,
       children: route.children,
@@ -127,7 +127,7 @@ function flattenRoutes(routes: Routes): Array<Route> {
           }
           const pattern = Chemin.create(...patterns.filter(Chemin.isChemin));
           const exact = route.exact || childRoute.exact;
-          const method = combineMethods(route.method, childRoute.method, m => {
+          const method = combineMethods(route.method, childRoute.method, (m) => {
             console.warn(
               `Error: in ${route.pattern} > ${route.pattern} the Method ${m} is not allowed by parent. It will be ignored !`
             );
@@ -143,7 +143,7 @@ function flattenRoutes(routes: Routes): Array<Route> {
       acc.push(...flattenSingle(route));
       return acc;
     }, [])
-    .filter(route => {
+    .filter((route) => {
       if (route.middleware.length === 0) {
         console.warn(
           `Route ${route.pattern === null ? 'null' : route.pattern.serialize()} has no middleware, it will be ignored`
@@ -167,7 +167,7 @@ function combineMethods(parent: Method, child: Method, onInvalid: (method: HttpM
   const childArr = Array.isArray(child) ? child : [child];
   const parentArr = Array.isArray(parent) ? parent : [parent];
   const common: Array<HttpMethod> = [];
-  childArr.forEach(m => {
+  childArr.forEach((m) => {
     if (parentArr.indexOf(m) >= 0) {
       common.push(m);
     } else {

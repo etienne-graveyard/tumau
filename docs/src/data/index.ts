@@ -18,7 +18,7 @@ export interface PageData {
 }
 
 export async function packagePageData(slug: Slug): Promise<PageData> {
-  const page = PAGES.find(p => p.slug === slug);
+  const page = PAGES.find((p) => p.slug === slug);
   if (!page) {
     throw new Error(`Cannot find package with slug ${slug}`);
   }
@@ -26,11 +26,11 @@ export async function packagePageData(slug: Slug): Promise<PageData> {
   const readmePath = path.resolve(monorepoPath, page.file);
   const readmeContent = await fse.readFile(readmePath, 'utf8');
   const parsed = markdownProcessor.parse(readmeContent);
-  visit(parsed, 'html', node => {
+  visit(parsed, 'html', (node) => {
     node.parsed = htmlProcessor.parse(node.value as string);
   });
   const usedIds = new Set<string>();
-  visit(parsed, 'heading', node => {
+  visit(parsed, 'heading', (node) => {
     const title = nodeToString(node.children as Array<Node>);
     const id = title
       .toString()
@@ -59,7 +59,7 @@ export async function packagePageData(slug: Slug): Promise<PageData> {
 
 function nodeToString(node: Array<Node> | Node): string {
   if (Array.isArray(node)) {
-    return node.map(n => nodeToString(n)).join('');
+    return node.map((n) => nodeToString(n)).join('');
   }
   if (node.type === 'text') {
     return node.value as string;

@@ -1,7 +1,7 @@
 import { TumauServer, Middleware, JsonParser, JsonResponse, JsonParserConsumer } from 'tumau';
 
 const server = TumauServer.create(
-  Middleware.compose(JsonParser(), tools => {
+  Middleware.compose(JsonParser(), (tools) => {
     const jsonBody = tools.readContextOrFail(JsonParserConsumer);
     if (jsonBody) {
       return JsonResponse.withJson({ you: '<- are here !', received: jsonBody });

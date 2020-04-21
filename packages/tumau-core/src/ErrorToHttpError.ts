@@ -4,7 +4,7 @@ import { HttpError } from './HttpError';
 /**
  * Handle any error and convert it to an HttpError if it's not one
  */
-export const ErrorToHttpError: Middleware = async tools => {
+export const ErrorToHttpError: Middleware = async (tools) => {
   try {
     return await tools.next();
   } catch (error) {

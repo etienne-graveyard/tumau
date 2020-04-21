@@ -1,7 +1,7 @@
 import { Middleware, RequestConsumer, HttpError, DebugConsumer } from '@tumau/core';
 import { JsonResponse } from './JsonResponse';
 
-export const HttpErrorToJson: Middleware = async tools => {
+export const HttpErrorToJson: Middleware = async (tools) => {
   const debug = tools.readContext(DebugConsumer);
   const isUpgrade = tools.readContextOrFail(RequestConsumer).isUpgrade;
   if (isUpgrade) {

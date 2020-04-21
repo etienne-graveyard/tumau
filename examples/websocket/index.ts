@@ -3,9 +3,9 @@ import WebSocket from 'ws';
 
 const wss1 = new WebSocket.Server({ noServer: true });
 
-wss1.on('connection', ws => {
+wss1.on('connection', (ws) => {
   console.log('connected');
-  ws.addEventListener('message', e => {
+  ws.addEventListener('message', (e) => {
     console.log('Received: ', e.data);
     ws.send('pong');
   });
@@ -13,7 +13,7 @@ wss1.on('connection', ws => {
 
 const server = TumauServer.create({
   handleServerUpgrade: true,
-  mainMiddleware: tools => {
+  mainMiddleware: (tools) => {
     const request = tools.readContext(RequestConsumer);
     console.log(request);
     console.log(request.isUpgrade, request.url);

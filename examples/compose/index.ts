@@ -2,7 +2,7 @@ import { TumauServer, Middleware, TumauResponse, Context, RequestConsumer } from
 
 const NumCtx = Context.create<number>();
 
-const logger: Middleware = async tools => {
+const logger: Middleware = async (tools) => {
   const start = process.hrtime();
   const request = tools.readContextOrFail(RequestConsumer);
   console.log(`Received request for ${request.method} ${request.url}`);
@@ -12,12 +12,12 @@ const logger: Middleware = async tools => {
   return result;
 };
 
-const addNum: Middleware = tools => {
+const addNum: Middleware = (tools) => {
   return tools.withContext(NumCtx.Provider(Math.floor(Math.random() * 100000))).next();
 };
 
-const logNum: Middleware = async tools => {
-  await new Promise(resolve => {
+const logNum: Middleware = async (tools) => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 2000);
   });
   const num = tools.readContext(NumCtx.Consumer);
@@ -25,8 +25,8 @@ const logNum: Middleware = async tools => {
   return tools.next();
 };
 
-const main: Middleware = async tools => {
-  await new Promise(resolve => {
+const main: Middleware = async (tools) => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 2000);
   });
   const num = tools.readContextOrFail(NumCtx.Consumer);

@@ -40,12 +40,12 @@ export function useComponentSize(ref: React.MutableRefObject<HTMLElement | undef
 
     handleResize();
 
-    let resizeObserver = new ResizeObserver(function() {
+    let resizeObserver = new ResizeObserver(function () {
       handleResize();
     });
     resizeObserver.observe(elem);
 
-    return function() {
+    return function () {
       resizeObserver.disconnect();
       resizeObserver = null as any;
     };

@@ -15,7 +15,7 @@ export function createOriginMatcher(allowedOrigins: Array<string | RegExp>): Ori
   // does a given request Origin match the list?
   return (requestOrigin: string | null | undefined) => {
     if (requestOrigin) {
-      return matchers.some(matcher => matcher(requestOrigin));
+      return matchers.some((matcher) => matcher(requestOrigin));
     } else {
       return false;
     }
@@ -24,14 +24,14 @@ export function createOriginMatcher(allowedOrigins: Array<string | RegExp>): Ori
 
 function createSingleOriginMatcher(allowedOrigin: string | RegExp): (origin: string) => boolean {
   if (allowedOrigin instanceof RegExp) {
-    return requestOrigin => Boolean(requestOrigin.match(allowedOrigin));
+    return (requestOrigin) => Boolean(requestOrigin.match(allowedOrigin));
   } else if (allowedOrigin.indexOf('*') === -1) {
     // simple string comparison
-    return requestOrigin => requestOrigin === allowedOrigin;
+    return (requestOrigin) => requestOrigin === allowedOrigin;
   } else {
     // need to build a regex *.foo.com
     const regex = '^' + allowedOrigin.replace('.', '\\.').replace('*', '.*') + '$';
-    return requestOrigin => Boolean(requestOrigin.match(regex));
+    return (requestOrigin) => Boolean(requestOrigin.match(regex));
   }
 }
 

@@ -5,9 +5,5 @@ import { AllowedMethods } from './AllowedMethods';
 import { Router } from './Router';
 
 export function RouterPackage(routes: Routes): Middleware {
-  return Middleware.compose(
-    UrlParser(),
-    AllowedMethods(routes),
-    Router(routes)
-  );
+  return Middleware.compose(UrlParser(), AllowedMethods(routes), Router(routes));
 }

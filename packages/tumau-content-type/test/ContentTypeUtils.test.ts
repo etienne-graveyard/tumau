@@ -87,7 +87,7 @@ describe('ContentTypeUtils.parse', () => {
   });
 
   describe('should throw on invalid media type', () => {
-    invalidTypes.forEach(function(type) {
+    invalidTypes.forEach(function (type) {
       test('media type: ' + type, () => {
         expect(() => ContentTypeUtils.parse(type)).toThrow(/invalid media type/);
       });
@@ -104,17 +104,17 @@ describe('ContentTypeUtils.parse', () => {
 });
 
 describe('ContentTypeUtils.fomrat', () => {
-  test('should format basic type', function() {
+  test('should format basic type', function () {
     const str = ContentTypeUtils.format({ type: 'text/html' });
     expect(str).toBe('text/html');
   });
 
-  test('should format type with suffix', function() {
+  test('should format type with suffix', function () {
     const str = ContentTypeUtils.format({ type: 'image/svg+xml' });
     expect(str).toBe('image/svg+xml');
   });
 
-  test('should format type with parameter', function() {
+  test('should format type with parameter', function () {
     const str = ContentTypeUtils.format({
       type: 'text/html',
       parameters: { charset: 'utf-8' },
@@ -122,7 +122,7 @@ describe('ContentTypeUtils.fomrat', () => {
     expect(str).toBe('text/html; charset=utf-8');
   });
 
-  test('should format type with parameter that needs quotes', function() {
+  test('should format type with parameter that needs quotes', function () {
     const str = ContentTypeUtils.format({
       type: 'text/html',
       parameters: { foo: 'bar or "baz"' },
@@ -130,7 +130,7 @@ describe('ContentTypeUtils.fomrat', () => {
     expect(str).toBe('text/html; foo="bar or \\"baz\\""');
   });
 
-  test('should format type with parameter with empty value', function() {
+  test('should format type with parameter with empty value', function () {
     const str = ContentTypeUtils.format({
       type: 'text/html',
       parameters: { foo: '' },
@@ -138,7 +138,7 @@ describe('ContentTypeUtils.fomrat', () => {
     expect(str).toBe('text/html; foo=""');
   });
 
-  test('should format type with multiple parameters', function() {
+  test('should format type with multiple parameters', function () {
     const str = ContentTypeUtils.format({
       type: 'text/html',
       parameters: { charset: 'utf-8', foo: 'bar', bar: 'baz' },
@@ -146,22 +146,22 @@ describe('ContentTypeUtils.fomrat', () => {
     expect(str).toBe('text/html; bar=baz; charset=utf-8; foo=bar');
   });
 
-  test('should reject invalid type', function() {
+  test('should reject invalid type', function () {
     const obj = { type: 'text/' };
     expect(() => ContentTypeUtils.format(obj)).toThrow(/invalid type/);
   });
 
-  test('should reject invalid type with LWS', function() {
+  test('should reject invalid type with LWS', function () {
     const obj = { type: ' text/html' };
     expect(() => ContentTypeUtils.format(obj)).toThrow(/invalid type/);
   });
 
-  test('should reject invalid parameter name', function() {
+  test('should reject invalid parameter name', function () {
     const obj = { type: 'image/svg', parameters: { 'foo/': 'bar' } };
     expect(() => ContentTypeUtils.format(obj)).toThrow(/invalid parameter name/);
   });
 
-  test('should reject invalid parameter value', function() {
+  test('should reject invalid parameter value', function () {
     const obj = { type: 'image/svg', parameters: { foo: 'bar\u0000' } };
     expect(() => ContentTypeUtils.format(obj)).toThrow(/invalid parameter value/);
   });

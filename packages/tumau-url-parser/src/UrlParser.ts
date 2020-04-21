@@ -14,7 +14,7 @@ export const UrlParserContext = Context.create<ParsedUrl>();
 export const UrlParserConsumer = UrlParserContext.Consumer;
 
 export function UrlParser(): Middleware {
-  return tools => {
+  return (tools) => {
     if (tools.hasContext(UrlParserContext.Consumer)) {
       return tools.next();
     }

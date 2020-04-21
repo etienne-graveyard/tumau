@@ -33,7 +33,7 @@ export class CompressResponse extends TumauResponse {
     }
     let bodyStream = typeof body === 'string' ? new StringStream(body) : body;
 
-    encodings.forEach(encoding => {
+    encodings.forEach((encoding) => {
       bodyStream = CompressResponse.encodeBodyWithEncoding(bodyStream, encoding);
     });
 

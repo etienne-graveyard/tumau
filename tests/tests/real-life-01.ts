@@ -21,7 +21,7 @@ test('real life', async () => {
   const onConnected = jest.fn();
   const onOpen = jest.fn();
 
-  wss.on('connection', ws => {
+  wss.on('connection', (ws) => {
     onConnected();
     ws.close();
   });
@@ -68,7 +68,7 @@ test('real life', async () => {
     Transfer-Encoding: chunked
   `);
 
-  await new Promise(res => {
+  await new Promise((res) => {
     const ws = new WebSocket(`ws://localhost:${port}/connect`);
     ws.on('open', () => {
       onOpen();

@@ -12,7 +12,7 @@ export function CorsActual(config: CorsActualConfig = {}): Middleware {
 
   const resolver = createActualConfigResolver(config);
 
-  return async tools => {
+  return async (tools) => {
     const request = tools.readContextOrFail(RequestConsumer);
     const origin = request.origin;
 

@@ -3,7 +3,7 @@ import { CompressContext } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 import { ContentEncoding } from './ContentEnconding';
 
-export const Compress: Middleware = async tools => {
+export const Compress: Middleware = async (tools) => {
   const request = tools.readContextOrFail(RequestConsumer);
   const isUpgrade = request.isUpgrade;
   const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];

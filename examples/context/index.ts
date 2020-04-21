@@ -7,7 +7,7 @@ const NumContext = Context.create<number>(7);
 const MaybeNumContext = Context.create<number>();
 
 // middleware
-const myContextProvider: Middleware = tools => {
+const myContextProvider: Middleware = (tools) => {
   // we provide our context
   const numProvider = NumContext.Provider(42);
   const maybeNumProvider = MaybeNumContext.Provider(6);
@@ -18,7 +18,7 @@ const myContextProvider: Middleware = tools => {
 };
 
 // middleware
-const myContextConsumer: Middleware = tools => {
+const myContextConsumer: Middleware = (tools) => {
   // Num
   console.log({
     has: tools.hasContext(NumContext.Consumer),

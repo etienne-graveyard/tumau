@@ -19,7 +19,7 @@ async function normPackageJson() {
   const pkg = JSON.parse((await fse.readFile(pkgPath)).toString());
   const rootPkg = JSON.parse((await fse.readFile(process.env.LERNA_ROOT_PATH + '/package.json')).toString());
   const keysToCopy = ['author', 'license', 'homepage', 'bugs', 'repository'];
-  keysToCopy.forEach(key => {
+  keysToCopy.forEach((key) => {
     if (rootPkg[key]) {
       pkg[key] = rootPkg[key];
     }
@@ -71,13 +71,13 @@ async function normReadme(pkg: any) {
 }
 
 async function replaceInjectTags(content: string, localRoot: string, pkg: any): Promise<string> {
-  const injectTags = Array.from(content.matchAll(/\[\[([A-Za-z0-9_@\-.\/]+)\]\]/g)).map(match => ({
+  const injectTags = Array.from(content.matchAll(/\[\[([A-Za-z0-9_@\-.\/]+)\]\]/g)).map((match) => ({
     path: match[1],
     position: match.index,
   }));
 
   const injectValues = await Promise.all(
-    injectTags.map(async tag => {
+    injectTags.map(async (tag) => {
       const { file, isLocal } = resolveFilePath(localRoot, tag.path);
       let content = await fse.readFile(file, 'utf8');
       // replace import {} from '../src' by import {} from 'packageName'
@@ -99,12 +99,12 @@ async function replaceInjectTags(content: string, localRoot: string, pkg: any): 
   );
 
   const resutlReplaced = content.replace(/\[\[([A-Za-z0-9_@\-.\/]+)\]\]/g, (match, path) => {
-    const replacer = injectValues.find(i => i.path === path);
+    const replacer = injectValues.find((i) => i.path === path);
     if (!replacer) {
       return match;
     }
     return replacer.blocks
-      .map(block => {
+      .map((block) => {
         if (block.type === 'Comment') {
           // replace comment start/end by empty lines
           return ['', ...block.lines.slice(1, block.lines.length - 1), ''].join('\n');

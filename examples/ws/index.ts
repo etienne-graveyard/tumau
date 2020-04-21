@@ -13,7 +13,7 @@ const server = TumauServer.create({
   mainMiddleware: Middleware.compose(
     WebsocketProvider(wss),
     // logger
-    tools => {
+    (tools) => {
       console.log(`Request !`);
       return tools.next();
     },

@@ -18,7 +18,7 @@ export class CookieResponse extends TumauResponse {
   public static buildSetCookieHeader(cookies: SetCookies): string | Array<string> | undefined {
     try {
       const all: { [name: string]: SetCookie } = {};
-      cookies.forEach(c => {
+      cookies.forEach((c) => {
         all[c.name] = c;
       });
       const names = Object.keys(all);
@@ -29,7 +29,7 @@ export class CookieResponse extends TumauResponse {
         const name = names[0];
         return SetCookie.toString(name, all[name]);
       }
-      return names.map(name => SetCookie.toString(name, all[name]));
+      return names.map((name) => SetCookie.toString(name, all[name]));
     } catch (error) {
       console.error(error);
       return undefined;
