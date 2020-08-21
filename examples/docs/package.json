@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/docs",
-  "version": "1.0.0-alpha.78",
+  "version": "1.0.0-alpha.79",
   "private": true,
   "description": "Examples used for the docs",
   "repository": "git@github.com:etienne-dldc/tumau.git",
@@ -12,7 +12,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "^1.0.0-alpha.78"
+    "tumau": "^1.0.0-alpha.79"
   },
   "devDependencies": {
     "ts-node": "^8.10.2",
