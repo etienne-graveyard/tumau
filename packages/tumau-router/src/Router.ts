@@ -1,4 +1,4 @@
-import { Middleware, RequestConsumer, Tools, HttpError, Result } from '@tumau/core';
+import { Middleware, RequestConsumer, HttpError, Result } from '@tumau/core';
 import { Route, Routes, FindResult } from './Route';
 import { RouterContext } from './RouterContext';
 import { UrlParserConsumer } from '@tumau/url-parser';
@@ -10,8 +10,8 @@ import { Chemin } from 'chemin';
 export function Router(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
-  return async (tools): Promise<Result> => {
-    if (tools.hasContext(RouterContext.Consumer)) {
+  return async (ctx, next): Promise<Result> => {
+    if (ctx.hasContext(RouterContext.Consumer)) {
       console.warn(
         [
           `Warning: Using a Router inside another Router will break 'Allow' header for OPTIONS request !`,
@@ -21,12 +21,12 @@ export function Router(routes: Routes): Middleware {
     }
 
     // all matching routes
-    const parsedUrl = tools.readContext(UrlParserConsumer);
+    const parsedUrl = ctx.readContext(UrlParserConsumer);
     if (!parsedUrl) {
       throw new HttpError.Internal(`[Router] Missing UrlParser contenxt !`);
     }
     const routesWithMatchingPattern = Route.find(flatRoutes, parsedUrl.pathname);
-    const request = tools.readContextOrFail(RequestConsumer);
+    const request = ctx.readContextOrFail(RequestConsumer);
     const requestMethod = request.method;
     const isUpgrade = request.isUpgrade;
 
@@ -80,23 +80,21 @@ export function Router(routes: Routes): Middleware {
         },
       };
 
-      const withRouterDataTools = tools.withContext(RouterContext.Provider(routerData));
+      const withRouterDataCtx = ctx.withContext(RouterContext.Provider(routerData));
 
       if (findResult === null) {
         // no more match, run next
-        return withRouterDataTools.next();
+        return next(withRouterDataCtx);
       }
 
       if (findResult.route.middleware === null) {
         // route with no middleware, this is still a match
-        // it's like if they was a middleware: tools => tools.next();
-        return withRouterDataTools.next();
+        // it's like if they was a middleware: (ctx, next) => next(ctx);
+        return next(withRouterDataCtx);
       }
 
       // call the route with next pointing to the middleware after the router
-      const currentContextStack = Tools.getContext(withRouterDataTools);
-      const middleTools = Tools.create(currentContextStack, Tools.getDone(tools));
-      const result = await findResult.route.middleware(middleTools);
+      const result = await findResult.route.middleware(withRouterDataCtx, next);
 
       // If the match did not return a response
       // proceed like if the route didn't match

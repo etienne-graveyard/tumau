@@ -12,25 +12,25 @@ export function CorsPreflight(config: CorsPreflightConfig = {}): Middleware {
 
   const resolver = createPreflightConfigResolver(config);
 
-  return async (tools) => {
-    const request = tools.readContextOrFail(RequestConsumer);
+  return async (ctx, next) => {
+    const request = ctx.readContextOrFail(RequestConsumer);
     const origin = request.origin;
 
     // Preflight only on OPTION
     if (request.method !== HttpMethod.OPTIONS) {
-      return tools.next();
+      return next(ctx);
     }
 
     // The requested method
     const requestMethod = request.headers[HttpHeaders.AccessControlRequestMethod] as string | undefined;
     // If there are no Access-Control-Request-Method this is not CORS preflight
     if (!requestMethod) {
-      return tools.next();
+      return next(ctx);
     }
 
     const cors = resolver(origin);
     if (cors === false) {
-      return tools.next();
+      return next(ctx);
     }
 
     // At this point we know the request is a CORS Preflight

@@ -31,8 +31,8 @@ test('should set the Set-Cookie header', async () => {
 
 test('should set the Set-Cookie header using Manager', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), (tools) => {
-      tools.readContextOrFail(CookieManagerConsumer).set('token', 'T55YTRR55554');
+    Middleware.compose(CookieManager(), (ctx) => {
+      ctx.readContextOrFail(CookieManagerConsumer).set('token', 'T55YTRR55554');
       return TumauResponse.noContent();
     })
   );
@@ -49,8 +49,8 @@ test('should set the Set-Cookie header using Manager', async () => {
 
 test('should set two Set-Cookie header using Manager', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), (tools) => {
-      const cookieManager = tools.readContextOrFail(CookieManagerConsumer);
+    Middleware.compose(CookieManager(), (ctx) => {
+      const cookieManager = ctx.readContextOrFail(CookieManagerConsumer);
       cookieManager.set('token', 'T55YTRR55554');
       cookieManager.set('user', 'etienne');
       return TumauResponse.noContent();
@@ -135,8 +135,8 @@ test('should return the same result as koa when deleting cookie', async () => {
 
 test('Cookie manager should set and delete cookies', async () => {
   const tumauApp = TumauServer.create(
-    Middleware.compose(CookieManager(), (tools) => {
-      const manager = tools.readContextOrFail(CookieManagerConsumer);
+    Middleware.compose(CookieManager(), (ctx) => {
+      const manager = ctx.readContextOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');
       manager.delete('deleted-cookie');
       return TumauResponse.noContent();
@@ -158,8 +158,8 @@ test('Cookie manager should set and delete cookies', async () => {
 
 test('Cookies should not be set on error response', async () => {
   const app = TumauServer.create(
-    Middleware.compose(CookieManager(), ErrorHandlerPackage, (tools) => {
-      const manager = tools.readContextOrFail(CookieManagerConsumer);
+    Middleware.compose(CookieManager(), ErrorHandlerPackage, (ctx) => {
+      const manager = ctx.readContextOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');
       manager.delete('deleted-cookie');
       throw new HttpError.NotFound();

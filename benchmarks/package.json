@@ -11,7 +11,7 @@
     "@tumau/json": "^1.0.0-alpha.78",
     "@tumau/router": "^1.0.0-alpha.78",
     "express": "^4.17.1",
-    "fastify": "^3.1.1",
+    "fastify": "^3.2.1",
     "koa": "^2.13.0"
   }
 }

@@ -1,10 +1,10 @@
 import { Middleware, RequestConsumer, HttpError, TumauUpgradeResponse } from '@tumau/core';
 import { WebsocketConsumer } from './WebsocketProvider';
 
-export const HandleWebsocket: Middleware = async (tools) => {
-  const request = tools.readContext(RequestConsumer);
+export const HandleWebsocket: Middleware = async (ctx, next) => {
+  const request = ctx.readContext(RequestConsumer);
   if (request.isUpgrade) {
-    const wss = tools.readContext(WebsocketConsumer);
+    const wss = ctx.readContext(WebsocketConsumer);
     if (!wss) {
       throw new HttpError.Internal(`Missing WebsocketProvider`);
     }
@@ -17,5 +17,5 @@ export const HandleWebsocket: Middleware = async (tools) => {
       });
     });
   }
-  return tools.next();
+  return next(ctx);
 };

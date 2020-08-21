@@ -7,7 +7,7 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "dependencies": {
-    "docsy": "^0.8.0",
+    "docsy": "^0.8.1",
     "runtypes": "^5.0.1"
   },
   "devDependencies": {

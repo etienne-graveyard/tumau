@@ -13,8 +13,8 @@ wss1.on('connection', (ws) => {
 
 const server = TumauServer.create({
   handleServerUpgrade: true,
-  mainMiddleware: (tools) => {
-    const request = tools.readContext(RequestConsumer);
+  mainMiddleware: (ctx) => {
+    const request = ctx.readContext(RequestConsumer);
     console.log(request);
     console.log(request.isUpgrade, request.url);
     if (request.isUpgrade) {

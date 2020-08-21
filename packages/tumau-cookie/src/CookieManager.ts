@@ -16,8 +16,8 @@ export const CookieManagerConsumer = CookieManagerCtx.Consumer;
  *
  */
 export function CookieManager(): Middleware {
-  return async (tools): Promise<Result> => {
-    const isUpgrade = tools.readContextOrFail(RequestConsumer).isUpgrade;
+  return async (ctx, next): Promise<Result> => {
+    const isUpgrade = ctx.readContextOrFail(RequestConsumer).isUpgrade;
     let cookies: SetCookies = [];
     const manager: CookieManager = {
       set: (name, value, options) => {
@@ -34,7 +34,7 @@ export function CookieManager(): Middleware {
         cookies = cookies.filter((c) => c.name !== name);
       },
     };
-    const response = await tools.withContext(CookieManagerCtx.Provider(manager)).next();
+    const response = await next(ctx.withContext(CookieManagerCtx.Provider(manager)));
     if (isUpgrade) {
       if (cookies.length) {
         console.warn(`Cookies set/deleted in an upgrade event are ignored`);

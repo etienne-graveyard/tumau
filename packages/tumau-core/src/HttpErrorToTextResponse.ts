@@ -7,11 +7,11 @@ import { HttpError } from './HttpError';
 /**
  * Handle HttpError and respond with a Text reponse
  */
-export const HttpErrorToTextResponse: Middleware = async (tools) => {
-  const isUpgrade = tools.readContextOrFail(RequestConsumer).isUpgrade;
-  const debug = tools.readContext(DebugConsumer);
+export const HttpErrorToTextResponse: Middleware = async (ctx, next) => {
+  const isUpgrade = ctx.readContextOrFail(RequestConsumer).isUpgrade;
+  const debug = ctx.readContext(DebugConsumer);
   try {
-    return await tools.next();
+    return await next(ctx);
   } catch (error) {
     if (error instanceof HttpError === false) {
       throw error;

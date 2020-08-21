@@ -179,8 +179,8 @@ describe('CORS: simple / actual requests', () => {
 describe('CORS: preflight requests', () => {
   function createCorsServer(config: CorsPreflightConfig = {}) {
     return TumauServer.create(
-      Middleware.compose(CorsPreflight(config), (tools) => {
-        const req = tools.readContextOrFail(RequestConsumer);
+      Middleware.compose(CorsPreflight(config), (ctx) => {
+        const req = ctx.readContextOrFail(RequestConsumer);
         if (req.method === HttpMethod.POST) {
           return TumauResponse.withText('Hello');
         }

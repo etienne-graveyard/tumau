@@ -7,35 +7,35 @@ const NumContext = Context.create<number>(7);
 const MaybeNumContext = Context.create<number>();
 
 // middleware
-const myContextProvider: Middleware = (tools) => {
+const myContextProvider: Middleware = (ctx, next) => {
   // we provide our context
   const numProvider = NumContext.Provider(42);
   const maybeNumProvider = MaybeNumContext.Provider(6);
-  // we create a new tools by calling tools.withContext()
-  const nextTools = tools.withContext(numProvider, maybeNumProvider);
-  // we call next on our new tools to execute the next middleware
-  return nextTools.next();
+  // we create a new context by calling ctx.withContext()
+  const nextCtx = ctx.withContext(numProvider, maybeNumProvider);
+  // we call next with our new context to execute the next middleware
+  return next(nextCtx);
 };
 
 // middleware
-const myContextConsumer: Middleware = (tools) => {
+const myContextConsumer: Middleware = (ctx, next) => {
   // Num
   console.log({
-    has: tools.hasContext(NumContext.Consumer),
-    num: tools.readContext(NumContext.Consumer),
+    has: ctx.hasContext(NumContext.Consumer),
+    num: ctx.readContext(NumContext.Consumer),
     // NumContext has a default value so this would never throw
-    numOrThrow: tools.readContextOrFail(NumContext.Consumer),
+    numOrThrow: ctx.readContextOrFail(NumContext.Consumer),
   });
 
   // MaybeNum
   console.log({
-    has: tools.hasContext(MaybeNumContext.Consumer),
-    maybeNum: tools.readContext(MaybeNumContext.Consumer),
+    has: ctx.hasContext(MaybeNumContext.Consumer),
+    maybeNum: ctx.readContext(MaybeNumContext.Consumer),
     // this will throw an error if the Context is not present
-    numOrThrow: tools.readContextOrFail(MaybeNumContext.Consumer),
+    numOrThrow: ctx.readContextOrFail(MaybeNumContext.Consumer),
   });
 
-  return tools.next();
+  return next(ctx);
 };
 
 const server = TumauServer.create(

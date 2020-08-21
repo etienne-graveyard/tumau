@@ -3,8 +3,8 @@ import { CompressContext } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 import { ContentEncoding } from './ContentEnconding';
 
-export const Compress: Middleware = async (tools) => {
-  const request = tools.readContextOrFail(RequestConsumer);
+export const Compress: Middleware = async (ctx, next) => {
+  const request = ctx.readContextOrFail(RequestConsumer);
   const isUpgrade = request.isUpgrade;
   const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];
   const acceptedEncoding: Array<ContentEncoding> =
@@ -20,7 +20,7 @@ export const Compress: Middleware = async (tools) => {
   };
 
   // we allow next middleware to change what acceptedEncoding are accepted
-  const response = await tools.withContext(CompressContext.Provider(compressCtx)).next();
+  const response = await next(ctx.withContext(CompressContext.Provider(compressCtx)));
   if (isUpgrade) {
     return response;
   }

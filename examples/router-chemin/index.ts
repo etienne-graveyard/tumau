@@ -41,10 +41,10 @@ const render = (content: string) => `<!DOCTYPE html>
   </body>
 </html>`;
 
-const logRoute: Middleware = (tools) => {
-  const parsedUrl = tools.readContext(UrlParserConsumer);
+const logRoute: Middleware = (ctx, next) => {
+  const parsedUrl = ctx.readContext(UrlParserConsumer);
   console.log(parsedUrl && parsedUrl.pathname);
-  return tools.next();
+  return next(ctx);
 };
 
 const SUBROUTE = Chemin.create(P.optionalString('subroute'));
@@ -54,8 +54,8 @@ const ROUTES: Routes = [
   Route.GET('/', logRoute, () => {
     return TumauResponse.withHtml(render('Home'));
   }),
-  Route.create({ pattern: STATIC_APP, exact: false, method: null }, (tools) => {
-    const params = tools.readContextOrFail(RouterConsumer).getOrFail(STATIC_APP);
+  Route.create({ pattern: STATIC_APP, exact: false, method: null }, (ctx) => {
+    const params = ctx.readContextOrFail(RouterConsumer).getOrFail(STATIC_APP);
     return JsonResponse.withJson({
       appParam: params.app,
     });
@@ -72,8 +72,8 @@ const ROUTES: Routes = [
       return TumauResponse.withHtml(render('Group 2'));
     }),
   ]),
-  Route.GET('/group/skip', async (tools) => {
-    await tools.next();
+  Route.GET('/group/skip', async (ctx, next) => {
+    await next(ctx);
     return TumauResponse.withHtml(render('Group skiped !'));
   }),
   Route.namespace('/foo', [
@@ -86,8 +86,8 @@ const ROUTES: Routes = [
       TumauResponse.withHtml(render('foo Not found'))
     ),
   ]),
-  Route.GET('/search', (tools) => {
-    const parsedUrl = tools.readContextOrFail(UrlParserConsumer);
+  Route.GET('/search', (ctx) => {
+    const parsedUrl = ctx.readContextOrFail(UrlParserConsumer);
     const searchQuery = parsedUrl && parsedUrl.query && parsedUrl.query.q;
     if (searchQuery) {
       return TumauResponse.withHtml(render(`Search page for "${searchQuery}"`));
@@ -95,9 +95,9 @@ const ROUTES: Routes = [
     // oops not a real match (return no response => act like this the route didn't match in the first place)
     return null;
   }),
-  Route.GET(Chemin.create('next', SUBROUTE), (tools) => {
+  Route.GET(Chemin.create('next', SUBROUTE), (ctx, next) => {
     // calling next in a route call the middleware after the route
-    return tools.next();
+    return next(ctx);
   }),
   Route.GET('/next/yolo', () => {
     return TumauResponse.withHtml(render('Welcome on /next/yolo'));
@@ -110,8 +110,8 @@ const server = TumauServer.create(
   Middleware.compose(
     RouterPackage(ROUTES),
     // this middleware is executed if next is called inside a route middleware
-    (tools) => {
-      const router = tools.readContextOrFail(RouterConsumer);
+    (ctx) => {
+      const router = ctx.readContextOrFail(RouterConsumer);
       const pattern = router.pattern?.stringify();
       const subrouteParam = router.get(SUBROUTE);
       const subroute = subrouteParam?.subroute;

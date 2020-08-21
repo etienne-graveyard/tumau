@@ -23,29 +23,29 @@ export function JsonParser(options: Options = {}): Middleware {
   const _1mb = 1024 * 1024 * 1024;
   const { limit = _1mb } = options;
 
-  return async (tools): Promise<Result> => {
-    const request = tools.readContextOrFail(RequestConsumer);
+  return async (ctx, next): Promise<Result> => {
+    const request = ctx.readContextOrFail(RequestConsumer);
     const headers = request.headers;
-    const noBodyTools = tools.withContext(JsonParserContext.Provider(null));
+    const noBodyCtx = ctx.withContext(JsonParserContext.Provider(null));
 
     if (
       request.method === HttpMethod.GET ||
       request.method === HttpMethod.DELETE ||
       request.method === HttpMethod.OPTIONS
     ) {
-      return noBodyTools.next();
+      return next(noBodyCtx);
     }
 
     const contentType = headers[HttpHeaders.ContentType];
 
     if (!contentType) {
-      return noBodyTools.next();
+      return next(noBodyCtx);
     }
 
     const parsed = ContentTypeUtils.parse(contentType);
 
     if (parsed.type !== ContentType.Json) {
-      return noBodyTools.next();
+      return next(noBodyCtx);
     }
 
     const length = (() => {
@@ -61,13 +61,13 @@ export function JsonParser(options: Options = {}): Middleware {
     })();
 
     if (length === 0) {
-      return noBodyTools.next();
+      return next(noBodyCtx);
     }
 
     if (length !== null && length > limit) {
       throw new HttpError.PayloadTooLarge();
     }
     const jsonBody = await parseJsonBody(request.req, limit, length);
-    return tools.withContext(JsonParserContext.Provider(jsonBody)).next();
+    return next(ctx.withContext(JsonParserContext.Provider(jsonBody)));
   };
 }

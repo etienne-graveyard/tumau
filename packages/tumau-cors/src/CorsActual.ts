@@ -12,11 +12,11 @@ export function CorsActual(config: CorsActualConfig = {}): Middleware {
 
   const resolver = createActualConfigResolver(config);
 
-  return async (tools) => {
-    const request = tools.readContextOrFail(RequestConsumer);
+  return async (ctx, next) => {
+    const request = ctx.readContextOrFail(RequestConsumer);
     const origin = request.origin;
 
-    const response = await tools.next();
+    const response = await next(ctx);
 
     // Can't respond on upgrade
     if (request.isUpgrade) {
