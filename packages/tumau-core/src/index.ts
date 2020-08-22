@@ -19,7 +19,7 @@ export { InvalidResponseToHttpError } from './InvalidResponseToHttpError';
 export { ErrorToHttpError } from './ErrorToHttpError';
 export { ErrorHandlerPackage } from './ErrorHandlerPackage';
 export { HttpErrorToTextResponse } from './HttpErrorToTextResponse';
-export { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'miid';
+export { Context, ContextConsumer, ContextProvider, ContextProviderFn, ContextStack } from 'miid';
 export {
   ContentType,
   ContentTypeCharset,
