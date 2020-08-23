@@ -15,10 +15,10 @@ export const UrlParserConsumer = UrlParserContext.Consumer;
 
 export function UrlParser(): Middleware {
   return (ctx, next) => {
-    if (ctx.hasContext(UrlParserContext.Consumer)) {
+    if (ctx.has(UrlParserContext.Consumer)) {
       return next(ctx);
     }
-    const request = ctx.readContextOrFail(RequestConsumer);
+    const request = ctx.getOrFail(RequestConsumer);
     const parsedObj = parseUrl(request.url);
     const parsed: ParsedUrl = {
       path: parsedObj.path,
@@ -27,7 +27,7 @@ export function UrlParser(): Middleware {
       query: parsedObj.query ? parseQueryString(parsedObj.query) : null,
       search: parsedObj.search,
     };
-    return next(ctx.withContext(UrlParserContext.Provider(parsed)));
+    return next(ctx.with(UrlParserContext.Provider(parsed)));
   };
 }
 

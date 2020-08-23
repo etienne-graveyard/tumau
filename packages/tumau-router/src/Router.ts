@@ -11,7 +11,7 @@ export function Router(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
   return async (ctx, next): Promise<Result> => {
-    if (ctx.hasContext(RouterContext.Consumer)) {
+    if (ctx.has(RouterContext.Consumer)) {
       console.warn(
         [
           `Warning: Using a Router inside another Router will break 'Allow' header for OPTIONS request !`,
@@ -21,12 +21,12 @@ export function Router(routes: Routes): Middleware {
     }
 
     // all matching routes
-    const parsedUrl = ctx.readContext(UrlParserConsumer);
+    const parsedUrl = ctx.get(UrlParserConsumer);
     if (!parsedUrl) {
       throw new HttpError.Internal(`[Router] Missing UrlParser contenxt !`);
     }
     const routesWithMatchingPattern = Route.find(flatRoutes, parsedUrl.pathname);
-    const request = ctx.readContextOrFail(RequestConsumer);
+    const request = ctx.getOrFail(RequestConsumer);
     const requestMethod = request.method;
     const isUpgrade = request.isUpgrade;
 
@@ -80,7 +80,7 @@ export function Router(routes: Routes): Middleware {
         },
       };
 
-      const withRouterDataCtx = ctx.withContext(RouterContext.Provider(routerData));
+      const withRouterDataCtx = ctx.with(RouterContext.Provider(routerData));
 
       if (findResult === null) {
         // no more match, run next

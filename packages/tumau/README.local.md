@@ -94,11 +94,11 @@ type Middleware = (tools: Tools) => null | Response | Promise<null | Response>;
 Example:
 
 ```js
-const myMiddleware = async tools => {
-  // 1. We receive a tools object
-  console.log(tools); // { readContext, readContextOrFail, hasContext, next, withContext }
+const myMiddleware = async (ctx, next) => {
+  // 1. We receive a ctx object
+  console.log(ctx); // { get, getOrFail, has, with }
   // 2. We call `next` to call the next middleware
-  const response = await tools.next();
+  const response = await next(ctx);
   // 3. The next middleware return a response
   console.log(response);
   // 4. We return that response
@@ -122,7 +122,7 @@ type Next = () => Promise<Response | null>;
 const middleware = () => Response.withText('Hello');
 
 // Return a response if the next middleware did not
-const middleware = async tools => {
+const middleware = async (tools) => {
   const response = await tools.next();
   if (response === null) {
     return Response.withText('Not found');
@@ -132,8 +132,8 @@ const middleware = async tools => {
 
 // Add a item to the context before calling the next middleware
 // return whatever the next middleware return
-const middleware = tools => {
-  const nextTools = tools.withContext(ReceivedAtContext.Provide(new Date()));
+const middleware = (tools) => {
+  const nextTools = tools.with(ReceivedAtContext.Provide(new Date()));
   return nextTools.next();
 };
 ```

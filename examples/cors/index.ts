@@ -1,7 +1,7 @@
 import { TumauServer, TumauResponse, Middleware, UrlParserConsumer, UrlParser, CorsPackage } from 'tumau';
 
 const main: Middleware = (ctx) => {
-  const parsedUrl = ctx.readContextOrFail(UrlParserConsumer);
+  const parsedUrl = ctx.getOrFail(UrlParserConsumer);
   return TumauResponse.withText(JSON.stringify(parsedUrl));
 };
 

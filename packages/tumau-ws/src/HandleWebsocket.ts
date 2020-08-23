@@ -2,9 +2,9 @@ import { Middleware, RequestConsumer, HttpError, TumauUpgradeResponse } from '@t
 import { WebsocketConsumer } from './WebsocketProvider';
 
 export const HandleWebsocket: Middleware = async (ctx, next) => {
-  const request = ctx.readContext(RequestConsumer);
+  const request = ctx.get(RequestConsumer);
   if (request.isUpgrade) {
-    const wss = ctx.readContext(WebsocketConsumer);
+    const wss = ctx.get(WebsocketConsumer);
     if (!wss) {
       throw new HttpError.Internal(`Missing WebsocketProvider`);
     }

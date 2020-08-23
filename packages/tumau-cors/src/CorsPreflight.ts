@@ -13,7 +13,7 @@ export function CorsPreflight(config: CorsPreflightConfig = {}): Middleware {
   const resolver = createPreflightConfigResolver(config);
 
   return async (ctx, next) => {
-    const request = ctx.readContextOrFail(RequestConsumer);
+    const request = ctx.getOrFail(RequestConsumer);
     const origin = request.origin;
 
     // Preflight only on OPTION

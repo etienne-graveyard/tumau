@@ -11,8 +11,8 @@ const myContextProvider: Middleware = (ctx, next) => {
   // we provide our context
   const numProvider = NumContext.Provider(42);
   const maybeNumProvider = MaybeNumContext.Provider(6);
-  // we create a new context by calling ctx.withContext()
-  const nextCtx = ctx.withContext(numProvider, maybeNumProvider);
+  // we create a new context by calling ctx.with()
+  const nextCtx = ctx.with(numProvider, maybeNumProvider);
   // we call next with our new context to execute the next middleware
   return next(nextCtx);
 };
@@ -21,18 +21,18 @@ const myContextProvider: Middleware = (ctx, next) => {
 const myContextConsumer: Middleware = (ctx, next) => {
   // Num
   console.log({
-    has: ctx.hasContext(NumContext.Consumer),
-    num: ctx.readContext(NumContext.Consumer),
+    has: ctx.has(NumContext.Consumer),
+    num: ctx.get(NumContext.Consumer),
     // NumContext has a default value so this would never throw
-    numOrThrow: ctx.readContextOrFail(NumContext.Consumer),
+    numOrThrow: ctx.getOrFail(NumContext.Consumer),
   });
 
   // MaybeNum
   console.log({
-    has: ctx.hasContext(MaybeNumContext.Consumer),
-    maybeNum: ctx.readContext(MaybeNumContext.Consumer),
+    has: ctx.has(MaybeNumContext.Consumer),
+    maybeNum: ctx.get(MaybeNumContext.Consumer),
     // this will throw an error if the Context is not present
-    numOrThrow: ctx.readContextOrFail(MaybeNumContext.Consumer),
+    numOrThrow: ctx.getOrFail(MaybeNumContext.Consumer),
   });
 
   return next(ctx);

@@ -24,9 +24,9 @@ export function JsonParser(options: Options = {}): Middleware {
   const { limit = _1mb } = options;
 
   return async (ctx, next): Promise<Result> => {
-    const request = ctx.readContextOrFail(RequestConsumer);
+    const request = ctx.getOrFail(RequestConsumer);
     const headers = request.headers;
-    const noBodyCtx = ctx.withContext(JsonParserContext.Provider(null));
+    const noBodyCtx = ctx.with(JsonParserContext.Provider(null));
 
     if (
       request.method === HttpMethod.GET ||
@@ -68,6 +68,6 @@ export function JsonParser(options: Options = {}): Middleware {
       throw new HttpError.PayloadTooLarge();
     }
     const jsonBody = await parseJsonBody(request.req, limit, length);
-    return next(ctx.withContext(JsonParserContext.Provider(jsonBody)));
+    return next(ctx.with(JsonParserContext.Provider(jsonBody)));
   };
 }

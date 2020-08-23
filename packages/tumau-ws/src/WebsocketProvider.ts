@@ -6,6 +6,6 @@ export const WebsocketConsumer = WebsocketContext.Consumer;
 
 export function WebsocketProvider(ws: Server): Middleware {
   return async (ctx, next) => {
-    return next(ctx.withContext(WebsocketContext.Provider(ws)));
+    return next(ctx.with(WebsocketContext.Provider(ws)));
   };
 }

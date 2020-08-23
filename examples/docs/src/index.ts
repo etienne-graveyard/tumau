@@ -5,7 +5,7 @@ This is [some](link)
 */
 
 const server = TumauServer.create((ctx) => {
-  const request = ctx.readContext(RequestConsumer);
+  const request = ctx.get(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 

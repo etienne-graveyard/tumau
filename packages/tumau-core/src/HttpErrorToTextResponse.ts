@@ -8,8 +8,8 @@ import { HttpError } from './HttpError';
  * Handle HttpError and respond with a Text reponse
  */
 export const HttpErrorToTextResponse: Middleware = async (ctx, next) => {
-  const isUpgrade = ctx.readContextOrFail(RequestConsumer).isUpgrade;
-  const debug = ctx.readContext(DebugConsumer);
+  const isUpgrade = ctx.getOrFail(RequestConsumer).isUpgrade;
+  const debug = ctx.get(DebugConsumer);
   try {
     return await next(ctx);
   } catch (error) {

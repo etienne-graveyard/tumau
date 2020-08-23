@@ -2,8 +2,8 @@ import { Middleware, RequestConsumer, HttpError, DebugConsumer } from '@tumau/co
 import { JsonResponse } from './JsonResponse';
 
 export const HttpErrorToJson: Middleware = async (ctx, next) => {
-  const debug = ctx.readContext(DebugConsumer);
-  const isUpgrade = ctx.readContextOrFail(RequestConsumer).isUpgrade;
+  const debug = ctx.get(DebugConsumer);
+  const isUpgrade = ctx.getOrFail(RequestConsumer).isUpgrade;
   if (isUpgrade) {
     // If Upgrade ignore this since upgrade can't return a response
     return next(ctx);

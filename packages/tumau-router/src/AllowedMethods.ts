@@ -8,11 +8,11 @@ export function AllowedMethods(routes: Routes): Middleware {
   // flatten routes
   const flatRoutes = Route.flatten(routes);
   return async (ctx, next): Promise<Result> => {
-    const request = ctx.readContextOrFail(RequestConsumer);
+    const request = ctx.getOrFail(RequestConsumer);
     if (request.method !== HttpMethod.OPTIONS) {
       return next(ctx);
     }
-    const parsedUrl = ctx.readContextOrFail(UrlParserConsumer);
+    const parsedUrl = ctx.getOrFail(UrlParserConsumer);
     const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
 
     const allowedMethods = matchingRoutesAllMethods.reduce<Set<HttpMethod> | null>((acc, findResult) => {
@@ -30,7 +30,7 @@ export function AllowedMethods(routes: Routes): Middleware {
     }, new Set<HttpMethod>());
 
     const methods = allowedMethods || HttpMethod.__ALL;
-    const response = await next(ctx.withContext(RouterAllowedMethodsContext.Provider(methods)));
+    const response = await next(ctx.with(RouterAllowedMethodsContext.Provider(methods)));
     if (response instanceof TumauResponse === false) {
       throw new HttpError.Internal(`AllowedMethods received an invalid response !`);
     }

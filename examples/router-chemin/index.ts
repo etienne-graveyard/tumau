@@ -42,7 +42,7 @@ const render = (content: string) => `<!DOCTYPE html>
 </html>`;
 
 const logRoute: Middleware = (ctx, next) => {
-  const parsedUrl = ctx.readContext(UrlParserConsumer);
+  const parsedUrl = ctx.get(UrlParserConsumer);
   console.log(parsedUrl && parsedUrl.pathname);
   return next(ctx);
 };
@@ -55,7 +55,7 @@ const ROUTES: Routes = [
     return TumauResponse.withHtml(render('Home'));
   }),
   Route.create({ pattern: STATIC_APP, exact: false, method: null }, (ctx) => {
-    const params = ctx.readContextOrFail(RouterConsumer).getOrFail(STATIC_APP);
+    const params = ctx.getOrFail(RouterConsumer).getOrFail(STATIC_APP);
     return JsonResponse.withJson({
       appParam: params.app,
     });
@@ -87,7 +87,7 @@ const ROUTES: Routes = [
     ),
   ]),
   Route.GET('/search', (ctx) => {
-    const parsedUrl = ctx.readContextOrFail(UrlParserConsumer);
+    const parsedUrl = ctx.getOrFail(UrlParserConsumer);
     const searchQuery = parsedUrl && parsedUrl.query && parsedUrl.query.q;
     if (searchQuery) {
       return TumauResponse.withHtml(render(`Search page for "${searchQuery}"`));
@@ -111,7 +111,7 @@ const server = TumauServer.create(
     RouterPackage(ROUTES),
     // this middleware is executed if next is called inside a route middleware
     (ctx) => {
-      const router = ctx.readContextOrFail(RouterConsumer);
+      const router = ctx.getOrFail(RouterConsumer);
       const pattern = router.pattern?.stringify();
       const subrouteParam = router.get(SUBROUTE);
       const subroute = subrouteParam?.subroute;

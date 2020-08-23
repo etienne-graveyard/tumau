@@ -11,7 +11,7 @@ Tumau is a small NodeJS server (just like <|Link href="https://expressjs.com/">E
 <#Code lang="ts">
 import { TumauServer, TumauResponse, RequestConsumer } from 'tumau';
 const server = TumauServer.create(ctx => {
-  const request = ctx.readContext(RequestConsumer);
+  const request = ctx.get(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
 server.listen(3002, () => {
@@ -105,11 +105,11 @@ type Middleware = (tools: Tools) => null | Response | Promise<null | Response>;
 Example:
 
 <#Code lang="js">
-const myMiddleware = async tools => {
-  // 1. We receive a tools object
-  console.log(tools); // { readContext, readContextOrFail, hasContext, next, withContext }
+const myMiddleware = async (ctx, next) => {
+  // 1. We receive a ctx object
+  console.log(ctx); // { get, getOrFail, has, with }
   // 2. We call `next` to call the next middleware
-  const response = await tools.next();
+  const response = await next(ctx);
   // 3. The next middleware return a response
   console.log(response);
   // 4. We return that response
@@ -144,7 +144,7 @@ const middleware = async tools => {
 // Add a item to the context before calling the next middleware
 // return whatever the next middleware return
 const middleware = tools => {
-  const nextTools = tools.withContext(ReceivedAtContext.Provide(new Date()));
+  const nextTools = tools.with(ReceivedAtContext.Provide(new Date()));
   return nextTools.next();
 };
 <Code#>
