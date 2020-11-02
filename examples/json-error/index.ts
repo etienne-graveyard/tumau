@@ -1,7 +1,7 @@
-import { TumauServer, Middleware, HttpError, JsonPackage } from 'tumau';
+import { TumauServer, HttpError, JsonPackage, compose } from 'tumau';
 
 const server = TumauServer.create(
-  Middleware.compose(JsonPackage(), () => {
+  compose(JsonPackage(), () => {
     throw new HttpError.NotFound();
   })
 );

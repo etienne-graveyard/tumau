@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@tumau/content-type": "workspace:1.0.0-alpha.79",
-    "miid": "^2.1.0"
+    "miid": "^3.0.1"
   },
   "devDependencies": {
     "tsdx": "^0.14.1",

@@ -7,8 +7,9 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "dependencies": {
-    "docsy": "^0.8.1",
-    "runtypes": "^5.0.1"
+    "docsy": "^0.10.0",
+    "runtypes": "^5.0.1",
+    "tslib": "^2.0.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.2",

@@ -1,7 +1,7 @@
-import { Context } from '@tumau/core';
+import { createContext } from '@tumau/core';
 import { ContentEncoding } from './ContentEnconding';
 
-export const CompressContext = Context.create<{
+export const CompressContext = createContext<{
   acceptedEncoding: Array<ContentEncoding>;
   usedEncoding: null | Array<ContentEncoding>;
 }>();

@@ -5,12 +5,18 @@ export type Result = TumauBaseResponse | null;
 export type Middleware = Miid.Middleware<Result>;
 export type Middlewares = Miid.Middlewares<Result>;
 
-export const Middleware = {
-  compose: (...middleware: Array<Middleware | null>): Middleware => Miid.Middleware.compose(...middleware),
-  run: (middleware: Middleware, done: () => Result): Promise<Result> => Miid.Middleware.run(middleware, done),
-  runWithContexts: (
-    middleware: Middleware,
-    contexts: Array<Miid.ContextProvider<any>>,
-    done: () => Result
-  ): Promise<Result> => Miid.Middleware.runWithContexts(middleware, contexts, done),
-};
+export function compose(...middleware: Array<Middleware | null>): Middleware {
+  return Miid.compose(...middleware);
+}
+
+export function runMiddleware(middleware: Middleware, done: () => Result): Promise<Result> {
+  return Miid.runMiddleware(middleware, done);
+}
+
+export function runMiddlewareWithContexts(
+  middleware: Middleware,
+  contexts: Array<Miid.ContextProvider<any>>,
+  done: () => Result
+): Promise<Result> {
+  return Miid.runMiddlewareWithContexts(middleware, contexts, done);
+}

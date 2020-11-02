@@ -2,7 +2,6 @@ import {
   TumauServer,
   TumauResponse,
   CorsActual,
-  Middleware,
   CorsActualConfig,
   CorsPreflight,
   RequestConsumer,
@@ -10,6 +9,7 @@ import {
   HttpError,
   CorsPreflightConfig,
   CorsPackage,
+  compose,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -17,7 +17,7 @@ import fetch from 'node-fetch';
 describe('CORS: simple / actual requests', () => {
   function createCorsServer(config: CorsActualConfig = {}) {
     return TumauServer.create(
-      Middleware.compose(CorsActual(config), () => {
+      compose(CorsActual(config), () => {
         return TumauResponse.withText('Hello');
       })
     );
@@ -179,7 +179,7 @@ describe('CORS: simple / actual requests', () => {
 describe('CORS: preflight requests', () => {
   function createCorsServer(config: CorsPreflightConfig = {}) {
     return TumauServer.create(
-      Middleware.compose(CorsPreflight(config), (ctx) => {
+      compose(CorsPreflight(config), (ctx) => {
         const req = ctx.getOrFail(RequestConsumer);
         if (req.method === HttpMethod.POST) {
           return TumauResponse.withText('Hello');
@@ -364,7 +364,7 @@ describe('CORS: preflight requests', () => {
 describe('CorsPackage', () => {
   function createServer(config: CorsActualConfig = {}) {
     return TumauServer.create(
-      Middleware.compose(CorsPackage(config), () => {
+      compose(CorsPackage(config), () => {
         return TumauResponse.withText('Hello');
       })
     );
@@ -417,7 +417,7 @@ describe('CorsPackage', () => {
 
   test('handle error', async () => {
     const app = TumauServer.create(
-      Middleware.compose(CorsPackage(), () => {
+      compose(CorsPackage(), () => {
         throw new HttpError.NotFound();
       })
     );
@@ -439,7 +439,7 @@ describe('CorsPackage', () => {
 
   test('handle error on preflight', async () => {
     const app = TumauServer.create(
-      Middleware.compose(CorsPackage(), () => {
+      compose(CorsPackage(), () => {
         throw new HttpError.NotFound();
       })
     );

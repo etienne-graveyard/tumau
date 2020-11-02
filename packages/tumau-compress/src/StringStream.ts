@@ -7,7 +7,7 @@ export class StringStream extends Readable {
     super();
   }
 
-  _read() {
+  _read(): void {
     if (!this.ended) {
       process.nextTick(() => {
         this.push(Buffer.from(this.str, 'utf8'));

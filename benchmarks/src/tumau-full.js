@@ -5,7 +5,7 @@ const json = require('@tumau/json');
 const router = require('@tumau/router');
 
 const app = tumau.TumauServer.create(
-  tumau.Middleware.compose(
+  tumau.compose(
     json.JsonPackage(),
     router.RouterPackage([
       router.Route.GET('/', () => {

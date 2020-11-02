@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMounted } from './useMounted';
 
-export function useScrolledAfter(limit: number, defaultValue: boolean) {
+export function useScrolledAfter(limit: number, defaultValue: boolean): boolean {
   const [isAfter, setIsAfter] = React.useState(defaultValue);
   const mounted = useMounted();
 

@@ -22,7 +22,7 @@ export const MenuToggleProvider: React.FC<{ ctx: MenuToggle }> = ({ children, ct
   return <ShowMenuContext.Provider value={ctx}>{children}</ShowMenuContext.Provider>;
 };
 
-export const useMenuToggle = () => {
+export const useMenuToggle = (): MenuToggle => {
   const ctx = React.useContext(ShowMenuContext);
   if (!ctx) {
     throw new Error('Missing context');

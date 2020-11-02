@@ -55,7 +55,7 @@ const serverC1 = TumauServer.create({
 // same as
 const serverC2 = TumauServer.create({
   handleErrors: false,
-  mainMiddleware: Middleware.compose(ErrorHandlerPackage, () => null),
+  mainMiddleware: compose(ErrorHandlerPackage, () => null),
 });
 ```
 
@@ -98,7 +98,7 @@ A middleware is a function that can be `async`, it receive the following argumen
 
 If the returned value is a object `ctx` is required while `response` can be either `null` or a `Response`
 
-#### Middleware.compose(...middlewares)
+#### compose(...middlewares)
 
 > Compose a list of middleware together
 
@@ -116,7 +116,7 @@ If the returned value is a object `ctx` is required while `response` can be eith
 
 **returns**: an object `{ ctx, response }` where response can be null.
 
-**Note**: You probably don't need to use this function as it is already called by `Middleware.compose` on the result of the `next()` call.
+**Note**: You probably don't need to use this function as it is already called by `compose` on the result of the `next()` call.
 
 ### Context
 

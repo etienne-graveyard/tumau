@@ -1,4 +1,4 @@
-import { Middleware, Context, Result, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
+import { Middleware, createContext, Result, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
 import { CreateCookieOptions, SetCookie, SetCookies } from './Cookie';
 import { CookieResponse } from './CookieResponse';
 
@@ -9,7 +9,7 @@ export interface CookieManager {
   delete(name: string, options?: CreateCookieOptions): void;
 }
 
-export const CookieManagerCtx = Context.create<CookieManager>();
+export const CookieManagerCtx = createContext<CookieManager>();
 export const CookieManagerConsumer = CookieManagerCtx.Consumer;
 
 /**

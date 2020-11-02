@@ -1,6 +1,6 @@
 import { Server, createServer, OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
 import { Duplex } from 'stream';
-import { Middleware } from './Middleware';
+import { compose, Middleware, runMiddlewareWithContexts } from './Middleware';
 import { TumauRequest } from './TumauRequest';
 import { TumauResponse } from './TumauResponse';
 import { HttpStatus } from './HttpStatus';
@@ -60,7 +60,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     listen,
   };
 
-  const rootMiddleware: Middleware = Middleware.compose(handleErrors ? ErrorHandlerPackage : null, mainMiddleware);
+  const rootMiddleware: Middleware = compose(handleErrors ? ErrorHandlerPackage : null, mainMiddleware);
 
   return server;
 
@@ -82,7 +82,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     const resCtx = ServerResponseContext.Provider(res);
     const debugCtx = DebugContext.Provider(debug);
 
-    return Middleware.runWithContexts(rootMiddleware, [requestCtx, resCtx, debugCtx], () => null)
+    return runMiddlewareWithContexts(rootMiddleware, [requestCtx, resCtx, debugCtx], () => null)
       .then((response) => {
         sendResponseAny(response, res, request);
       })
@@ -103,7 +103,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     const headCtx = UpgradeHeadContext.Provider(head);
     const debugCtx = DebugContext.Provider(debug);
 
-    return Middleware.runWithContexts(rootMiddleware, [requestCtx, socketCtx, headCtx, debugCtx], () => null)
+    return runMiddlewareWithContexts(rootMiddleware, [requestCtx, socketCtx, headCtx, debugCtx], () => null)
       .then((response) => {
         // On upgrade if no response we just destroy the socket.
         if (response === null) {
@@ -133,7 +133,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
   }
 
   function sendResponseAny(response: any, res: ServerResponse, request: TumauRequest): void {
-    if (res.finished) {
+    if (res.writableEnded) {
       throw new Error('Response finished ?');
     }
     if (res.headersSent) {

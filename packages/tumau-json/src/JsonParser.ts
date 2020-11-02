@@ -4,7 +4,7 @@ import {
   HttpHeaders,
   ContentType,
   HttpError,
-  Context,
+  createContext,
   RequestConsumer,
   Result,
   ContentTypeUtils,
@@ -16,7 +16,7 @@ interface Options {
   limit?: number;
 }
 
-export const JsonParserContext = Context.create<any>();
+export const JsonParserContext = createContext<any>();
 export const JsonParserConsumer = JsonParserContext.Consumer;
 
 export function JsonParser(options: Options = {}): Middleware {

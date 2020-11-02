@@ -1,5 +1,5 @@
 import { parse as parseQueryString, ParsedUrlQuery } from 'querystring';
-import { Middleware, Context, RequestConsumer } from '@tumau/core';
+import { Middleware, createContext, RequestConsumer } from '@tumau/core';
 
 export interface ParsedUrl {
   query: null | ParsedUrlQuery;
@@ -9,7 +9,7 @@ export interface ParsedUrl {
   rawQuery: null | string;
 }
 
-export const UrlParserContext = Context.create<ParsedUrl>();
+export const UrlParserContext = createContext<ParsedUrl>();
 
 export const UrlParserConsumer = UrlParserContext.Consumer;
 

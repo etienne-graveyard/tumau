@@ -11,6 +11,7 @@ import {
   JsonResponse,
   Chemin,
   CheminParam as P,
+  compose,
 } from 'tumau';
 
 const render = (content: string) => `<!DOCTYPE html>
@@ -106,7 +107,7 @@ const ROUTES: Routes = [
 ];
 
 const server = TumauServer.create(
-  Middleware.compose(
+  compose(
     RouterPackage(ROUTES),
     // this middleware is executed if next is called inside a route middleware
     (ctx) => {

@@ -1,7 +1,7 @@
-import { Middleware, HttpHeaders, Context, RequestConsumer, Result } from '@tumau/core';
+import { Middleware, HttpHeaders, createContext, RequestConsumer, Result } from '@tumau/core';
 import { Cookies } from './Cookie';
 
-export const CookieParserContext = Context.create<Cookies>({});
+export const CookieParserContext = createContext<Cookies>({});
 export const CookieParserConsumer = CookieParserContext.Consumer;
 
 export function CookieParser(): Middleware {

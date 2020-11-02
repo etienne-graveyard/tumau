@@ -1,5 +1,5 @@
-import { Middleware, HttpMethod } from '@tumau/core';
-import { Chemin, CheminUtils } from 'chemin';
+import { Middleware, HttpMethod, compose } from '@tumau/core';
+import { Chemin, splitPathname } from 'chemin';
 
 const ROUTE_TOKEN = Symbol('ROUTE_TOKEN');
 
@@ -41,12 +41,12 @@ export const Route = {
   PUT: withMethod(HttpMethod.PUT),
   DELETE: withMethod(HttpMethod.DELETE),
   PATCH: withMethod(HttpMethod.PATCH),
-  UPGRADE: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) =>
+  UPGRADE: (pattern: Chemin | string | null, ...middleware: Array<Middleware>): Route =>
     createRoute({ method: HttpMethod.GET, upgrade: true, pattern }, middleware),
   all: withMethod(null),
-  namespace: (pattern: Chemin | string | null, routes: Routes) =>
+  namespace: (pattern: Chemin | string | null, routes: Routes): Route =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
-  fallback: (...middlewares: Array<Middleware>) => createRoute({ method: null, exact: false }, middlewares),
+  fallback: (...middlewares: Array<Middleware>): Route => createRoute({ method: null, exact: false }, middlewares),
 };
 
 interface RouteOptions {
@@ -100,7 +100,7 @@ function flattenAllRoutes(routes: Routes): Array<RouteResolved> {
           ? null
           : route.middleware.length === 1
           ? route.middleware[0]
-          : Middleware.compose(...route.middleware),
+          : compose(...route.middleware),
     };
   });
 }
@@ -185,7 +185,7 @@ export interface FindResult {
 
 // fins all routes matching the pattern (ignoring methods & upgrade)
 function find(routes: Array<RouteResolved>, pathname: string): Array<FindResult> {
-  const parts = CheminUtils.splitPathname(pathname);
+  const parts = splitPathname(pathname);
   return routes
     .map((route, index): FindResult | false => {
       if (route.pattern === null) {

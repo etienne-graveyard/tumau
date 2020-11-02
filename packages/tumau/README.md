@@ -89,11 +89,11 @@ The tools let you do two things:
 Contexts are typed when you create them:
 
 ```ts
-import { Context } from 'tumau';
+import { createContext } from 'tumau';
 // here we could omit <number> because it would be infered
-const NumCtx = Context.create<number>(0);
+const NumCtx = createContext<number>(0);
 // you can omit the default value
-const NameCtx = Context.create<string>();
+const NameCtx = createContext<string>();
 ```
 
 ## Middleware
@@ -156,12 +156,12 @@ const middleware = (tools) => {
 
 ### Conbining multiple Middlewares
 
-The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `Middleware.compose`:
+The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `compose`:
 
 ```js
 import { TumauServer, Middleware } from 'tumau';
 
-const composed = Middleware.compose(logger, cors, main);
+const composed = compose(logger, cors, main);
 
 const server = TumauServer.create(composed);
 ```

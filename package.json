@@ -10,16 +10,18 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build:docs": "pnpm run export --scope docs",
-    "build": "pnpm run build -r",
-    "test": "pnpm run --stream --concurrency 1 test",
+    "build:docs": "pnpm run export --filter docs",
+    "build": "pnpm run -r build",
+    "test": "pnpm run -r test",
     "typecheck:all": "pnpm recursive exec --filter '@tumau/*' --filter '@tumau-example/*' -- pnpx tsc --noEmit",
     "norm": "echo 'TODO'",
     "norm:core": "echo 'TODO'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
-    "pub": "yarn build && yarn test && changesets  && changesets publish",
+    "pub": "yarn build && yarn test",
     "lint": "eslint .",
-    "generate-readme": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/generateReadme.ts"
+    "generate-readme": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/generateReadme.ts",
+    "changesets": "changesets",
+    "changesets:version": "changesets version"
   },
   "husky": {
     "hooks": {

@@ -1,4 +1,4 @@
-import { Middleware, ErrorToHttpError, InvalidResponseToHttpError } from '@tumau/core';
+import { Middleware, ErrorToHttpError, InvalidResponseToHttpError, compose } from '@tumau/core';
 import { HttpErrorToJson } from './HttpErrorToJson';
 import { JsonParser } from './JsonParser';
 
@@ -8,7 +8,7 @@ interface Options {
 }
 
 export function JsonPackage(options: Options = {}): Middleware {
-  return Middleware.compose(
+  return compose(
     HttpErrorToJson,
     ErrorToHttpError,
     InvalidResponseToHttpError,

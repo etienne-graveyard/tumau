@@ -20,10 +20,11 @@
     "@types/node-fetch": "^2.5.7",
     "@types/ws": "^7.2.9",
     "got": "^11.8.0",
-    "jest": "^26.6.1",
+    "jest": "^26.6.2",
     "koa": "^2.13.0",
     "node-fetch": "^2.6.1",
     "ts-jest": "^26.4.3",
+    "tslib": "^2.0.3",
     "tumau": "workspace:1.0.0-alpha.81",
     "ws": "^7.3.1"
   }

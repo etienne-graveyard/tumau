@@ -1,7 +1,6 @@
 import {
   TumauServer,
   HttpError,
-  Middleware,
   HttpMethod,
   HttpHeaders,
   ContentType,
@@ -13,6 +12,7 @@ import {
   TumauResponse,
   CookieManager,
   CookieManagerConsumer,
+  compose,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -20,7 +20,7 @@ import fetch from 'node-fetch';
 describe('Server', () => {
   test('parse JSON body', async () => {
     const app = TumauServer.create(
-      Middleware.compose(HttpErrorToJson, JsonParser(), (ctx) => {
+      compose(HttpErrorToJson, JsonParser(), (ctx) => {
         return JsonResponse.withJson({ body: ctx.get(JsonParserConsumer) });
       })
     );
@@ -45,7 +45,7 @@ describe('Server', () => {
 
   test('JsonPackage handle JsonResponse', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), () => {
+      compose(JsonPackage(), () => {
         return JsonResponse.withJson({ foo: 'bar' });
       })
     );
@@ -65,7 +65,7 @@ describe('Server', () => {
   });
 
   test('JsonPackage handle null response', async () => {
-    const app = TumauServer.create(Middleware.compose(JsonPackage(), () => null));
+    const app = TumauServer.create(compose(JsonPackage(), () => null));
     const { close, url } = await mountTumau(app);
 
     const res1 = await fetch(url);
@@ -83,7 +83,7 @@ describe('Server', () => {
 
   test('JsonPackage does not convert text to Json', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), () => {
+      compose(JsonPackage(), () => {
         return TumauResponse.withText('Hello');
       })
     );
@@ -104,7 +104,7 @@ describe('Server', () => {
 
   test('JsonPackage handle HttpError and convert them to json', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), () => {
+      compose(JsonPackage(), () => {
         throw new HttpError.NotFound();
       })
     );
@@ -125,7 +125,7 @@ describe('Server', () => {
 
   test('JsonPackage handle Error and convert them to json', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), () => {
+      compose(JsonPackage(), () => {
         throw new Error('Oops');
       })
     );
@@ -146,7 +146,7 @@ describe('Server', () => {
 
   test('JsonPackage works with Cookies', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), CookieManager(), (ctx) => {
+      compose(JsonPackage(), CookieManager(), (ctx) => {
         ctx.getOrFail(CookieManagerConsumer).set('token', 'AZERTYUIO');
         return JsonResponse.withJson({ foo: 'bar' });
       })
@@ -169,7 +169,7 @@ describe('Server', () => {
 
   test('JsonPackage can read Json body', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), (ctx) => {
+      compose(JsonPackage(), (ctx) => {
         const body = ctx.getOrFail(JsonParserConsumer);
         return JsonResponse.withJson(body);
       })
@@ -198,7 +198,7 @@ describe('Server', () => {
 
   test('JsonPackage can read Json with Axio PUT', async () => {
     const app = TumauServer.create(
-      Middleware.compose(JsonPackage(), (ctx) => {
+      compose(JsonPackage(), (ctx) => {
         const body = ctx.getOrFail(JsonParserConsumer);
         return JsonResponse.withJson(body);
       })

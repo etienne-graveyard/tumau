@@ -140,12 +140,12 @@ const middleware = (tools) => {
 
 ### Conbining multiple Middlewares
 
-The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `Middleware.compose`:
+The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `compose`:
 
 ```js
 import { TumauServer, Middleware } from 'tumau';
 
-const composed = Middleware.compose(logger, cors, main);
+const composed = compose(logger, cors, main);
 
 const server = TumauServer.create(composed);
 ```

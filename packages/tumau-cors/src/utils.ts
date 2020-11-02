@@ -59,7 +59,9 @@ export interface CorsPreflightConfigResolved extends CorsActualConfigResolved {
   maxAge: number | null;
 }
 
-export function createActualConfigResolver(config: CorsActualConfig) {
+export function createActualConfigResolver(
+  config: CorsActualConfig
+): (origin: string | null | undefined) => CorsActualConfigResolved | false {
   const {
     allowOrigin = DEFAULT_ALLOW_ORIGIN,
     allowCredentials = DEFAULT_ALLOW_CREDENTIALS,
@@ -78,7 +80,9 @@ export function createActualConfigResolver(config: CorsActualConfig) {
   };
 }
 
-export function createPreflightConfigResolver(config: CorsPreflightConfig) {
+export function createPreflightConfigResolver(
+  config: CorsPreflightConfig
+): (origin: string | null | undefined) => CorsPreflightConfigResolved | false {
   const {} = config;
   const actualResolver = createActualConfigResolver(config);
   return (origin: string | null | undefined): CorsPreflightConfigResolved | false => {

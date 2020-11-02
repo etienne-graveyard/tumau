@@ -4,7 +4,7 @@
 Imports:
 */
 
-import { TumauServer, Middleware, ErrorHandlerPackage } from '@tumau/core';
+import { TumauServer, compose, ErrorHandlerPackage } from '@tumau/core';
 import { createServer } from 'http';
 
 /*
@@ -46,7 +46,7 @@ const serverC1 = TumauServer.create({
 // same as
 const serverC2 = TumauServer.create({
   handleErrors: false,
-  mainMiddleware: Middleware.compose(ErrorHandlerPackage, () => null),
+  mainMiddleware: compose(ErrorHandlerPackage, () => null),
 });
 
 /*

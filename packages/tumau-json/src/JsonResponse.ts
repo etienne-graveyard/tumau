@@ -22,11 +22,11 @@ export class JsonResponse<T = any> extends TumauResponse {
     this.json = json;
   }
 
-  public static withJson<T extends object>(json: T): JsonResponse {
+  public static withJson<T extends unknown>(json: T): JsonResponse {
     return new JsonResponse({ json });
   }
 
-  public static fromError(err: any, debug: boolean): JsonResponse {
+  public static fromError(err: unknown, debug: boolean): JsonResponse {
     if (err instanceof HttpError) {
       const stack = (err instanceof HttpError.Internal ? err.internalStack : err.stack) || '';
       return new JsonResponse({
@@ -41,10 +41,10 @@ export class JsonResponse<T = any> extends TumauResponse {
     if (err instanceof Error) {
       return JsonResponse.fromError(new HttpError.Internal(err.message, err.stack), debug);
     }
-    return JsonResponse.fromError(new HttpError.Internal(String(err.message)), debug);
+    return JsonResponse.fromError(new HttpError.Internal(String(err)), debug);
   }
 
-  public static fromResponse(res: any, debug: boolean): JsonResponse | TumauResponse {
+  public static fromResponse(res: unknown, debug: boolean): JsonResponse | TumauResponse {
     if (res === null) {
       return JsonResponse.fromError(new HttpError.ServerDidNotRespond(), debug);
     }

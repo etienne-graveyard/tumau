@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function useLockBodyScroll(active: boolean) {
+export function useLockBodyScroll(active: boolean): void {
   React.useLayoutEffect(() => {
     if (active === false) {
       return;

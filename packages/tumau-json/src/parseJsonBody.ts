@@ -10,7 +10,7 @@ export async function parseJsonBody(
   req: IncomingMessage,
   limit: number,
   expectedLength: number | null
-): Promise<object> {
+): Promise<unknown> {
   const str = await requestToString(req, limit);
 
   if (!str) {

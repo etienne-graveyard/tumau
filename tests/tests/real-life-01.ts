@@ -1,6 +1,5 @@
 import {
   TumauServer,
-  Middleware,
   WebsocketProvider,
   RouterPackage,
   Route,
@@ -10,6 +9,7 @@ import {
   CookieManager,
   CompressPackage,
   CorsPackage,
+  compose,
 } from 'tumau';
 import WebSocket from 'ws';
 import { mountTumau } from '../utils/mountTumau';
@@ -28,7 +28,7 @@ test('real life', async () => {
 
   const app = TumauServer.create({
     handleServerUpgrade: true,
-    mainMiddleware: Middleware.compose(
+    mainMiddleware: compose(
       CompressPackage,
       CorsPackage(),
       CookieManager(),

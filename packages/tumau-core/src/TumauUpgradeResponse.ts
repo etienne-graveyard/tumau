@@ -12,7 +12,7 @@ export class TumauUpgradeResponse extends TumauBaseResponse {
     this.handler = handler;
   }
 
-  public static fromError(err: any): TumauUpgradeResponse {
+  public static fromError(err: unknown): TumauUpgradeResponse {
     return new TumauUpgradeResponse(async (_req, socket) => {
       console.error(err);
       socket.destroy();

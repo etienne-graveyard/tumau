@@ -1,4 +1,4 @@
-import { Middleware, HttpMethod, Context } from '@tumau/core';
+import { Middleware, HttpMethod, createContext } from '@tumau/core';
 import { Chemin } from 'chemin';
 
 export interface Params {
@@ -16,8 +16,8 @@ export interface RouterContext {
   has(chemin: Chemin): boolean;
 }
 
-export const RouterContext = Context.create<RouterContext>();
+export const RouterContext = createContext<RouterContext>();
 export const RouterConsumer = RouterContext.Consumer;
 
-export const RouterAllowedMethodsContext = Context.create<Set<HttpMethod>>();
+export const RouterAllowedMethodsContext = createContext<Set<HttpMethod>>();
 export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;

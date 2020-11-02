@@ -46,7 +46,7 @@ export class TumauResponse extends TumauBaseResponse {
     };
   }
 
-  public static withText(text: string) {
+  public static withText(text: string): TumauResponse {
     return new TumauResponse({
       body: text,
       headers: {
@@ -61,7 +61,7 @@ export class TumauResponse extends TumauBaseResponse {
     });
   }
 
-  public static withHtml(html: string) {
+  public static withHtml(html: string): TumauResponse {
     return new TumauResponse({
       body: html,
       headers: {
@@ -71,13 +71,13 @@ export class TumauResponse extends TumauBaseResponse {
     });
   }
 
-  public static noContent() {
+  public static noContent(): TumauResponse {
     return new TumauResponse({
       code: 204,
     });
   }
 
-  public static redirect(to: string, permanent: boolean = false) {
+  public static redirect(to: string, permanent: boolean = false): TumauResponse {
     return new TumauResponse({
       code: permanent ? 301 : 302,
       headers: {
@@ -86,7 +86,7 @@ export class TumauResponse extends TumauBaseResponse {
     });
   }
 
-  public static withStream(stream: Readable, size: number) {
+  public static withStream(stream: Readable, size: number): TumauResponse {
     return new TumauResponse({
       body: stream,
       headers: {
@@ -95,11 +95,11 @@ export class TumauResponse extends TumauBaseResponse {
     });
   }
 
-  public static isTumauResponse(maybe: any): maybe is TumauResponse {
+  public static isTumauResponse(maybe: unknown): maybe is TumauResponse {
     return maybe && maybe instanceof TumauResponse;
   }
 
-  public static fromError(err: any, debug: boolean): TumauResponse {
+  public static fromError(err: unknown, debug: boolean): TumauResponse {
     if (err instanceof HttpError) {
       const stack = err instanceof HttpError.Internal ? err.internalStack || err.stack : err.stack;
       return new TumauResponse({

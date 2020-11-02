@@ -12,6 +12,7 @@
     "@tumau/router": "workspace:1.0.0-alpha.81",
     "express": "^4.17.1",
     "fastify": "^3.7.0",
-    "koa": "^2.13.0"
+    "koa": "^2.13.0",
+    "tslib": "^2.0.3"
   }
 }

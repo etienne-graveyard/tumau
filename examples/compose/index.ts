@@ -1,6 +1,6 @@
-import { TumauServer, Middleware, TumauResponse, Context, RequestConsumer } from 'tumau';
+import { TumauServer, Middleware, TumauResponse, createContext, RequestConsumer, compose } from 'tumau';
 
-const NumCtx = Context.create<number>();
+const NumCtx = createContext<number>();
 
 const logger: Middleware = async (ctx, next) => {
   const start = process.hrtime();
@@ -33,7 +33,7 @@ const main: Middleware = async (ctx) => {
   return TumauResponse.withText(`Num : ${num}`);
 };
 
-const composed = Middleware.compose(logger, logNum, addNum, logNum, main);
+const composed = compose(logger, logNum, addNum, logNum, main);
 
 const server = TumauServer.create(composed);
 

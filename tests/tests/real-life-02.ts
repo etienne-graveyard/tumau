@@ -1,6 +1,5 @@
 import {
   TumauServer,
-  Middleware,
   RouterPackage,
   Route,
   HttpError,
@@ -10,6 +9,7 @@ import {
   JsonPackage,
   CookieParser,
   JsonResponse,
+  compose,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -17,7 +17,7 @@ import fetch from 'node-fetch';
 test('real life 2', async () => {
   const app = TumauServer.create({
     handleServerUpgrade: true,
-    mainMiddleware: Middleware.compose(
+    mainMiddleware: compose(
       CorsPackage(),
       CompressPackage,
       JsonPackage(),

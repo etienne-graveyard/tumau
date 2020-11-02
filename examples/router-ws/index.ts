@@ -1,12 +1,4 @@
-import {
-  TumauServer,
-  WebsocketProvider,
-  Middleware,
-  HandleWebsocket,
-  Route,
-  TumauResponse,
-  RouterPackage,
-} from 'tumau';
+import { TumauServer, WebsocketProvider, HandleWebsocket, Route, TumauResponse, RouterPackage, compose } from 'tumau';
 import WebSocket from 'ws';
 
 const wss = new WebSocket.Server({ noServer: true });
@@ -19,14 +11,14 @@ wss.on('connection', (_ws, request) => {
 const server = TumauServer.create({
   handleErrors: true,
   handleServerUpgrade: true,
-  mainMiddleware: Middleware.compose(
+  mainMiddleware: compose(
     WebsocketProvider(wss),
     RouterPackage([
       Route.namespace('user', [
         Route.GET(null, () => TumauResponse.withText('OK')),
         Route.all(
           'ws',
-          Middleware.compose(HandleWebsocket, () => TumauResponse.withText('Not WS ?'))
+          compose(HandleWebsocket, () => TumauResponse.withText('Not WS ?'))
         ),
       ]),
     ])
