@@ -1,5 +1,11 @@
 # docs
 
+## 1.0.0-alpha.83
+
+### Minor Changes
+
+- d5f46ab: Export createServer function
+
 ## 1.0.0-alpha.82
 
 ### Minor Changes
