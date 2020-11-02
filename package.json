@@ -20,8 +20,8 @@
     "pub": "yarn build && yarn test",
     "lint": "eslint .",
     "generate-readme": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/generateReadme.ts",
-    "changesets": "changesets",
-    "changesets:version": "changesets version"
+    "changeset": "changeset",
+    "changeset:version": "changeset version"
   },
   "husky": {
     "hooks": {
