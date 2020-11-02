@@ -1,5 +1,17 @@
 # @tumau/router
 
+## 1.0.0-alpha.83
+
+### Minor Changes
+
+- Force release
+
+### Patch Changes
+
+- Updated dependencies [undefined]
+  - @tumau/core@1.0.0-alpha.83
+  - @tumau/url-parser@1.0.0-alpha.83
+
 ## 1.0.0-alpha.82
 
 ### Minor Changes

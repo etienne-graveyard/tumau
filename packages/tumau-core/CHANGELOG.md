@@ -1,5 +1,16 @@
 # @tumau/core
 
+## 1.0.0-alpha.83
+
+### Minor Changes
+
+- Force release
+
+### Patch Changes
+
+- Updated dependencies [undefined]
+  - @tumau/content-type@1.0.0-alpha.81
+
 ## 1.0.0-alpha.82
 
 ### Minor Changes

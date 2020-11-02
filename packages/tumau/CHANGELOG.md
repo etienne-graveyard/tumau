@@ -1,5 +1,25 @@
 # tumau
 
+## 1.0.0-alpha.83
+
+### Minor Changes
+
+- Force release
+
+### Patch Changes
+
+- Updated dependencies [undefined]
+  - @tumau/compress@1.0.0-alpha.83
+  - @tumau/cookie@1.0.0-alpha.83
+  - @tumau/core@1.0.0-alpha.83
+  - @tumau/cors@1.0.0-alpha.83
+  - @tumau/json@1.0.0-alpha.83
+  - @tumau/rate-limit@1.0.0-alpha.83
+  - @tumau/router@1.0.0-alpha.83
+  - @tumau/static@1.0.0-alpha.83
+  - @tumau/url-parser@1.0.0-alpha.83
+  - @tumau/ws@1.0.0-alpha.83
+
 ## 1.0.0-alpha.82
 
 ### Minor Changes

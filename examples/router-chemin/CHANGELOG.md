@@ -1,5 +1,16 @@
 # @tumau-example/router-chemin
 
+## 1.0.0-alpha.83
+
+### Minor Changes
+
+- Force release
+
+### Patch Changes
+
+- Updated dependencies [undefined]
+  - tumau@1.0.0-alpha.83
+
 ## 1.0.0-alpha.82
 
 ### Minor Changes

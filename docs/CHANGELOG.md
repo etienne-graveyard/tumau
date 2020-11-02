@@ -1,5 +1,11 @@
 # docs
 
+## 1.0.0-alpha.84
+
+### Minor Changes
+
+- Force release
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

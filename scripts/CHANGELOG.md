@@ -1,5 +1,11 @@
 # scripts
 
+## 1.0.0-alpha.82
+
+### Minor Changes
+
+- Force release
+
 ## 1.0.0-alpha.81
 
 ### Minor Changes
