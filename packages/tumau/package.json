@@ -21,19 +21,19 @@
     "start": "tsdx watch --noClean --target node"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.80",
-    "@tumau/cookie": "^1.0.0-alpha.80",
-    "@tumau/core": "^1.0.0-alpha.80",
-    "@tumau/cors": "^1.0.0-alpha.80",
-    "@tumau/json": "^1.0.0-alpha.80",
-    "@tumau/rate-limit": "^1.0.0-alpha.80",
-    "@tumau/router": "^1.0.0-alpha.80",
-    "@tumau/static": "^1.0.0-alpha.80",
-    "@tumau/url-parser": "^1.0.0-alpha.80",
-    "@tumau/ws": "^1.0.0-alpha.80"
+    "@tumau/compress": "workspace:1.0.0-alpha.80",
+    "@tumau/cookie": "workspace:1.0.0-alpha.80",
+    "@tumau/core": "workspace:1.0.0-alpha.80",
+    "@tumau/cors": "workspace:1.0.0-alpha.80",
+    "@tumau/json": "workspace:1.0.0-alpha.80",
+    "@tumau/rate-limit": "workspace:1.0.0-alpha.80",
+    "@tumau/router": "workspace:1.0.0-alpha.80",
+    "@tumau/static": "workspace:1.0.0-alpha.80",
+    "@tumau/url-parser": "workspace:1.0.0-alpha.80",
+    "@tumau/ws": "workspace:1.0.0-alpha.80"
   },
   "devDependencies": {
-    "tsdx": "^0.13.2"
+    "tsdx": "^0.14.1"
   },
   "publishConfig": {
     "access": "public"

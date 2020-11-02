@@ -7,11 +7,11 @@
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "index.js",
   "dependencies": {
-    "@tumau/core": "^1.0.0-alpha.80",
-    "@tumau/json": "^1.0.0-alpha.80",
-    "@tumau/router": "^1.0.0-alpha.80",
+    "@tumau/core": "workspace:1.0.0-alpha.80",
+    "@tumau/json": "workspace:1.0.0-alpha.80",
+    "@tumau/router": "workspace:1.0.0-alpha.80",
     "express": "^4.17.1",
-    "fastify": "^3.2.1",
+    "fastify": "^3.7.0",
     "koa": "^2.13.0"
   }
 }

@@ -12,12 +12,12 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "^1.0.0-alpha.80",
+    "tumau": "workspace:1.0.0-alpha.80",
     "ws": "^7.3.1"
   },
   "devDependencies": {
-    "@types/ws": "^7.2.6",
-    "ts-node": "^8.10.2",
-    "ts-node-dev": "^1.0.0-pre.56"
+    "@types/ws": "^7.2.9",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0"
   }
 }

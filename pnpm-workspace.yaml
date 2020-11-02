@@ -1,0 +1,7 @@
+packages:
+  - 'packages/**'
+  - 'examples/**'
+  - 'benchmarks'
+  - 'scripts'
+  - 'tests'
+  - 'docs'

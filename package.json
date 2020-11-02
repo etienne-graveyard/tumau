@@ -1,14 +1,6 @@
 {
   "name": "tumau",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "examples/*",
-    "benchmarks",
-    "scripts",
-    "tests",
-    "docs"
-  ],
   "keywords": [
     "node",
     "server",
@@ -17,14 +9,15 @@
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "scripts": {
-    "build:docs": "lerna run export --stream --scope docs",
-    "build": "lerna run build",
-    "test": "lerna run --stream --concurrency 1 test",
-    "typecheck": "lerna exec --stream --scope 'tumau' --scope '{@tumau,@tumau-example}/**' 'tsc --noEmit'",
-    "norm": "lerna exec --stream -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
-    "norm:core": "lerna exec --stream --scope '@tumau/core' -- '$LERNA_ROOT_PATH/node_modules/.bin/ts-node --project $LERNA_ROOT_PATH/scripts/tsconfig.json $LERNA_ROOT_PATH/scripts/src/norm.ts'",
+    "preinstall": "npx only-allow pnpm",
+    "build:docs": "pnpm run export --scope docs",
+    "build": "pnpm run build -r",
+    "test": "pnpm run --stream --concurrency 1 test",
+    "typecheck:all": "pnpm recursive exec --filter '@tumau/*' --filter '@tumau-example/*' -- pnpx tsc --noEmit",
+    "norm": "echo 'TODO'",
+    "norm:core": "echo 'TODO'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
-    "pub": "yarn build && yarn test && lerna publish",
+    "pub": "yarn build && yarn test && changesets  && changesets publish",
     "lint": "eslint .",
     "generate-readme": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/generateReadme.ts"
   },
@@ -34,17 +27,17 @@
     }
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
-    "@typescript-eslint/eslint-plugin": "^3.9.1",
-    "@typescript-eslint/parser": "^3.9.1",
-    "eslint": "^7.7.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-react": "^7.20.6",
-    "husky": "^4.2.5",
-    "lerna": "^3.22.1",
-    "prettier": "^2.0.5",
-    "pretty-quick": "^3.0.0",
-    "ts-node": "^8.10.2",
+    "@changesets/cli": "^2.11.2",
+    "@types/jest": "^26.0.15",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-react": "^7.21.5",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "ts-node": "^9.0.0",
     "typescript": "^3.9.7"
   }
 }

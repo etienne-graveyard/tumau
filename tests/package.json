@@ -11,20 +11,20 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@tumau/compress": "^1.0.0-alpha.80",
-    "@tumau/core": "^1.0.0-alpha.80",
-    "@tumau/json": "^1.0.0-alpha.80",
-    "@tumau/router": "^1.0.0-alpha.80",
-    "@types/jest": "^26.0.10",
-    "@types/koa": "^2.11.4",
+    "@tumau/compress": "workspace:1.0.0-alpha.80",
+    "@tumau/core": "workspace:1.0.0-alpha.80",
+    "@tumau/json": "workspace:1.0.0-alpha.80",
+    "@tumau/router": "workspace:1.0.0-alpha.80",
+    "@types/jest": "^26.0.15",
+    "@types/koa": "^2.11.6",
     "@types/node-fetch": "^2.5.7",
-    "@types/ws": "^7.2.6",
-    "got": "^11.5.2",
-    "jest": "^26.4.1",
-    "koa": "^2.10.0",
-    "node-fetch": "^2.6.0",
-    "ts-jest": "^26.2.0",
-    "tumau": "^1.0.0-alpha.80",
+    "@types/ws": "^7.2.9",
+    "got": "^11.8.0",
+    "jest": "^26.6.1",
+    "koa": "^2.13.0",
+    "node-fetch": "^2.6.1",
+    "ts-jest": "^26.4.3",
+    "tumau": "workspace:1.0.0-alpha.80",
     "ws": "^7.3.1"
   }
 }
