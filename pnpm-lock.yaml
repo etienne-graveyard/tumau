@@ -35,9 +35,9 @@ importers:
       fastify: 3.7.0
       koa: 2.13.0
     specifiers:
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
-      '@tumau/json': 'workspace:^1.0.0-alpha.80'
-      '@tumau/router': 'workspace:^1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
+      '@tumau/json': 'workspace:1.0.0-alpha.80'
+      '@tumau/router': 'workspace:1.0.0-alpha.80'
       express: ^4.17.1
       fastify: ^3.7.0
       koa: ^2.13.0
@@ -132,16 +132,16 @@ importers:
       ts-node: 9.0.0
       ts-node-dev: 1.0.0
     specifiers:
-      '@tumau/compress': 'workspace:^1.0.0-alpha.80'
-      '@tumau/cookie': 'workspace:^1.0.0-alpha.80'
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
-      '@tumau/cors': 'workspace:^1.0.0-alpha.80'
-      '@tumau/json': 'workspace:^1.0.0-alpha.80'
-      '@tumau/rate-limit': 'workspace:^1.0.0-alpha.80'
-      '@tumau/router': 'workspace:^1.0.0-alpha.80'
-      '@tumau/static': 'workspace:^1.0.0-alpha.80'
-      '@tumau/url-parser': 'workspace:^1.0.0-alpha.80'
-      '@tumau/ws': 'workspace:^1.0.0-alpha.80'
+      '@tumau/compress': 'workspace:1.0.0-alpha.80'
+      '@tumau/cookie': 'workspace:1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
+      '@tumau/cors': 'workspace:1.0.0-alpha.80'
+      '@tumau/json': 'workspace:1.0.0-alpha.80'
+      '@tumau/rate-limit': 'workspace:1.0.0-alpha.80'
+      '@tumau/router': 'workspace:1.0.0-alpha.80'
+      '@tumau/static': 'workspace:1.0.0-alpha.80'
+      '@tumau/url-parser': 'workspace:1.0.0-alpha.80'
+      '@tumau/ws': 'workspace:1.0.0-alpha.80'
       ts-node: ^9.0.0
       ts-node-dev: ^1.0.0
       tumau: 'workspace:1.0.0-alpha.80'
@@ -318,16 +318,16 @@ importers:
     devDependencies:
       tsdx: 0.14.1
     specifiers:
-      '@tumau/compress': 'workspace:^1.0.0-alpha.80'
-      '@tumau/cookie': 'workspace:^1.0.0-alpha.80'
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
-      '@tumau/cors': 'workspace:^1.0.0-alpha.80'
-      '@tumau/json': 'workspace:^1.0.0-alpha.80'
-      '@tumau/rate-limit': 'workspace:^1.0.0-alpha.80'
-      '@tumau/router': 'workspace:^1.0.0-alpha.80'
-      '@tumau/static': 'workspace:^1.0.0-alpha.80'
-      '@tumau/url-parser': 'workspace:^1.0.0-alpha.80'
-      '@tumau/ws': 'workspace:^1.0.0-alpha.80'
+      '@tumau/compress': 'workspace:1.0.0-alpha.80'
+      '@tumau/cookie': 'workspace:1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
+      '@tumau/cors': 'workspace:1.0.0-alpha.80'
+      '@tumau/json': 'workspace:1.0.0-alpha.80'
+      '@tumau/rate-limit': 'workspace:1.0.0-alpha.80'
+      '@tumau/router': 'workspace:1.0.0-alpha.80'
+      '@tumau/static': 'workspace:1.0.0-alpha.80'
+      '@tumau/url-parser': 'workspace:1.0.0-alpha.80'
+      '@tumau/ws': 'workspace:1.0.0-alpha.80'
       tsdx: ^0.14.1
   packages/tumau-compress:
     dependencies:
@@ -405,8 +405,8 @@ importers:
       tsdx: 0.14.1
       tslib: 2.0.3
     specifiers:
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
-      '@tumau/url-parser': 'workspace:^1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
+      '@tumau/url-parser': 'workspace:1.0.0-alpha.80'
       chemin: ^5.0.5
       tsdx: ^0.14.1
       tslib: ^2.0.3
@@ -416,7 +416,7 @@ importers:
     devDependencies:
       tsdx: 0.14.1
     specifiers:
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
       tsdx: ^0.14.1
   packages/tumau-url-parser:
     dependencies:
@@ -424,7 +424,7 @@ importers:
     devDependencies:
       tsdx: 0.14.1
     specifiers:
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
       tsdx: ^0.14.1
   packages/tumau-ws:
     dependencies:
@@ -476,10 +476,10 @@ importers:
       tumau: 'link:../packages/tumau'
       ws: 7.3.1
     specifiers:
-      '@tumau/compress': 'workspace:^1.0.0-alpha.80'
-      '@tumau/core': 'workspace:^1.0.0-alpha.80'
-      '@tumau/json': 'workspace:^1.0.0-alpha.80'
-      '@tumau/router': 'workspace:^1.0.0-alpha.80'
+      '@tumau/compress': 'workspace:1.0.0-alpha.80'
+      '@tumau/core': 'workspace:1.0.0-alpha.80'
+      '@tumau/json': 'workspace:1.0.0-alpha.80'
+      '@tumau/router': 'workspace:1.0.0-alpha.80'
       '@types/jest': ^26.0.15
       '@types/koa': ^2.11.6
       '@types/node-fetch': ^2.5.7
