@@ -19,8 +19,8 @@
     "@tumau/core": "workspace:1.0.0-alpha.81"
   },
   "devDependencies": {
-    "tslib": "^2.0.3",
-    "tsdx": "^0.14.1"
+    "tsdx": "^0.14.1",
+    "tslib": "^2.0.3"
   },
   "publishConfig": {
     "access": "public"
