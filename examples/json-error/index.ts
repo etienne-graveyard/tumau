@@ -1,6 +1,6 @@
-import { TumauServer, HttpError, JsonPackage, compose } from 'tumau';
+import { createServer, HttpError, JsonPackage, compose } from 'tumau';
 
-const server = TumauServer.create(
+const server = createServer(
   compose(JsonPackage(), () => {
     throw new HttpError.NotFound();
   })

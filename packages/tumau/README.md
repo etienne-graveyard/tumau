@@ -14,8 +14,8 @@ Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [
 ## Gist
 
 ```ts
-import { TumauServer, TumauResponse, RequestConsumer } from 'tumau';
-const server = TumauServer.create((ctx) => {
+import { createServer, TumauResponse, RequestConsumer } from 'tumau';
+const server = createServer((ctx) => {
   const request = ctx.get(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
@@ -159,11 +159,11 @@ const middleware = (tools) => {
 The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `compose`:
 
 ```js
-import { TumauServer, Middleware } from 'tumau';
+import { createServer, Middleware } from 'tumau';
 
 const composed = compose(logger, cors, main);
 
-const server = TumauServer.create(composed);
+const server = createServer(composed);
 ```
 
 **Note**: Middlewares are executed in the order they are passed to `compose`. In the example above: `logger`, then `cors`, then `main` (then the reverse order on the way up).

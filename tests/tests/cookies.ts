@@ -1,5 +1,5 @@
 import {
-  TumauServer,
+  createServer,
   TumauResponse,
   CookieResponse,
   SetCookie,
@@ -15,7 +15,7 @@ import { mountKoa } from '../utils/mountKoa';
 import fetch from 'node-fetch';
 
 test('should set the Set-Cookie header', async () => {
-  const app = TumauServer.create(() => {
+  const app = createServer(() => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
   });
   const { close, url } = await mountTumau(app);
@@ -30,7 +30,7 @@ test('should set the Set-Cookie header', async () => {
 });
 
 test('should set the Set-Cookie header using Manager', async () => {
-  const app = TumauServer.create(
+  const app = createServer(
     compose(CookieManager(), (ctx) => {
       ctx.getOrFail(CookieManagerConsumer).set('token', 'T55YTRR55554');
       return TumauResponse.noContent();
@@ -48,7 +48,7 @@ test('should set the Set-Cookie header using Manager', async () => {
 });
 
 test('should set two Set-Cookie header using Manager', async () => {
-  const app = TumauServer.create(
+  const app = createServer(
     compose(CookieManager(), (ctx) => {
       const cookieManager = ctx.getOrFail(CookieManagerConsumer);
       cookieManager.set('token', 'T55YTRR55554');
@@ -68,7 +68,7 @@ test('should set two Set-Cookie header using Manager', async () => {
 });
 
 test('should return the same result as koa', async () => {
-  const tumauApp = TumauServer.create(() => {
+  const tumauApp = createServer(() => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.create('token', 'T55YTRR55554')]);
   });
   const koaApp = new koa();
@@ -101,7 +101,7 @@ test('should return the same result as koa', async () => {
 });
 
 test('should return the same result as koa when deleting cookie', async () => {
-  const tumauApp = TumauServer.create(() => {
+  const tumauApp = createServer(() => {
     return new CookieResponse(TumauResponse.noContent(), [SetCookie.delete('token')]);
   });
   const koaApp = new koa();
@@ -134,7 +134,7 @@ test('should return the same result as koa when deleting cookie', async () => {
 });
 
 test('Cookie manager should set and delete cookies', async () => {
-  const tumauApp = TumauServer.create(
+  const tumauApp = createServer(
     compose(CookieManager(), (ctx) => {
       const manager = ctx.getOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');
@@ -157,7 +157,7 @@ test('Cookie manager should set and delete cookies', async () => {
 });
 
 test('Cookies should not be set on error response', async () => {
-  const app = TumauServer.create(
+  const app = createServer(
     compose(CookieManager(), ErrorHandlerPackage, (ctx) => {
       const manager = ctx.getOrFail(CookieManagerConsumer);
       manager.set('new-cookie', 'value');

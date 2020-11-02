@@ -1,4 +1,4 @@
-import { Server, createServer, OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
+import { Server, createServer as createHttpServer, OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
 import { Duplex } from 'stream';
 import { compose, Middleware, runMiddlewareWithContexts } from './Middleware';
 import { TumauRequest } from './TumauRequest';
@@ -38,11 +38,7 @@ interface Options {
   debug?: boolean;
 }
 
-export const TumauServer = {
-  create: createTumauServer,
-};
-
-function createTumauServer(opts: Middleware | Options): TumauServer {
+export function createServer(opts: Middleware | Options): TumauServer {
   const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
   const {
     mainMiddleware,
@@ -53,7 +49,7 @@ function createTumauServer(opts: Middleware | Options): TumauServer {
     debug = false,
   } = options;
 
-  const resolvedHttpServer: Server = httpServer || createServer();
+  const resolvedHttpServer: Server = httpServer || createHttpServer();
 
   const server: TumauServer = {
     httpServer: resolvedHttpServer,

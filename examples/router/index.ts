@@ -1,5 +1,5 @@
 import {
-  TumauServer,
+  createServer,
   TumauResponse,
   Middleware,
   HttpMethod,
@@ -106,7 +106,7 @@ const ROUTES: Routes = [
   Route.create({ pattern: '/all' }, () => null),
 ];
 
-const server = TumauServer.create(
+const server = createServer(
   compose(
     RouterPackage(ROUTES),
     // this middleware is executed if next is called inside a route middleware

@@ -17,14 +17,14 @@ import { TumauServer, Middleware, ErrorHandlerPackage } from '@tumau/core';
 import { createServer } from 'http';
 ```
 
-### TumauServer
+### createServer
 
-The `TumauServer` namespace contains only one function `create` that take a
+The `createServer` function that take a
 Middleware as argument and return an object of type `TumauServer`.
 
 ```ts
-// TumauServer.create(middleware: Middleware)
-const serverA = TumauServer.create(() => null);
+// createServer(middleware: Middleware)
+const serverA = createServer(() => null);
 ```
 
 The resulting `TumauServer` has the following properties
@@ -36,10 +36,10 @@ serverA.httpServer;
 serverA.listen();
 ```
 
-You can also pass an object to `TumauServer.create`
+You can also pass an object to `createServer`
 
 ```ts
-const serverB = TumauServer.create({
+const serverB = createServer({
   mainMiddleware: () => null,
 });
 ```
@@ -48,12 +48,12 @@ The `handleErrors` options (`true` by default) will add the
 ErrorHandlerPackage middleware before the mainMiddleware
 
 ```ts
-const serverC1 = TumauServer.create({
+const serverC1 = createServer({
   handleErrors: true,
   mainMiddleware: () => null,
 });
 // same as
-const serverC2 = TumauServer.create({
+const serverC2 = createServer({
   handleErrors: false,
   mainMiddleware: compose(ErrorHandlerPackage, () => null),
 });
@@ -62,8 +62,8 @@ const serverC2 = TumauServer.create({
 The `httpServer` option let you provide your own http server
 
 ```ts
-const myHttpServer = createServer();
-const serverD = TumauServer.create({
+const myHttpServer = http.createServer();
+const serverD = createServer({
   mainMiddleware: () => null,
   httpServer: myHttpServer,
 });
@@ -76,7 +76,7 @@ By default only the `request` event is handled
 but you can turn `upgrade` on if you want to deal with websocket for example.
 
 ```ts
-const serverE = TumauServer.create({
+const serverE = createServer({
   mainMiddleware: () => null,
   handleServerRequest: true, // true by default
   handleServerUpgrade: false, // false by default

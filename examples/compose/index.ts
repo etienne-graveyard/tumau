@@ -1,4 +1,4 @@
-import { TumauServer, Middleware, TumauResponse, createContext, RequestConsumer, compose } from 'tumau';
+import { createServer, Middleware, TumauResponse, createContext, RequestConsumer, compose } from 'tumau';
 
 const NumCtx = createContext<number>();
 
@@ -35,7 +35,7 @@ const main: Middleware = async (ctx) => {
 
 const composed = compose(logger, logNum, addNum, logNum, main);
 
-const server = TumauServer.create(composed);
+const server = createServer(composed);
 
 server.listen(3002, () => {
   console.log(`Server is up at http://localhost:3002/ `);

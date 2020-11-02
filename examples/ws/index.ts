@@ -1,4 +1,4 @@
-import { TumauServer, WebsocketProvider, HandleWebsocket, compose } from 'tumau';
+import { createServer, WebsocketProvider, HandleWebsocket, compose } from 'tumau';
 import WebSocket from 'ws';
 
 const wss = new WebSocket.Server({ noServer: true });
@@ -8,7 +8,7 @@ wss.on('connection', (_ws, request) => {
   console.log('connected', request.url);
 });
 
-const server = TumauServer.create({
+const server = createServer({
   handleServerUpgrade: true,
   mainMiddleware: compose(
     WebsocketProvider(wss),

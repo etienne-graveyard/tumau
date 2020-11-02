@@ -1,5 +1,5 @@
 import {
-  TumauServer,
+  createServer,
   RouterPackage,
   Route,
   HttpError,
@@ -15,7 +15,7 @@ import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
 
 test('real life 2', async () => {
-  const app = TumauServer.create({
+  const app = createServer({
     handleServerUpgrade: true,
     mainMiddleware: compose(
       CorsPackage(),

@@ -1,4 +1,4 @@
-import { TumauServer, TumauResponse, RequestConsumer, TumauUpgradeResponse } from 'tumau';
+import { createServer, TumauResponse, RequestConsumer, TumauUpgradeResponse } from 'tumau';
 import WebSocket from 'ws';
 
 const wss1 = new WebSocket.Server({ noServer: true });
@@ -11,7 +11,7 @@ wss1.on('connection', (ws) => {
   });
 });
 
-const server = TumauServer.create({
+const server = createServer({
   handleServerUpgrade: true,
   mainMiddleware: (ctx) => {
     const request = ctx.get(RequestConsumer);

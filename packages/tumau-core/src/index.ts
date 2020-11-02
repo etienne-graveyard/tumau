@@ -8,7 +8,7 @@ export { TumauRequest } from './TumauRequest';
 export { Body, TumauResponse, ResponseConstuctorOptions } from './TumauResponse';
 export { TumauBaseResponse } from './TumauBaseResponse';
 export { TumauUpgradeResponse, UpgradeResponseHandler } from './TumauUpgradeResponse';
-export { TumauServer } from './TumauServer';
+export { TumauServer, createServer } from './TumauServer';
 export {
   RequestConsumer,
   ServerResponseConsumer,

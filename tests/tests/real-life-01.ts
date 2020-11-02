@@ -1,5 +1,5 @@
 import {
-  TumauServer,
+  createServer,
   WebsocketProvider,
   RouterPackage,
   Route,
@@ -26,7 +26,7 @@ test('real life', async () => {
     ws.close();
   });
 
-  const app = TumauServer.create({
+  const app = createServer({
     handleServerUpgrade: true,
     mainMiddleware: compose(
       CompressPackage,

@@ -1,4 +1,4 @@
-import { createContext, TumauServer, Middleware, compose } from 'tumau';
+import { createContext, createServer, Middleware, compose } from 'tumau';
 
 // Num context with a default value of 7
 const NumContext = createContext<number>(7);
@@ -38,7 +38,7 @@ const myContextConsumer: Middleware = (ctx, next) => {
   return next(ctx);
 };
 
-const server = TumauServer.create(
+const server = createServer(
   compose(
     myContextConsumer, // consume but context are not there yet
     myContextProvider, // providing context

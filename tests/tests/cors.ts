@@ -1,5 +1,5 @@
 import {
-  TumauServer,
+  createServer,
   TumauResponse,
   CorsActual,
   CorsActualConfig,
@@ -16,7 +16,7 @@ import fetch from 'node-fetch';
 
 describe('CORS: simple / actual requests', () => {
   function createCorsServer(config: CorsActualConfig = {}) {
-    return TumauServer.create(
+    return createServer(
       compose(CorsActual(config), () => {
         return TumauResponse.withText('Hello');
       })
@@ -178,7 +178,7 @@ describe('CORS: simple / actual requests', () => {
 
 describe('CORS: preflight requests', () => {
   function createCorsServer(config: CorsPreflightConfig = {}) {
-    return TumauServer.create(
+    return createServer(
       compose(CorsPreflight(config), (ctx) => {
         const req = ctx.getOrFail(RequestConsumer);
         if (req.method === HttpMethod.POST) {
@@ -363,7 +363,7 @@ describe('CORS: preflight requests', () => {
 
 describe('CorsPackage', () => {
   function createServer(config: CorsActualConfig = {}) {
-    return TumauServer.create(
+    return createServer(
       compose(CorsPackage(config), () => {
         return TumauResponse.withText('Hello');
       })
@@ -416,7 +416,7 @@ describe('CorsPackage', () => {
   });
 
   test('handle error', async () => {
-    const app = TumauServer.create(
+    const app = createServer(
       compose(CorsPackage(), () => {
         throw new HttpError.NotFound();
       })
@@ -438,7 +438,7 @@ describe('CorsPackage', () => {
   });
 
   test('handle error on preflight', async () => {
-    const app = TumauServer.create(
+    const app = createServer(
       compose(CorsPackage(), () => {
         throw new HttpError.NotFound();
       })
