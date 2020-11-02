@@ -362,7 +362,7 @@ describe('CORS: preflight requests', () => {
 });
 
 describe('CorsPackage', () => {
-  function createServer(config: CorsActualConfig = {}) {
+  function createCorsServer(config: CorsActualConfig = {}) {
     return createServer(
       compose(CorsPackage(config), () => {
         return TumauResponse.withText('Hello');
@@ -371,11 +371,11 @@ describe('CorsPackage', () => {
   }
 
   test('create a server with CorsPackage does not throw', () => {
-    expect(() => createServer()).not.toThrow();
+    expect(() => createCorsServer()).not.toThrow();
   });
 
   test('response to actual request', async () => {
-    const app = createServer();
+    const app = createCorsServer();
     const { url, close } = await mountTumau(app);
     const res = await fetch(url, {
       headers: {
@@ -394,7 +394,7 @@ describe('CorsPackage', () => {
   });
 
   test('response to preflight request', async () => {
-    const app = createServer();
+    const app = createCorsServer();
     const { url, close } = await mountTumau(app);
     const res = await fetch(url, {
       method: 'OPTIONS',
