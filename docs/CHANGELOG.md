@@ -1,5 +1,11 @@
 # docs
 
+## 1.0.0-alpha.82
+
+### Minor Changes
+
+- 330fb09: Many fix and overhaule cleanup
+
 ## 1.0.0-alpha.81
 
 ### Minor Changes

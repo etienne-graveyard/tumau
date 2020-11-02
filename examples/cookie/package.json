@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/cookie",
-  "version": "1.0.0-alpha.81",
+  "version": "1.0.0-alpha.82",
   "private": true,
   "description": "Exemple usage of cookie",
   "repository": "git@github.com:etienne-dldc/tumau.git",
@@ -12,7 +12,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "workspace:1.0.0-alpha.81"
+    "tumau": "workspace:1.0.0-alpha.82"
   },
   "devDependencies": {
     "ts-node": "^9.0.0",
