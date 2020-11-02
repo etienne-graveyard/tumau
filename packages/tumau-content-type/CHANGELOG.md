@@ -1,0 +1,7 @@
+# @tumau/content-type
+
+## 1.0.0-alpha.79
+
+### Minor Changes
+
+- daf9430: Migrate to pnpm

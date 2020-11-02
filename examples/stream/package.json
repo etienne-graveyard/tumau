@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/stream",
-  "version": "1.0.0-alpha.80",
+  "version": "1.0.0-alpha.81",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "fs-extra": "^9.0.1",
-    "tumau": "workspace:1.0.0-alpha.80"
+    "tumau": "workspace:1.0.0-alpha.81"
   },
   "devDependencies": {
     "tslib": "^2.0.3",

@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/websocket",
-  "version": "1.0.0-alpha.80",
+  "version": "1.0.0-alpha.81",
   "private": true,
   "description": "Websocket example for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
@@ -12,7 +12,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "workspace:1.0.0-alpha.80",
+    "tumau": "workspace:1.0.0-alpha.81",
     "ws": "^7.3.1"
   },
   "devDependencies": {
