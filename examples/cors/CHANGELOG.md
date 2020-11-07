@@ -1,5 +1,11 @@
 # @tumau-example/cors
 
+## 1.0.0-alpha.85
+
+### Patch Changes
+
+- tumau@1.0.0-alpha.84
+
 ## 1.0.0-alpha.84
 
 ### Minor Changes

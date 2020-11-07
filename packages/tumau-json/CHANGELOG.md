@@ -1,5 +1,13 @@
 # @tumau/json
 
+## 1.0.0-alpha.84
+
+### Patch Changes
+
+- d993ff9: Log errors when handling them
+- Updated dependencies [d993ff9]
+  - @tumau/core@1.0.0-alpha.84
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/router-chemin",
-  "version": "1.0.0-alpha.83",
+  "version": "1.0.0-alpha.84",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "tumau": "workspace:1.0.0-alpha.83"
+    "tumau": "workspace:1.0.0-alpha.84"
   },
   "devDependencies": {
     "tslib": "^2.0.3",

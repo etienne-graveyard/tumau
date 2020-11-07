@@ -1,5 +1,11 @@
 # @tumau-example/url-parser
 
+## 1.0.0-alpha.84
+
+### Patch Changes
+
+- tumau@1.0.0-alpha.84
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

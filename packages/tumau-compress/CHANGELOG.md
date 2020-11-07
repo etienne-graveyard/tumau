@@ -1,5 +1,12 @@
 # @tumau/compress
 
+## 1.0.0-alpha.84
+
+### Patch Changes
+
+- Updated dependencies [d993ff9]
+  - @tumau/core@1.0.0-alpha.84
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

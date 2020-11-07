@@ -1,5 +1,21 @@
 # tumau
 
+## 1.0.0-alpha.84
+
+### Patch Changes
+
+- Updated dependencies [d993ff9]
+  - @tumau/core@1.0.0-alpha.84
+  - @tumau/json@1.0.0-alpha.84
+  - @tumau/compress@1.0.0-alpha.84
+  - @tumau/cookie@1.0.0-alpha.84
+  - @tumau/cors@1.0.0-alpha.84
+  - @tumau/rate-limit@1.0.0-alpha.84
+  - @tumau/router@1.0.0-alpha.84
+  - @tumau/static@1.0.0-alpha.84
+  - @tumau/url-parser@1.0.0-alpha.84
+  - @tumau/ws@1.0.0-alpha.84
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

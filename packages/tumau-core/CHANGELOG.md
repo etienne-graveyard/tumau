@@ -1,5 +1,11 @@
 # @tumau/core
 
+## 1.0.0-alpha.84
+
+### Patch Changes
+
+- d993ff9: Log errors when handling them
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

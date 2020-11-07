@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/content-encoding",
-  "version": "1.0.0-alpha.83",
+  "version": "1.0.0-alpha.84",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -11,17 +11,17 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/compress": "workspace:1.0.0-alpha.83",
-    "@tumau/cookie": "workspace:1.0.0-alpha.83",
-    "@tumau/core": "workspace:1.0.0-alpha.83",
-    "@tumau/cors": "workspace:1.0.0-alpha.83",
-    "@tumau/json": "workspace:1.0.0-alpha.83",
-    "@tumau/rate-limit": "workspace:1.0.0-alpha.83",
-    "@tumau/router": "workspace:1.0.0-alpha.83",
-    "@tumau/static": "workspace:1.0.0-alpha.83",
-    "@tumau/url-parser": "workspace:1.0.0-alpha.83",
-    "@tumau/ws": "workspace:1.0.0-alpha.83",
-    "tumau": "workspace:1.0.0-alpha.83"
+    "@tumau/compress": "workspace:1.0.0-alpha.84",
+    "@tumau/cookie": "workspace:1.0.0-alpha.84",
+    "@tumau/core": "workspace:1.0.0-alpha.84",
+    "@tumau/cors": "workspace:1.0.0-alpha.84",
+    "@tumau/json": "workspace:1.0.0-alpha.84",
+    "@tumau/rate-limit": "workspace:1.0.0-alpha.84",
+    "@tumau/router": "workspace:1.0.0-alpha.84",
+    "@tumau/static": "workspace:1.0.0-alpha.84",
+    "@tumau/url-parser": "workspace:1.0.0-alpha.84",
+    "@tumau/ws": "workspace:1.0.0-alpha.84",
+    "tumau": "workspace:1.0.0-alpha.84"
   },
   "devDependencies": {
     "ts-node": "^9.0.0",
