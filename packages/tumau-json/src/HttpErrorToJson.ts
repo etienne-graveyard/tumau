@@ -12,6 +12,8 @@ export const HttpErrorToJson: Middleware = async (ctx, next) => {
     return await next(ctx);
   } catch (error) {
     if (error instanceof HttpError) {
+      // TODO: Use a logger context for that !
+      console.error(error);
       return JsonResponse.fromError(error, debug);
     }
     throw error;

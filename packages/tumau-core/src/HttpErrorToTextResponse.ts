@@ -16,6 +16,8 @@ export const HttpErrorToTextResponse: Middleware = async (ctx, next) => {
     if (error instanceof HttpError === false) {
       throw error;
     }
+    // TODO: Use a logger context for that !
+    console.error(error);
     if (isUpgrade) {
       return TumauUpgradeResponse.fromError(error);
     }
