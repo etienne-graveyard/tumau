@@ -17,7 +17,7 @@
     "norm": "echo 'TODO'",
     "norm:core": "echo 'TODO'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
-    "pub": "yarn build && yarn test",
+    "pub": "pnpm run build && pnpm run test",
     "lint": "eslint .",
     "generate-readme": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/generateReadme.ts",
     "changeset": "changeset",
