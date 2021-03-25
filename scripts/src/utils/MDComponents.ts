@@ -67,6 +67,7 @@ export const PackageLink = createComponent(R.Record({ package: R.String }), ({ p
     '@tumau/compress': 'https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-compress',
     '@tumau/cookie': 'https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-cookie',
     '@tumau/ws': 'https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-ws',
+    '@tumau/cors': 'https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-cors',
   };
   const link = (LINKS as any)[pkg];
   if (!link) {

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.3.0",
-    "docsy": "^0.10.0",
+    "docsy": "^1.0.0-9",
     "eslint": "^7.22.0",
     "framer-motion": "^3.3.0",
     "fs-extra": "^9.1.0",

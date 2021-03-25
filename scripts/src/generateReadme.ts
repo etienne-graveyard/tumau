@@ -20,18 +20,24 @@ async function generateReadme(sourcePath: string, destPath: string) {
     sourceResolved,
     destResolved,
   });
-  const { document } = DocsyParser.parseDocument(content);
+  const { document } = await DocsyParser.parseDocument(content);
   const resolved = DocsyResolver.resolve(document, {
-    createElement: (type: any, props: any, ...children: any) => {
+    jsx: (type: any, props: any) => {
       try {
-        return type({ ...props, children });
+        return type(props);
       } catch (error) {
-        console.log({ ...props, children });
+        console.log({
+          type,
+          props,
+        });
         throw error;
       }
     },
-    ...MDComponents,
-  }).join('');
+    globals: {
+      ...MDComponents,
+    },
+  });
+
   const header = `<!-- This file has been generated, to change it edit ${path.relative(
     PROJECT_ROOT,
     sourceResolved

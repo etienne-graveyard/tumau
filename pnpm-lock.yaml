@@ -46,7 +46,7 @@ importers:
   docs:
     dependencies:
       '@juggle/resize-observer': 3.3.0
-      docsy: 0.10.0
+      docsy: 1.0.0-9
       eslint: 7.22.0
       framer-motion: 3.3.0_react-dom@17.0.2+react@17.0.2
       fs-extra: 9.1.0
@@ -76,7 +76,7 @@ importers:
       '@types/node': ^14.14.36
       '@types/react': ^17.0.3
       '@types/styled-components': ^5.1.9
-      docsy: ^0.10.0
+      docsy: ^1.0.0-9
       eslint: ^7.22.0
       eslint-plugin-react-hooks: ^4.2.0
       framer-motion: ^3.3.0
@@ -468,7 +468,7 @@ importers:
       tslib: ^2.1.0
   scripts:
     dependencies:
-      docsy: 0.10.0
+      docsy: 1.0.0-9
       runtypes: 5.1.0
       tslib: 2.1.0
     devDependencies:
@@ -482,7 +482,7 @@ importers:
       '@types/fs-extra': ^9.0.8
       '@types/prettier': ^2.2.3
       autocannon: ^7.0.5
-      docsy: ^0.10.0
+      docsy: ^1.0.0-9
       fs-extra: ^9.1.0
       prettier: ^2.2.1
       runtypes: ^5.1.0
@@ -4733,10 +4733,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==
-  /docsy/0.10.0:
+  /docsy/1.0.0-9:
     dev: false
     resolution:
-      integrity: sha512-LoaiQeDj4y1Eg6Q2aZh1iuW5G9MuYRt1B5k2m5ed/ZY/tKd0h6SQw4GeVROJepZj3zKaYY01l7DNDUG1BqxcHw==
+      integrity: sha512-q4e2ODT1XksV37GepRNr8QbDu/FELfpFu6OCnJaIXcN36oPu+V0ZjcymGc83Zkmkjf57XnokMWtq9DvrcHU6Kg==
   /doctrine/1.5.0:
     dependencies:
       esutils: 2.0.3

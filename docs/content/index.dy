@@ -25,7 +25,7 @@ server.listen(3002, () => {
   <|LI>Written in Typescript (strong yet easy-to-use types)|>
   <|LI>Almost no external dependency (easy to audit)|>
   <|LI>Simple to extends (using middleware)|>
-  <|LI>Modular, cou can take only what you need.|>
+  <|LI>Modular, you can take only what you need.|>
 <List|>
 
 <|Subtitle>Install|>
@@ -49,6 +49,7 @@ The <|InlineCode>tumau|> package is a proxi for different packages:
   <|LI><|PackageLink package="@tumau/json"|> for parsing / sending JSON|>
   <|LI><|PackageLink package="@tumau/compress"|> for Brotli / GZip / Deflate compression|>
   <|LI><|PackageLink package="@tumau/cookie"|> for readong and setting cookies|>
+  <|LI><|PackageLink package="@tumau/cors"|> for CORS headers|>
 <List|>
 
 <|Subtitle>Dependencies|>
