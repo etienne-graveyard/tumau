@@ -40,7 +40,7 @@ export function JsonParser(): Middleware {
 
     const parsedContentType = ContentTypeUtils.parse(contentType);
     const stringContent = ctx.getOrFail(StringBodyConsumer);
-    const isJsonContentType = parsedContentType.type !== ContentType.Json;
+    const isJsonContentType = parsedContentType.type === ContentType.Json;
 
     if (stringContent === null || stringContent.length === 0 || !isJsonContentType) {
       return next(noBodyCtx);

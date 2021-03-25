@@ -180,7 +180,7 @@ describe('CORS: simple / actual requests', () => {
 describe('CORS: preflight requests', () => {
   function createCorsServer(config: CorsPreflightConfig = {}) {
     return createServer(
-      compose(CorsPreflight(config), (ctx) => {
+      compose(CorsPreflight(config), HttpErrorToTextResponse, ErrorToHttpError, (ctx) => {
         const req = ctx.getOrFail(RequestConsumer);
         if (req.method === HttpMethod.POST) {
           return TumauResponse.withText('Hello');

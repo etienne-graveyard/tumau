@@ -69,7 +69,10 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
       })
       .catch((err): void => {
         // fatal
-        console.error(err);
+        const IS_TEST = process.env.JEST_WORKER_ID !== undefined;
+        if (!IS_TEST) {
+          console.error(err);
+        }
         if (!res.writableEnded) {
           res.end();
         }

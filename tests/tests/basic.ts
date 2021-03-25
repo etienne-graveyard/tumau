@@ -1,4 +1,12 @@
-import { createServer, TumauResponse, HttpMethod, HttpError } from 'tumau';
+import {
+  createServer,
+  TumauResponse,
+  HttpMethod,
+  HttpError,
+  compose,
+  ErrorToHttpError,
+  HttpErrorToTextResponse,
+} from 'tumau';
 import koa from 'koa';
 import { mountTumau } from '../utils/mountTumau';
 import { mountKoa } from '../utils/mountKoa';
@@ -138,9 +146,11 @@ describe('TumauServer', () => {
   });
 
   test('throw HttpError return an error', async () => {
-    const app = createServer(() => {
-      throw new HttpError.NotFound();
-    });
+    const app = createServer(
+      compose(HttpErrorToTextResponse, ErrorToHttpError, () => {
+        throw new HttpError.NotFound();
+      })
+    );
     const { close, url } = await mountTumau(app);
     const res = await fetch(url);
     expect(res).toMatchInlineSnapshot(`
@@ -154,9 +164,11 @@ describe('TumauServer', () => {
   });
 
   test('throw return an error', async () => {
-    const app = createServer(() => {
-      throw new Error('Oops');
-    });
+    const app = createServer(
+      compose(HttpErrorToTextResponse, ErrorToHttpError, () => {
+        throw new Error('Oops');
+      })
+    );
     const { close, url } = await mountTumau(app);
     const res = await fetch(url);
     expect(res).toMatchInlineSnapshot(`
@@ -169,15 +181,15 @@ describe('TumauServer', () => {
     await close();
   });
 
-  test.only('error contains stack when debug is true', async () => {
+  test('error contains stack when debug is true', async () => {
     function throwError(): never {
       throw new Error('Oops');
     }
 
     const app = createServer({
-      mainMiddleware: () => {
+      mainMiddleware: compose(HttpErrorToTextResponse, ErrorToHttpError, () => {
         throwError();
-      },
+      }),
       debug: true,
     });
     const { close, url } = await mountTumau(app);

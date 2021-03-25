@@ -45,7 +45,6 @@ describe('Server', () => {
         [HttpHeaders.ContentType]: ContentType.Json,
       },
     });
-    console.log(await res.text());
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 200 OK
       Connection: close
