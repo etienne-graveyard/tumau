@@ -1,4 +1,12 @@
-import { Middleware, HttpMethod, TumauResponse, RequestConsumer, Result, HttpError } from '@tumau/core';
+import {
+  Middleware,
+  HttpMethod,
+  TumauResponse,
+  RequestConsumer,
+  Result,
+  HttpError,
+  TumauHandlerResponse,
+} from '@tumau/core';
 import { Routes, Route } from './Route';
 import { UrlParserConsumer } from '@tumau/url-parser';
 import { RouterAllowedMethodsContext } from './RouterContext';
@@ -31,6 +39,9 @@ export function AllowedMethods(routes: Routes): Middleware {
 
     const methods = allowedMethods || HttpMethod.__ALL;
     const response = await next(ctx.with(RouterAllowedMethodsContext.Provider(methods)));
+    if (response instanceof TumauHandlerResponse) {
+      return response;
+    }
     if (response instanceof TumauResponse === false) {
       throw new HttpError.Internal(`AllowedMethods received an invalid response !`);
     }

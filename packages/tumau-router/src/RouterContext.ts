@@ -16,8 +16,8 @@ export interface RouterContext {
   has(chemin: Chemin): boolean;
 }
 
-export const RouterContext = createContext<RouterContext>();
+export const RouterContext = createContext<RouterContext>({ name: 'Router' });
 export const RouterConsumer = RouterContext.Consumer;
 
-export const RouterAllowedMethodsContext = createContext<Set<HttpMethod>>();
+export const RouterAllowedMethodsContext = createContext<Set<HttpMethod>>({ name: 'RouterAllowedMethods' });
 export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;

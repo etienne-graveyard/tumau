@@ -1,4 +1,4 @@
-import { Middleware, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
+import { Middleware, RequestConsumer, TumauResponse, HttpError, TumauHandlerResponse } from '@tumau/core';
 import { CorsActualResponse } from './CorsActualResponse';
 import { CorsActualConfig, createActualConfigResolver } from './utils';
 import { DEFAULT_ALLOW_ORIGIN, DEFAULT_ALLOW_CREDENTIALS } from './defaults';
@@ -20,6 +20,9 @@ export function CorsActual(config: CorsActualConfig = {}): Middleware {
 
     // Can't respond on upgrade
     if (request.isUpgrade) {
+      return response;
+    }
+    if (response instanceof TumauHandlerResponse) {
       return response;
     }
     if (response instanceof TumauResponse === false) {

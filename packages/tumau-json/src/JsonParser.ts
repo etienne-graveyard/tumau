@@ -9,20 +9,16 @@ import {
   Result,
   ContentTypeUtils,
 } from '@tumau/core';
-import { parseJsonBody } from './parseJsonBody';
+import { StringBodyConsumer } from '@tumau/string-body';
 
-interface Options {
-  // limit in byte
-  limit?: number;
-}
+// Allowed whitespace is defined in RFC 7159
+// http://www.rfc-editor.org/rfc/rfc7159.txt
+const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
 
-export const JsonParserContext = createContext<any>();
+export const JsonParserContext = createContext<any>({ name: 'JsonParser' });
 export const JsonParserConsumer = JsonParserContext.Consumer;
 
-export function JsonParser(options: Options = {}): Middleware {
-  const _1mb = 1024 * 1024 * 1024;
-  const { limit = _1mb } = options;
-
+export function JsonParser(): Middleware {
   return async (ctx, next): Promise<Result> => {
     const request = ctx.getOrFail(RequestConsumer);
     const headers = request.headers;
@@ -42,32 +38,19 @@ export function JsonParser(options: Options = {}): Middleware {
       return next(noBodyCtx);
     }
 
-    const parsed = ContentTypeUtils.parse(contentType);
+    const parsedContentType = ContentTypeUtils.parse(contentType);
+    const stringContent = ctx.getOrFail(StringBodyConsumer);
+    const isJsonContentType = parsedContentType.type !== ContentType.Json;
 
-    if (parsed.type !== ContentType.Json) {
+    if (stringContent === null || stringContent.length === 0 || !isJsonContentType) {
       return next(noBodyCtx);
     }
 
-    const length = (() => {
-      const lengthStr = headers[HttpHeaders.ContentLength];
-      if (lengthStr === undefined || Array.isArray(lengthStr)) {
-        return null;
-      }
-      const length = parseInt(lengthStr, 10);
-      if (Number.isNaN(length)) {
-        return null;
-      }
-      return length;
-    })();
-
-    if (length === 0) {
-      return next(noBodyCtx);
+    // strict JSON test
+    if (!strictJSONReg.test(stringContent)) {
+      throw new HttpError.NotAcceptable('invalid JSON, only supports object and array');
     }
-
-    if (length !== null && length > limit) {
-      throw new HttpError.PayloadTooLarge();
-    }
-    const jsonBody = await parseJsonBody(request.req, limit, length);
+    const jsonBody = JSON.parse(stringContent);
     return next(ctx.with(JsonParserContext.Provider(jsonBody)));
   };
 }

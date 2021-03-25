@@ -1,0 +1,33 @@
+{
+  "name": "@tumau/graphql",
+  "version": "1.0.0-alpha.84",
+  "description": "GraphQL for @tumau/core",
+  "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
+  "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
+  "main": "dist/index.js",
+  "module": "dist/graphql.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --noClean --target node"
+  },
+  "dependencies": {
+    "@tumau/core": "workspace:1.0.0-alpha.84",
+    "@tumau/json": "workspace:1.0.0-alpha.84"
+  },
+  "devDependencies": {
+    "graphql": "^15.5.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.1.0"
+  },
+  "peerDependencies": {
+    "graphql": "^15.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

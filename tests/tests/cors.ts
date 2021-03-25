@@ -8,8 +8,9 @@ import {
   HttpMethod,
   HttpError,
   CorsPreflightConfig,
-  CorsPackage,
   compose,
+  ErrorToHttpError,
+  HttpErrorToTextResponse,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -364,7 +365,7 @@ describe('CORS: preflight requests', () => {
 describe('CorsPackage', () => {
   function createCorsServer(config: CorsActualConfig = {}) {
     return createServer(
-      compose(CorsPackage(config), () => {
+      compose(CorsActual(config), CorsPreflight(), () => {
         return TumauResponse.withText('Hello');
       })
     );
@@ -417,7 +418,7 @@ describe('CorsPackage', () => {
 
   test('handle error', async () => {
     const app = createServer(
-      compose(CorsPackage(), () => {
+      compose(CorsActual(), CorsPreflight(), HttpErrorToTextResponse, ErrorToHttpError, () => {
         throw new HttpError.NotFound();
       })
     );
@@ -439,7 +440,7 @@ describe('CorsPackage', () => {
 
   test('handle error on preflight', async () => {
     const app = createServer(
-      compose(CorsPackage(), () => {
+      compose(CorsActual(), CorsPreflight(), () => {
         throw new HttpError.NotFound();
       })
     );

@@ -1,4 +1,12 @@
-import { Middleware, createContext, Result, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
+import {
+  Middleware,
+  createContext,
+  Result,
+  RequestConsumer,
+  TumauResponse,
+  HttpError,
+  TumauHandlerResponse,
+} from '@tumau/core';
 import { CreateCookieOptions, SetCookie, SetCookies } from './Cookie';
 import { CookieResponse } from './CookieResponse';
 
@@ -9,7 +17,9 @@ export interface CookieManager {
   delete(name: string, options?: CreateCookieOptions): void;
 }
 
-export const CookieManagerCtx = createContext<CookieManager>();
+export const CookieManagerCtx = createContext<CookieManager>({
+  name: 'CookieManager',
+});
 export const CookieManagerConsumer = CookieManagerCtx.Consumer;
 
 /**
@@ -44,6 +54,9 @@ export function CookieManager(): Middleware {
     if (response === null) {
       // If the next did not respond we don't set cookies
       return null;
+    }
+    if (response instanceof TumauHandlerResponse) {
+      return response;
     }
     if (response instanceof TumauResponse === false) {
       throw new HttpError.Internal(`CookieManager received an invalid response !`);

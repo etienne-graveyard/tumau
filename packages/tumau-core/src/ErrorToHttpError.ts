@@ -11,6 +11,7 @@ export const ErrorToHttpError: Middleware = async (ctx, next) => {
     if (error instanceof HttpError) {
       throw error;
     }
+    // console.error(error);
     throw HttpError.Internal.fromError(error);
   }
 };

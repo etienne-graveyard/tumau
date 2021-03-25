@@ -9,7 +9,7 @@ export interface ParsedUrl {
   rawQuery: null | string;
 }
 
-export const UrlParserContext = createContext<ParsedUrl>();
+export const UrlParserContext = createContext<ParsedUrl>({ name: 'UrlParser' });
 
 export const UrlParserConsumer = UrlParserContext.Consumer;
 

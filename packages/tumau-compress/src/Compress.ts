@@ -1,4 +1,4 @@
-import { Middleware, HttpHeaders, RequestConsumer, TumauResponse, HttpError } from '@tumau/core';
+import { Middleware, HttpHeaders, RequestConsumer, TumauResponse, HttpError, TumauHandlerResponse } from '@tumau/core';
 import { CompressContext } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 import { ContentEncoding } from './ContentEnconding';
@@ -26,6 +26,9 @@ export const Compress: Middleware = async (ctx, next) => {
   }
   if (response === null) {
     // no response = do nothing
+    return response;
+  }
+  if (response instanceof TumauHandlerResponse) {
     return response;
   }
   if (response instanceof TumauResponse === false) {

@@ -5,22 +5,35 @@ import {
   HttpHeaders,
   ContentType,
   JsonParser,
-  HttpErrorToJson,
   JsonResponse,
   JsonParserConsumer,
-  JsonPackage,
   TumauResponse,
   CookieManager,
   CookieManagerConsumer,
   compose,
+  ErrorToHttpError,
+  InvalidResponseToHttpError,
+  HttpErrorToJsonResponse,
+  StringBodyParser,
+  HttpErrorToTextResponse,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
 
+function JsonPackage() {
+  return compose(
+    HttpErrorToJsonResponse,
+    ErrorToHttpError,
+    InvalidResponseToHttpError,
+    StringBodyParser(),
+    JsonParser()
+  );
+}
+
 describe('Server', () => {
   test('parse JSON body', async () => {
     const app = createServer(
-      compose(HttpErrorToJson, JsonParser(), (ctx) => {
+      compose(HttpErrorToTextResponse, ErrorToHttpError, StringBodyParser(), JsonParser(), (ctx) => {
         return JsonResponse.withJson({ body: ctx.get(JsonParserConsumer) });
       })
     );
@@ -32,6 +45,7 @@ describe('Server', () => {
         [HttpHeaders.ContentType]: ContentType.Json,
       },
     });
+    console.log(await res.text());
     expect(res).toMatchInlineSnapshot(`
       HTTP/1.1 200 OK
       Connection: close

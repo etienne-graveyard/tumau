@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "dist/index.js",
-  "module": "dist/tumau.router.esm.js",
+  "module": "dist/router.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -18,11 +18,11 @@
   "dependencies": {
     "@tumau/core": "workspace:1.0.0-alpha.84",
     "@tumau/url-parser": "workspace:1.0.0-alpha.84",
-    "chemin": "^6.0.0"
+    "chemin": "^6.0.2"
   },
   "devDependencies": {
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.1.0"
   },
   "publishConfig": {
     "access": "public"

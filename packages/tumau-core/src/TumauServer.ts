@@ -1,13 +1,12 @@
 import { Server, createServer as createHttpServer, OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
 import { Duplex } from 'stream';
-import { compose, Middleware, runMiddlewareWithContexts } from './Middleware';
+import { Middleware } from './Middleware';
 import { TumauRequest } from './TumauRequest';
 import { TumauResponse } from './TumauResponse';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
 import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
-import { ErrorHandlerPackage } from './ErrorHandlerPackage';
 import { HttpError } from './HttpError';
 import {
   RequestContext,
@@ -17,59 +16,45 @@ import {
   DebugContext,
 } from './Contexts';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
+import { ContextStack } from 'miid';
+import { TumauHandlerResponse } from './TumauHandlerResponse';
 
-export interface TumauServer {
+export interface TumauHandlers {
+  requestHandler(req: IncomingMessage, res: ServerResponse): Promise<void>;
+  upgradeHandler(req: IncomingMessage, socket: Duplex, head: Buffer): Promise<void>;
+}
+
+export interface TumauServer extends TumauHandlers {
   httpServer: Server;
   listen(port?: number, listeningListener?: () => void): TumauServer;
 }
 
-interface Options {
+export interface HandlerOptions {
   mainMiddleware: Middleware;
-  // include ErrorHandlerPackage
-  handleErrors?: boolean;
+  // In debug mode error stack are returned
+  // the default value is false
+  debug?: boolean;
+}
+
+export interface ServerOptions extends HandlerOptions {
   httpServer?: Server;
   // The server should handle the 'request' event (default true)
   handleServerRequest?: boolean;
   // The server should handle the 'upgrade' event (default false)
   // this is used for websocket
   handleServerUpgrade?: boolean;
-  // In debug mode error stack are returned
-  // the default value is false
-  debug?: boolean;
 }
 
-export function createServer(opts: Middleware | Options): TumauServer {
+export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers {
   const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
-  const {
-    mainMiddleware,
-    handleErrors = true,
-    httpServer,
-    handleServerRequest = true,
-    handleServerUpgrade = false,
-    debug = false,
-  } = options;
+  const { mainMiddleware, debug = false } = options;
 
-  const resolvedHttpServer: Server = httpServer || createHttpServer();
-
-  const server: TumauServer = {
-    httpServer: resolvedHttpServer,
-    listen,
+  const handlers: TumauHandlers = {
+    requestHandler,
+    upgradeHandler,
   };
 
-  const rootMiddleware: Middleware = compose(handleErrors ? ErrorHandlerPackage : null, mainMiddleware);
-
-  return server;
-
-  function listen(port?: number, listeningListener?: () => void): TumauServer {
-    if (handleServerRequest) {
-      resolvedHttpServer.on('request', requestHandler);
-    }
-    if (handleServerUpgrade) {
-      resolvedHttpServer.on('upgrade', upgradeHandler);
-    }
-    resolvedHttpServer.listen(port, listeningListener);
-    return server;
-  }
+  return handlers;
 
   async function requestHandler(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const request = new TumauRequest(req);
@@ -78,14 +63,14 @@ export function createServer(opts: Middleware | Options): TumauServer {
     const resCtx = ServerResponseContext.Provider(res);
     const debugCtx = DebugContext.Provider(debug);
 
-    return runMiddlewareWithContexts(rootMiddleware, [requestCtx, resCtx, debugCtx], () => null)
+    return Promise.resolve(mainMiddleware(ContextStack.createFrom(requestCtx, resCtx, debugCtx), () => null))
       .then((response) => {
-        sendResponseAny(response, res, request);
+        return sendResponseAny(response, res, request);
       })
       .catch((err): void => {
         // fatal
         console.error(err);
-        if (!res.finished) {
+        if (!res.writableEnded) {
           res.end();
         }
       });
@@ -99,7 +84,9 @@ export function createServer(opts: Middleware | Options): TumauServer {
     const headCtx = UpgradeHeadContext.Provider(head);
     const debugCtx = DebugContext.Provider(debug);
 
-    return runMiddlewareWithContexts(rootMiddleware, [requestCtx, socketCtx, headCtx, debugCtx], () => null)
+    return Promise.resolve(
+      mainMiddleware(ContextStack.createFrom(requestCtx, socketCtx, headCtx, debugCtx), () => null)
+    )
       .then((response) => {
         // On upgrade if no response we just destroy the socket.
         if (response === null) {
@@ -115,6 +102,11 @@ export function createServer(opts: Middleware | Options): TumauServer {
             `Tumau received a TumauResponse on an 'upgrade' event. You should return null or a 'TumauUpgradeResponse'`
           );
         }
+        if (response instanceof TumauHandlerResponse) {
+          throw new Error(
+            `Tumau received a TumauHandlerResponse on an 'upgrade' event. You should return null or a 'TumauUpgradeResponse'`
+          );
+        }
         if (response instanceof Error || response instanceof HttpError) {
           // we can't send response so Error or HttpError are fatal
           throw response;
@@ -128,7 +120,11 @@ export function createServer(opts: Middleware | Options): TumauServer {
       });
   }
 
-  function sendResponseAny(response: any, res: ServerResponse, request: TumauRequest): void {
+  async function sendResponseAny(response: any, res: ServerResponse, request: TumauRequest): Promise<void> {
+    if (response instanceof TumauHandlerResponse) {
+      await response.handler(request.req, res);
+      return;
+    }
     if (res.writableEnded) {
       throw new Error('Response finished ?');
     }
@@ -189,5 +185,34 @@ export function createServer(opts: Middleware | Options): TumauServer {
       return;
     }
     throw new Error(`Invalid body`);
+  }
+}
+
+export function createServer(opts: Middleware | ServerOptions): TumauServer {
+  const options = typeof opts === 'function' ? { mainMiddleware: opts } : opts;
+  const { httpServer, handleServerRequest = true, handleServerUpgrade = false, ...handlerOptions } = options;
+
+  const { requestHandler, upgradeHandler } = createHandlers(handlerOptions);
+
+  const resolvedHttpServer: Server = httpServer || createHttpServer();
+
+  const server: TumauServer = {
+    httpServer: resolvedHttpServer,
+    requestHandler,
+    upgradeHandler,
+    listen,
+  };
+
+  return server;
+
+  function listen(port?: number, listeningListener?: () => void): TumauServer {
+    if (handleServerRequest) {
+      resolvedHttpServer.on('request', requestHandler);
+    }
+    if (handleServerUpgrade) {
+      resolvedHttpServer.on('upgrade', upgradeHandler);
+    }
+    resolvedHttpServer.listen(port, listeningListener);
+    return server;
   }
 }

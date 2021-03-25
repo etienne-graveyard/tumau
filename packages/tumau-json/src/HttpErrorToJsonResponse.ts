@@ -1,7 +1,7 @@
 import { Middleware, RequestConsumer, HttpError, DebugConsumer } from '@tumau/core';
 import { JsonResponse } from './JsonResponse';
 
-export const HttpErrorToJson: Middleware = async (ctx, next) => {
+export const HttpErrorToJsonResponse: Middleware = async (ctx, next) => {
   const debug = ctx.get(DebugConsumer);
   const isUpgrade = ctx.getOrFail(RequestConsumer).isUpgrade;
   if (isUpgrade) {
@@ -13,7 +13,7 @@ export const HttpErrorToJson: Middleware = async (ctx, next) => {
   } catch (error) {
     if (error instanceof HttpError) {
       // TODO: Use a logger context for that !
-      console.error(error);
+      // console.error(error);
       return JsonResponse.fromError(error, debug);
     }
     throw error;

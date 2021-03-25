@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "dist/index.js",
-  "module": "dist/tumau.json.esm.js",
+  "module": "dist/json.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -16,11 +16,12 @@
     "start": "tsdx watch --noClean --target node"
   },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.84"
+    "@tumau/core": "workspace:1.0.0-alpha.84",
+    "@tumau/string-body": "workspace:1.0.0-alpha.84"
   },
   "devDependencies": {
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.1.0"
   },
   "publishConfig": {
     "access": "public"

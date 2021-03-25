@@ -3,6 +3,7 @@ import { TumauResponse } from './TumauResponse';
 import { HttpError } from './HttpError';
 import { RequestConsumer } from './Contexts';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
+import { TumauHandlerResponse } from './TumauHandlerResponse';
 
 /**
  * Return a Valid Repsonse or throw an HttpError
@@ -24,6 +25,9 @@ export const InvalidResponseToHttpError: Middleware = async (ctx, next) => {
   }
   if (response === null || response === undefined) {
     throw new HttpError.ServerDidNotRespond();
+  }
+  if (response instanceof TumauHandlerResponse) {
+    return response;
   }
   if (response instanceof TumauResponse === false) {
     throw new HttpError.Internal(`The returned response is not valid (does not inherit the TumauResponse class)`);

@@ -1,10 +1,10 @@
-import { createServer, compose, JsonResponse, CompressPackage } from 'tumau';
+import { createServer, compose, JsonResponse, Compress } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
 
 describe('Compress', () => {
   test('gzip', async () => {
-    const app = createServer(compose(CompressPackage, () => JsonResponse.withJson({ hello: 'world' })));
+    const app = createServer(compose(Compress, () => JsonResponse.withJson({ hello: 'world' })));
 
     const { close, url } = await mountTumau(app);
     const res = await fetch(url, {
@@ -25,7 +25,7 @@ describe('Compress', () => {
   });
 
   test('brotli over gzip', async () => {
-    const app = createServer(compose(CompressPackage, () => JsonResponse.withJson({ hello: 'world' })));
+    const app = createServer(compose(Compress, () => JsonResponse.withJson({ hello: 'world' })));
     const { close, url } = await mountTumau(app);
     const res = await fetch(url, {
       headers: {
@@ -45,7 +45,7 @@ describe('Compress', () => {
   });
 
   test('deflate', async () => {
-    const app = createServer(compose(CompressPackage, () => JsonResponse.withJson({ hello: 'world' })));
+    const app = createServer(compose(Compress, () => JsonResponse.withJson({ hello: 'world' })));
     const { close, url } = await mountTumau(app);
     const res = await fetch(url, {
       headers: {

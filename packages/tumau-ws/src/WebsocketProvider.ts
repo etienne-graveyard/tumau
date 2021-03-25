@@ -1,7 +1,7 @@
 import { createContext, Middleware } from '@tumau/core';
 import { Server } from 'ws';
 
-const WebsocketContext = createContext<Server>();
+const WebsocketContext = createContext<Server>({ name: 'Websocket' });
 export const WebsocketConsumer = WebsocketContext.Consumer;
 
 export function WebsocketProvider(ws: Server): Middleware {

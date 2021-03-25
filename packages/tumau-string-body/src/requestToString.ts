@@ -28,7 +28,7 @@ export function requestToString(stream: IncomingMessage, limit: number): Promise
           return reject(err);
         }
 
-        resolve(data);
+        resolve(data ?? '');
       };
 
       if (sync) {

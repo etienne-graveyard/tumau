@@ -96,7 +96,10 @@ export class TumauResponse extends TumauBaseResponse {
   }
 
   public static isTumauResponse(maybe: unknown): maybe is TumauResponse {
-    return maybe && maybe instanceof TumauResponse;
+    if (!maybe) {
+      return false;
+    }
+    return maybe instanceof TumauResponse;
   }
 
   public static fromError(err: unknown, debug: boolean): TumauResponse {

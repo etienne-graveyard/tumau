@@ -4,12 +4,16 @@ import {
   Route,
   HttpError,
   CookieManager,
-  CompressPackage,
-  CorsPackage,
-  JsonPackage,
   CookieParser,
   JsonResponse,
   compose,
+  JsonParser,
+  ErrorToHttpError,
+  InvalidResponseToHttpError,
+  CorsActual,
+  CorsPreflight,
+  Compress,
+  HttpErrorToJsonResponse,
 } from 'tumau';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -18,9 +22,13 @@ test('real life 2', async () => {
   const app = createServer({
     handleServerUpgrade: true,
     mainMiddleware: compose(
-      CorsPackage(),
-      CompressPackage,
-      JsonPackage(),
+      CorsActual(),
+      CorsPreflight(),
+      Compress,
+      HttpErrorToJsonResponse,
+      InvalidResponseToHttpError,
+      ErrorToHttpError,
+      JsonParser(),
       CookieParser(),
       CookieManager(),
       RouterPackage([

@@ -11,7 +11,7 @@
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "dist/index.js",
-  "module": "dist/tumau.core.esm.js",
+  "module": "dist/core.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -22,11 +22,11 @@
   },
   "dependencies": {
     "@tumau/content-type": "workspace:1.0.0-alpha.81",
-    "miid": "^3.0.1"
+    "miid": "^4.0.0-1"
   },
   "devDependencies": {
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.1.0"
   },
   "publishConfig": {
     "access": "public"

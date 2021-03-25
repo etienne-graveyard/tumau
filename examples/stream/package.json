@@ -11,12 +11,12 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "fs-extra": "^9.0.1",
+    "fs-extra": "^9.1.0",
     "tumau": "workspace:1.0.0-alpha.84"
   },
   "devDependencies": {
-    "tslib": "^2.0.3",
-    "ts-node": "^9.0.0",
-    "ts-node-dev": "^1.0.0"
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
+    "tslib": "^2.1.0"
   }
 }

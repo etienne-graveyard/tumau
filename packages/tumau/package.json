@@ -27,6 +27,7 @@
     "@tumau/cors": "workspace:1.0.0-alpha.84",
     "@tumau/json": "workspace:1.0.0-alpha.84",
     "@tumau/rate-limit": "workspace:1.0.0-alpha.84",
+    "@tumau/string-body": "workspace:1.0.0-alpha.84",
     "@tumau/router": "workspace:1.0.0-alpha.84",
     "@tumau/static": "workspace:1.0.0-alpha.84",
     "@tumau/url-parser": "workspace:1.0.0-alpha.84",

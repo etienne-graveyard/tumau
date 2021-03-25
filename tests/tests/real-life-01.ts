@@ -7,9 +7,13 @@ import {
   TumauResponse,
   HttpError,
   CookieManager,
-  CompressPackage,
-  CorsPackage,
   compose,
+  CorsActual,
+  CorsPreflight,
+  Compress,
+  ErrorToHttpError,
+  HttpErrorToTextResponse,
+  InvalidResponseToHttpError,
 } from 'tumau';
 import WebSocket from 'ws';
 import { mountTumau } from '../utils/mountTumau';
@@ -29,8 +33,12 @@ test('real life', async () => {
   const app = createServer({
     handleServerUpgrade: true,
     mainMiddleware: compose(
-      CompressPackage,
-      CorsPackage(),
+      CorsActual(),
+      CorsPreflight(),
+      Compress,
+      HttpErrorToTextResponse,
+      InvalidResponseToHttpError,
+      ErrorToHttpError,
       CookieManager(),
       WebsocketProvider(wss),
       RouterPackage([
@@ -68,7 +76,7 @@ test('real life', async () => {
     Transfer-Encoding: chunked
   `);
 
-  await new Promise((res) => {
+  await new Promise<void>((res) => {
     const ws = new WebSocket(`ws://localhost:${port}/connect`);
     ws.on('open', () => {
       onOpen();

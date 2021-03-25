@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
   "main": "dist/index.js",
-  "module": "dist/tumau.content-type.esm.js",
+  "module": "dist/content-type.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"

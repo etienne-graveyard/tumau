@@ -12,6 +12,7 @@ export const ContentType = {
   Html: 'text/html',
   Json: 'application/json',
   Text: 'text/plain',
+  GraphQL: 'application/graphql',
 } as const;
 
 export type ContentType = typeof ContentType[keyof typeof ContentType];
