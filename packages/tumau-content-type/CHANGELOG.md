@@ -1,5 +1,11 @@
 # @tumau/content-type
 
+## 1.0.0-alpha.82
+
+### Minor Changes
+
+- Publish
+
 ## 1.0.0-alpha.81
 
 ### Minor Changes

@@ -34,7 +34,16 @@
     "@tumau/url-parser": "1.0.0-alpha.80",
     "@tumau/ws": "1.0.0-alpha.80",
     "scripts": "1.0.0-alpha.79",
-    "tests": "1.0.0-alpha.80"
+    "tests": "1.0.0-alpha.80",
+    "@tumau/graphql": "1.0.0-alpha.84",
+    "@tumau/string-body": "1.0.0-alpha.84"
   },
-  "changesets": ["curly-shrimps-hang", "curvy-bees-pay", "cyan-ants-approve", "empty-dots-itch", "moody-rockets-dream"]
+  "changesets": [
+    "curly-shrimps-hang",
+    "curvy-bees-pay",
+    "cyan-ants-approve",
+    "empty-dots-itch",
+    "moody-rockets-dream",
+    "sour-bulldogs-allow"
+  ]
 }

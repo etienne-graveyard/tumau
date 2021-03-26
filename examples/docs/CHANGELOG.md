@@ -1,5 +1,13 @@
 # @tumau-example/docs
 
+## 1.0.0-alpha.85
+
+### Patch Changes
+
+- Updated dependencies [undefined]
+  - tumau@1.0.0-alpha.85
+  - @tumau/core@1.0.0-alpha.85
+
 ## 1.0.0-alpha.84
 
 ### Patch Changes
