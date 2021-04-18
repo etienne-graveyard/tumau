@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "tumau": "workspace:1.0.0-alpha.86",
-    "ws": "^7.4.4"
+    "ws": "^7.4.5"
   },
   "devDependencies": {
-    "@types/ws": "^7.4.0",
+    "@types/ws": "^7.4.1",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.6"
   }

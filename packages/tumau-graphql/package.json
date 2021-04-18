@@ -22,7 +22,7 @@
   "devDependencies": {
     "graphql": "^15.5.0",
     "tsdx": "^0.14.1",
-    "tslib": "^2.1.0"
+    "tslib": "^2.2.0"
   },
   "peerDependencies": {
     "graphql": "^15.4.0"
