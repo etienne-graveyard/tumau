@@ -46,6 +46,8 @@ export const Route = {
   all: withMethod(null),
   namespace: (pattern: Chemin | string | null, routes: Routes): Route =>
     createRoute({ method: null, pattern, exact: false }, null, routes),
+  group: (middleware: Middleware | Array<Middleware> | null, children?: Routes): Route =>
+    createRoute({ method: null, exact: false }, middleware, children),
   fallback: (...middlewares: Array<Middleware>): Route => createRoute({ method: null, exact: false }, middlewares),
 };
 
