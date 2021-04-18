@@ -16,12 +16,8 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsdx build --target node",
-    "start": "tsdx watch --noClean --target node"
-  },
   "dependencies": {
-    "@tumau/content-type": "workspace:1.0.0-alpha.83",
+    "@tumau/content-type": "1.0.0-alpha.83",
     "miid": "^4.0.0-1"
   },
   "devDependencies": {
@@ -30,5 +26,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --noClean --target node"
   }
 }

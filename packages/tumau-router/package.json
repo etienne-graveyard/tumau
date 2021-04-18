@@ -11,13 +11,9 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsdx build --target node",
-    "start": "tsdx watch --noClean --target node"
-  },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.86",
-    "@tumau/url-parser": "workspace:1.0.0-alpha.86",
+    "@tumau/core": "1.0.0-alpha.86",
+    "@tumau/url-parser": "1.0.0-alpha.86",
     "chemin": "^6.0.2"
   },
   "devDependencies": {
@@ -26,5 +22,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --noClean --target node"
   }
 }

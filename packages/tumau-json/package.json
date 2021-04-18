@@ -11,13 +11,9 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsdx build --target node",
-    "start": "tsdx watch --noClean --target node"
-  },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.86",
-    "@tumau/string-body": "workspace:1.0.0-alpha.86"
+    "@tumau/core": "1.0.0-alpha.86",
+    "@tumau/string-body": "1.0.0-alpha.86"
   },
   "devDependencies": {
     "tsdx": "^0.14.1",
@@ -25,5 +21,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --noClean --target node"
   }
 }

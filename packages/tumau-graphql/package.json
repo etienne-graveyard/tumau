@@ -11,13 +11,9 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsdx build --target node",
-    "start": "tsdx watch --noClean --target node"
-  },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.86",
-    "@tumau/json": "workspace:1.0.0-alpha.86"
+    "@tumau/core": "1.0.0-alpha.86",
+    "@tumau/json": "1.0.0-alpha.86"
   },
   "devDependencies": {
     "graphql": "^15.5.0",
@@ -29,5 +25,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "tsdx build --target node",
+    "start": "tsdx watch --noClean --target node"
   }
 }
