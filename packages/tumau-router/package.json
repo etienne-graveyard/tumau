@@ -1,6 +1,6 @@
 {
   "name": "@tumau/router",
-  "version": "1.0.0-alpha.86",
+  "version": "1.0.0-alpha.87",
   "description": "Router for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -16,8 +16,8 @@
     "start": "tsdx watch --noClean --target node"
   },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.85",
-    "@tumau/url-parser": "workspace:1.0.0-alpha.85",
+    "@tumau/core": "workspace:1.0.0-alpha.86",
+    "@tumau/url-parser": "workspace:1.0.0-alpha.86",
     "chemin": "^6.0.2"
   },
   "devDependencies": {

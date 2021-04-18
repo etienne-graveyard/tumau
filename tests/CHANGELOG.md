@@ -1,5 +1,20 @@
 # tests
 
+## 1.0.0-alpha.87
+
+### Minor Changes
+
+- c3dbc37: Upgrade deps
+
+### Patch Changes
+
+- Updated dependencies [c3dbc37]
+  - tumau@1.0.0-alpha.87
+  - @tumau/compress@1.0.0-alpha.86
+  - @tumau/core@1.0.0-alpha.86
+  - @tumau/json@1.0.0-alpha.86
+  - @tumau/router@1.0.0-alpha.87
+
 ## 1.0.0-alpha.86
 
 ### Patch Changes

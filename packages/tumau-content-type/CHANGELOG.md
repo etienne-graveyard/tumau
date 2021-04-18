@@ -1,5 +1,11 @@
 # @tumau/content-type
 
+## 1.0.0-alpha.83
+
+### Minor Changes
+
+- c3dbc37: Upgrade deps
+
 ## 1.0.0-alpha.82
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "tumau",
-  "version": "1.0.0-alpha.86",
+  "version": "1.0.0-alpha.87",
   "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
@@ -21,17 +21,17 @@
     "start": "tsdx watch --noClean --target node"
   },
   "dependencies": {
-    "@tumau/compress": "workspace:1.0.0-alpha.85",
-    "@tumau/cookie": "workspace:1.0.0-alpha.85",
-    "@tumau/core": "workspace:1.0.0-alpha.85",
-    "@tumau/cors": "workspace:1.0.0-alpha.85",
-    "@tumau/json": "workspace:1.0.0-alpha.85",
-    "@tumau/rate-limit": "workspace:1.0.0-alpha.85",
-    "@tumau/router": "workspace:1.0.0-alpha.86",
-    "@tumau/static": "workspace:1.0.0-alpha.85",
-    "@tumau/string-body": "workspace:1.0.0-alpha.85",
-    "@tumau/url-parser": "workspace:1.0.0-alpha.85",
-    "@tumau/ws": "workspace:1.0.0-alpha.85"
+    "@tumau/compress": "workspace:1.0.0-alpha.86",
+    "@tumau/cookie": "workspace:1.0.0-alpha.86",
+    "@tumau/core": "workspace:1.0.0-alpha.86",
+    "@tumau/cors": "workspace:1.0.0-alpha.86",
+    "@tumau/json": "workspace:1.0.0-alpha.86",
+    "@tumau/rate-limit": "workspace:1.0.0-alpha.86",
+    "@tumau/router": "workspace:1.0.0-alpha.87",
+    "@tumau/static": "workspace:1.0.0-alpha.86",
+    "@tumau/string-body": "workspace:1.0.0-alpha.86",
+    "@tumau/url-parser": "workspace:1.0.0-alpha.86",
+    "@tumau/ws": "workspace:1.0.0-alpha.86"
   },
   "devDependencies": {
     "tsdx": "^0.14.1"

@@ -1,5 +1,17 @@
 # @tumau/router
 
+## 1.0.0-alpha.87
+
+### Minor Changes
+
+- c3dbc37: Upgrade deps
+
+### Patch Changes
+
+- Updated dependencies [c3dbc37]
+  - @tumau/core@1.0.0-alpha.86
+  - @tumau/url-parser@1.0.0-alpha.86
+
 ## 1.0.0-alpha.86
 
 ### Minor Changes

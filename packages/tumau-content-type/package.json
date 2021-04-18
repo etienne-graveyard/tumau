@@ -1,6 +1,6 @@
 {
   "name": "@tumau/content-type",
-  "version": "1.0.0-alpha.82",
+  "version": "1.0.0-alpha.83",
   "description": "Content Type utils made for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",

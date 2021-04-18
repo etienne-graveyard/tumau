@@ -1,5 +1,26 @@
 # @tumau-example/content-encoding
 
+## 1.0.0-alpha.87
+
+### Minor Changes
+
+- c3dbc37: Upgrade deps
+
+### Patch Changes
+
+- Updated dependencies [c3dbc37]
+  - tumau@1.0.0-alpha.87
+  - @tumau/compress@1.0.0-alpha.86
+  - @tumau/cookie@1.0.0-alpha.86
+  - @tumau/core@1.0.0-alpha.86
+  - @tumau/cors@1.0.0-alpha.86
+  - @tumau/json@1.0.0-alpha.86
+  - @tumau/rate-limit@1.0.0-alpha.86
+  - @tumau/router@1.0.0-alpha.87
+  - @tumau/static@1.0.0-alpha.86
+  - @tumau/url-parser@1.0.0-alpha.86
+  - @tumau/ws@1.0.0-alpha.86
+
 ## 1.0.0-alpha.86
 
 ### Patch Changes

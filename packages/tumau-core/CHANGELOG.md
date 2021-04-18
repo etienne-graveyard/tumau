@@ -1,5 +1,16 @@
 # @tumau/core
 
+## 1.0.0-alpha.86
+
+### Minor Changes
+
+- c3dbc37: Upgrade deps
+
+### Patch Changes
+
+- Updated dependencies [c3dbc37]
+  - @tumau/content-type@1.0.0-alpha.83
+
 ## 1.0.0-alpha.85
 
 ### Minor Changes

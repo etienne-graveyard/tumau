@@ -1,5 +1,11 @@
 # docs
 
+## 1.0.0-alpha.85
+
+### Minor Changes
+
+- c3dbc37: Upgrade deps
+
 ## 1.0.0-alpha.84
 
 ### Minor Changes
