@@ -1,6 +1,6 @@
 {
   "name": "tests",
-  "version": "1.0.0-alpha.85",
+  "version": "1.0.0-alpha.86",
   "private": true,
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "@tumau/compress": "workspace:1.0.0-alpha.85",
     "@tumau/core": "workspace:1.0.0-alpha.85",
     "@tumau/json": "workspace:1.0.0-alpha.85",
-    "@tumau/router": "workspace:1.0.0-alpha.85",
+    "@tumau/router": "workspace:1.0.0-alpha.86",
     "@types/jest": "^26.0.22",
     "@types/koa": "^2.13.1",
     "@types/node-fetch": "^2.5.8",
@@ -25,7 +25,7 @@
     "node-fetch": "^2.6.1",
     "ts-jest": "^26.5.4",
     "tslib": "^2.1.0",
-    "tumau": "workspace:1.0.0-alpha.85",
+    "tumau": "workspace:1.0.0-alpha.86",
     "ws": "^7.4.4"
   }
 }

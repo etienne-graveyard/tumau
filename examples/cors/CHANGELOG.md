@@ -1,5 +1,12 @@
 # @tumau-example/cors
 
+## 1.0.0-alpha.87
+
+### Patch Changes
+
+- Updated dependencies [a3c2fb1]
+  - tumau@1.0.0-alpha.86
+
 ## 1.0.0-alpha.86
 
 ### Patch Changes

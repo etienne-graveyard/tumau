@@ -1,5 +1,16 @@
 # tumau
 
+## 1.0.0-alpha.86
+
+### Minor Changes
+
+- a3c2fb1: Add Route.group
+
+### Patch Changes
+
+- Updated dependencies [a3c2fb1]
+  - @tumau/router@1.0.0-alpha.86
+
 ## 1.0.0-alpha.85
 
 ### Minor Changes
