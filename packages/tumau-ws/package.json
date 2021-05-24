@@ -19,7 +19,7 @@
     "@tumau/core": "workspace:1.0.0-alpha.86"
   },
   "devDependencies": {
-    "@types/ws": "^7.4.1",
+    "@types/ws": "^7.4.4",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0"
   },
