@@ -123,7 +123,7 @@ function flattenRoutes(routes: Routes): Array<Route> {
           const patterns = [route.pattern, childRoute.pattern];
           if (childRoute.pattern && route.exact) {
             console.warn(
-              `Error: ${route.pattern} is expected to be exact but its children ${childRoute.pattern} has a pattern, the child pattern will be ignored`
+              `Error: ${route.pattern?.stringify()} is expected to be exact but its children ${childRoute.pattern.stringify()} has a pattern, the child pattern will be ignored`
             );
             patterns[1] = null;
           }
@@ -131,7 +131,7 @@ function flattenRoutes(routes: Routes): Array<Route> {
           const exact = route.exact || childRoute.exact;
           const method = combineMethods(route.method, childRoute.method, (m) => {
             console.warn(
-              `Error: in ${route.pattern} > ${route.pattern} the Method ${m} is not allowed by parent. It will be ignored !`
+              `Error: in ${route.pattern?.stringify()} > ${childRoute.pattern?.stringify()} the Method ${m} is not allowed by parent. It will be ignored !`
             );
           });
           return createRoute({ pattern, exact, method }, middlewares, childRoute.children);
