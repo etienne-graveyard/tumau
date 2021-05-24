@@ -1,6 +1,6 @@
 import { createServer, Middleware, TumauResponse, createContext, RequestConsumer, compose } from 'tumau';
 
-const NumCtx = createContext<number>();
+const NumCtx = createContext<number>({ name: 'Num' });
 
 const logger: Middleware = async (ctx, next) => {
   const start = process.hrtime();

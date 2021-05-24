@@ -1,4 +1,14 @@
-import { createServer, WebsocketProvider, HandleWebsocket, Route, TumauResponse, RouterPackage, compose } from 'tumau';
+import {
+  createServer,
+  WebsocketProvider,
+  HandleWebsocket,
+  Route,
+  TumauResponse,
+  RouterPackage,
+  compose,
+  HttpErrorToTextResponse,
+  ErrorToHttpError,
+} from 'tumau';
 import WebSocket from 'ws';
 
 const wss = new WebSocket.Server({ noServer: true });
@@ -9,9 +19,10 @@ wss.on('connection', (_ws, request) => {
 });
 
 const server = createServer({
-  handleErrors: true,
   handleServerUpgrade: true,
   mainMiddleware: compose(
+    HttpErrorToTextResponse,
+    ErrorToHttpError,
     WebsocketProvider(wss),
     RouterPackage([
       Route.namespace('user', [

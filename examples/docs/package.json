@@ -12,8 +12,8 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.86",
-    "tumau": "workspace:1.0.0-alpha.88"
+    "@tumau/core": "workspace:*",
+    "tumau": "workspace:*"
   },
   "devDependencies": {
     "ts-node": "^10.0.0",

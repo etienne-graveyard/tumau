@@ -11,10 +11,10 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@tumau/compress": "workspace:1.0.0-alpha.86",
-    "@tumau/core": "workspace:1.0.0-alpha.86",
-    "@tumau/json": "workspace:1.0.0-alpha.86",
-    "@tumau/router": "workspace:1.0.0-alpha.88",
+    "@tumau/compress": "workspace:*",
+    "@tumau/core": "workspace:*",
+    "@tumau/json": "workspace:*",
+    "@tumau/router": "workspace:*",
     "@types/jest": "^26.0.23",
     "@types/koa": "^2.13.1",
     "@types/node-fetch": "^2.5.10",
@@ -25,7 +25,7 @@
     "node-fetch": "^2.6.1",
     "ts-jest": "^26.5.6",
     "tslib": "^2.2.0",
-    "tumau": "workspace:1.0.0-alpha.88",
+    "tumau": "workspace:*",
     "ws": "^7.4.5"
   }
 }

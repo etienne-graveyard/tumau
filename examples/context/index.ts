@@ -1,10 +1,10 @@
 import { createContext, createServer, Middleware, compose } from 'tumau';
 
 // Num context with a default value of 7
-const NumContext = createContext<number>(7);
+const NumContext = createContext<number>({ name: 'Num', defaultValue: 7 });
 
 // MaybeNum with no default value
-const MaybeNumContext = createContext<number>();
+const MaybeNumContext = createContext<number>({ name: 'MaybeNum' });
 
 // middleware
 const myContextProvider: Middleware = (ctx, next) => {

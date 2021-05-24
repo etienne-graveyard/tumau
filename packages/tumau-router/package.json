@@ -12,8 +12,8 @@
     "dist"
   ],
   "dependencies": {
-    "@tumau/core": "1.0.0-alpha.86",
-    "@tumau/url-parser": "1.0.0-alpha.86",
+    "@tumau/core": "workspace:*",
+    "@tumau/url-parser": "workspace:*",
     "chemin": "^6.0.3"
   },
   "devDependencies": {

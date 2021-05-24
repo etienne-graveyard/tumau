@@ -8,6 +8,7 @@ importers:
       '@types/jest': ^26.0.23
       '@typescript-eslint/eslint-plugin': ^4.25.0
       '@typescript-eslint/parser': ^4.25.0
+      caniuse-lite: ^1.0.30001228
       eslint: ^7.27.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-react: ^7.23.2
@@ -16,6 +17,8 @@ importers:
       pretty-quick: ^3.1.0
       ts-node: ^10.0.0
       typescript: ^4.2.4
+    dependencies:
+      caniuse-lite: 1.0.30001228
     devDependencies:
       '@changesets/cli': 2.16.0
       '@types/jest': 26.0.23
@@ -32,9 +35,9 @@ importers:
 
   benchmarks:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.86
-      '@tumau/json': workspace:1.0.0-alpha.86
-      '@tumau/router': workspace:1.0.0-alpha.87
+      '@tumau/core': workspace:*
+      '@tumau/json': workspace:*
+      '@tumau/router': workspace:*
       express: ^4.17.1
       fastify: ^3.15.1
       koa: ^2.13.1
@@ -105,7 +108,7 @@ importers:
     specifiers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -116,7 +119,7 @@ importers:
     specifiers:
       ts-node: ^10.0.0
       tslib: ^2.2.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -125,19 +128,19 @@ importers:
 
   examples/content-encoding:
     specifiers:
-      '@tumau/compress': workspace:1.0.0-alpha.86
-      '@tumau/cookie': workspace:1.0.0-alpha.86
-      '@tumau/core': workspace:1.0.0-alpha.86
-      '@tumau/cors': workspace:1.0.0-alpha.86
-      '@tumau/json': workspace:1.0.0-alpha.86
-      '@tumau/rate-limit': workspace:1.0.0-alpha.86
-      '@tumau/router': workspace:1.0.0-alpha.87
-      '@tumau/static': workspace:1.0.0-alpha.86
-      '@tumau/url-parser': workspace:1.0.0-alpha.86
-      '@tumau/ws': workspace:1.0.0-alpha.86
+      '@tumau/compress': workspace:*
+      '@tumau/cookie': workspace:*
+      '@tumau/core': workspace:*
+      '@tumau/cors': workspace:*
+      '@tumau/json': workspace:*
+      '@tumau/rate-limit': workspace:*
+      '@tumau/router': workspace:*
+      '@tumau/static': workspace:*
+      '@tumau/url-parser': workspace:*
+      '@tumau/ws': workspace:*
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       '@tumau/compress': link:../../packages/tumau-compress
       '@tumau/cookie': link:../../packages/tumau-cookie
@@ -158,7 +161,7 @@ importers:
     specifiers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -169,7 +172,7 @@ importers:
     specifiers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -179,7 +182,7 @@ importers:
   examples/cors:
     specifiers:
       ts-node: ^10.0.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -187,10 +190,10 @@ importers:
 
   examples/docs:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.86
+      '@tumau/core': workspace:*
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       '@tumau/core': link:../../packages/tumau-core
       tumau: link:../../packages/tumau
@@ -201,7 +204,7 @@ importers:
   examples/json:
     specifiers:
       ts-node: ^10.0.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -211,7 +214,7 @@ importers:
     specifiers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -222,7 +225,7 @@ importers:
     specifiers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -234,7 +237,7 @@ importers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
       tslib: ^2.2.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -247,7 +250,7 @@ importers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
       tslib: ^2.2.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -260,7 +263,7 @@ importers:
       '@types/ws': ^7.4.4
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
       ws: ^7.4.5
     dependencies:
       tumau: link:../../packages/tumau
@@ -276,7 +279,7 @@ importers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
       tslib: ^2.2.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       fs-extra: 10.0.0
       tumau: link:../../packages/tumau
@@ -288,7 +291,7 @@ importers:
   examples/url-parser:
     specifiers:
       ts-node: ^10.0.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
     dependencies:
       tumau: link:../../packages/tumau
     devDependencies:
@@ -300,7 +303,7 @@ importers:
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
       tslib: ^2.2.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
       ws: ^7.4.5
     dependencies:
       tumau: link:../../packages/tumau
@@ -316,7 +319,7 @@ importers:
       '@types/ws': ^7.4.4
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
       ws: ^7.4.5
     dependencies:
       tumau: link:../../packages/tumau
@@ -328,17 +331,17 @@ importers:
 
   packages/tumau:
     specifiers:
-      '@tumau/compress': workspace:1.0.0-alpha.85
-      '@tumau/cookie': workspace:1.0.0-alpha.85
-      '@tumau/core': workspace:1.0.0-alpha.85
-      '@tumau/cors': workspace:1.0.0-alpha.85
-      '@tumau/json': workspace:1.0.0-alpha.85
-      '@tumau/rate-limit': workspace:1.0.0-alpha.85
-      '@tumau/router': workspace:1.0.0-alpha.86
-      '@tumau/static': workspace:1.0.0-alpha.85
-      '@tumau/string-body': workspace:1.0.0-alpha.85
-      '@tumau/url-parser': workspace:1.0.0-alpha.85
-      '@tumau/ws': workspace:1.0.0-alpha.85
+      '@tumau/compress': workspace:*
+      '@tumau/cookie': workspace:*
+      '@tumau/core': workspace:*
+      '@tumau/cors': workspace:*
+      '@tumau/json': workspace:*
+      '@tumau/rate-limit': workspace:*
+      '@tumau/router': workspace:*
+      '@tumau/static': workspace:*
+      '@tumau/string-body': workspace:*
+      '@tumau/url-parser': workspace:*
+      '@tumau/ws': workspace:*
       tsdx: ^0.14.1
     dependencies:
       '@tumau/compress': link:../tumau-compress
@@ -357,7 +360,7 @@ importers:
 
   packages/tumau-compress:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
       tslib: ^2.2.0
     dependencies:
@@ -374,7 +377,7 @@ importers:
 
   packages/tumau-cookie:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
       tslib: ^2.2.0
     dependencies:
@@ -385,7 +388,7 @@ importers:
 
   packages/tumau-core:
     specifiers:
-      '@tumau/content-type': workspace:1.0.0-alpha.82
+      '@tumau/content-type': workspace:*
       miid: ^4.0.0-1
       tsdx: ^0.14.1
       tslib: ^2.2.0
@@ -398,7 +401,7 @@ importers:
 
   packages/tumau-cors:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
       tslib: ^2.2.0
     dependencies:
@@ -409,8 +412,8 @@ importers:
 
   packages/tumau-graphql:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
-      '@tumau/json': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
+      '@tumau/json': workspace:*
       graphql: ^15.5.0
       tsdx: ^0.14.1
       tslib: ^2.2.0
@@ -424,8 +427,8 @@ importers:
 
   packages/tumau-json:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
-      '@tumau/string-body': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
+      '@tumau/string-body': workspace:*
       tsdx: ^0.14.1
       tslib: ^2.2.0
     dependencies:
@@ -437,7 +440,7 @@ importers:
 
   packages/tumau-rate-limit:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
       tslib: ^2.2.0
     dependencies:
@@ -448,8 +451,8 @@ importers:
 
   packages/tumau-router:
     specifiers:
-      '@tumau/core': 1.0.0-alpha.86
-      '@tumau/url-parser': 1.0.0-alpha.86
+      '@tumau/core': workspace:*
+      '@tumau/url-parser': workspace:*
       chemin: ^6.0.3
       tsdx: ^0.14.1
       tslib: ^2.2.0
@@ -463,7 +466,7 @@ importers:
 
   packages/tumau-static:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
     dependencies:
       '@tumau/core': link:../tumau-core
@@ -472,7 +475,7 @@ importers:
 
   packages/tumau-string-body:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
       tslib: ^2.2.0
     dependencies:
@@ -483,7 +486,7 @@ importers:
 
   packages/tumau-url-parser:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.85
+      '@tumau/core': workspace:*
       tsdx: ^0.14.1
     dependencies:
       '@tumau/core': link:../tumau-core
@@ -492,7 +495,7 @@ importers:
 
   packages/tumau-ws:
     specifiers:
-      '@tumau/core': workspace:1.0.0-alpha.86
+      '@tumau/core': workspace:*
       '@types/ws': ^7.4.4
       tsdx: ^0.14.1
       tslib: ^2.2.0
@@ -528,10 +531,10 @@ importers:
 
   tests:
     specifiers:
-      '@tumau/compress': workspace:1.0.0-alpha.86
-      '@tumau/core': workspace:1.0.0-alpha.86
-      '@tumau/json': workspace:1.0.0-alpha.86
-      '@tumau/router': workspace:1.0.0-alpha.87
+      '@tumau/compress': workspace:*
+      '@tumau/core': workspace:*
+      '@tumau/json': workspace:*
+      '@tumau/router': workspace:*
       '@types/jest': ^26.0.23
       '@types/koa': ^2.13.1
       '@types/node-fetch': ^2.5.10
@@ -542,7 +545,7 @@ importers:
       node-fetch: ^2.6.1
       ts-jest: ^26.5.6
       tslib: ^2.2.0
-      tumau: workspace:1.0.0-alpha.87
+      tumau: workspace:*
       ws: ^7.4.5
     dependencies:
       '@tumau/compress': link:../packages/tumau-compress

@@ -16,7 +16,7 @@
     "start": "tsdx watch --noClean --target node"
   },
   "dependencies": {
-    "@tumau/core": "workspace:1.0.0-alpha.86"
+    "@tumau/core": "workspace:*"
   },
   "devDependencies": {
     "tsdx": "^0.14.1"

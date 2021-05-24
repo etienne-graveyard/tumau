@@ -12,8 +12,8 @@
     "dist"
   ],
   "dependencies": {
-    "@tumau/core": "1.0.0-alpha.86",
-    "@tumau/json": "1.0.0-alpha.86"
+    "@tumau/core": "workspace:*",
+    "@tumau/json": "workspace:*"
   },
   "devDependencies": {
     "graphql": "^15.5.0",

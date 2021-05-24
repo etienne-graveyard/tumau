@@ -1,7 +1,7 @@
-import { createServer, HttpError, JsonPackage, compose } from 'tumau';
+import { createServer, HttpError, compose, JsonParser, HttpErrorToJsonResponse } from 'tumau';
 
 const server = createServer(
-  compose(JsonPackage(), () => {
+  compose(JsonParser(), HttpErrorToJsonResponse, () => {
     throw new HttpError.NotFound();
   })
 );

@@ -4,7 +4,7 @@
 Imports:
 */
 
-import { createServer, compose, ErrorHandlerPackage } from '@tumau/core';
+import { createServer, compose } from '@tumau/core';
 import { createServer as createHttpServer } from 'http';
 
 /*
@@ -32,21 +32,6 @@ You can also pass an object to `createServer`
 
 const serverB = createServer({
   mainMiddleware: () => null,
-});
-
-/*
-The `handleErrors` options (`true` by default) will add the 
-ErrorHandlerPackage middleware before the mainMiddleware
-*/
-
-const serverC1 = createServer({
-  handleErrors: true,
-  mainMiddleware: () => null,
-});
-// same as
-const serverC2 = createServer({
-  handleErrors: false,
-  mainMiddleware: compose(ErrorHandlerPackage, () => null),
 });
 
 /*
