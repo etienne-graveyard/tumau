@@ -1,6 +1,6 @@
 {
   "name": "@tumau/rate-limit",
-  "version": "1.0.0-alpha.86",
+  "version": "1.0.0-alpha.87",
   "description": "Rate limit for @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",

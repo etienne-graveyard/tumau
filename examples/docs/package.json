@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/docs",
-  "version": "1.0.0-alpha.88",
+  "version": "1.0.0-alpha.89",
   "private": true,
   "description": "Examples used for the docs",
   "repository": "git@github.com:etienne-dldc/tumau.git",

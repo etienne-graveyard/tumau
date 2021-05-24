@@ -1,5 +1,21 @@
 # tests
 
+## 1.0.0-alpha.89
+
+### Major Changes
+
+- df45e5d: Upgarde dependencies and fix typeerrors
+
+### Patch Changes
+
+- Updated dependencies [df45e5d]
+- Updated dependencies [3faced1]
+  - tumau@1.0.0-alpha.89
+  - @tumau/compress@1.0.0-alpha.87
+  - @tumau/core@1.0.0-alpha.87
+  - @tumau/json@1.0.0-alpha.87
+  - @tumau/router@1.0.0-alpha.89
+
 ## 1.0.0-alpha.88
 
 ### Minor Changes

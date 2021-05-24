@@ -1,6 +1,6 @@
 {
   "name": "@tumau/static",
-  "version": "1.0.0-alpha.86",
+  "version": "1.0.0-alpha.87",
   "description": "Static file handler for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",
   "license": "MIT",

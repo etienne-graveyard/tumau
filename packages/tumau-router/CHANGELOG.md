@@ -1,5 +1,21 @@
 # @tumau/router
 
+## 1.0.0-alpha.89
+
+### Major Changes
+
+- df45e5d: Upgarde dependencies and fix typeerrors
+
+### Minor Changes
+
+- 3faced1: Fix error message
+
+### Patch Changes
+
+- Updated dependencies [df45e5d]
+  - @tumau/core@1.0.0-alpha.87
+  - @tumau/url-parser@1.0.0-alpha.87
+
 ## 1.0.0-alpha.88
 
 ### Minor Changes

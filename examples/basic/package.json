@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/basic",
-  "version": "1.0.0-alpha.88",
+  "version": "1.0.0-alpha.89",
   "private": true,
   "description": "Basic example of @tumau/core",
   "repository": "git@github.com:etienne-dldc/tumau.git",

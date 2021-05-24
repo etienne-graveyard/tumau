@@ -1,5 +1,17 @@
 # @tumau-example/docs
 
+## 1.0.0-alpha.89
+
+### Major Changes
+
+- df45e5d: Upgarde dependencies and fix typeerrors
+
+### Patch Changes
+
+- Updated dependencies [df45e5d]
+  - tumau@1.0.0-alpha.89
+  - @tumau/core@1.0.0-alpha.87
+
 ## 1.0.0-alpha.88
 
 ### Minor Changes

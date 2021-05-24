@@ -1,5 +1,27 @@
 # tumau
 
+## 1.0.0-alpha.89
+
+### Major Changes
+
+- df45e5d: Upgarde dependencies and fix typeerrors
+
+### Patch Changes
+
+- Updated dependencies [df45e5d]
+- Updated dependencies [3faced1]
+  - @tumau/compress@1.0.0-alpha.87
+  - @tumau/cookie@1.0.0-alpha.87
+  - @tumau/core@1.0.0-alpha.87
+  - @tumau/cors@1.0.0-alpha.87
+  - @tumau/json@1.0.0-alpha.87
+  - @tumau/rate-limit@1.0.0-alpha.87
+  - @tumau/router@1.0.0-alpha.89
+  - @tumau/static@1.0.0-alpha.87
+  - @tumau/string-body@1.0.0-alpha.87
+  - @tumau/url-parser@1.0.0-alpha.87
+  - @tumau/ws@1.0.0-alpha.88
+
 ## 1.0.0-alpha.88
 
 ### Patch Changes
