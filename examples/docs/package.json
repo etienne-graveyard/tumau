@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/docs",
-  "version": "1.0.0-alpha.87",
+  "version": "1.0.0-alpha.88",
   "private": true,
   "description": "Examples used for the docs",
   "repository": "git@github.com:etienne-dldc/tumau.git",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@tumau/core": "workspace:1.0.0-alpha.86",
-    "tumau": "workspace:1.0.0-alpha.87"
+    "tumau": "workspace:1.0.0-alpha.88"
   },
   "devDependencies": {
     "ts-node": "^10.0.0",

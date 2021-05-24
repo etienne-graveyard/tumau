@@ -1,5 +1,13 @@
 # tumau
 
+## 1.0.0-alpha.88
+
+### Patch Changes
+
+- Updated dependencies [daf606d]
+  - @tumau/router@1.0.0-alpha.88
+  - @tumau/ws@1.0.0-alpha.87
+
 ## 1.0.0-alpha.87
 
 ### Minor Changes

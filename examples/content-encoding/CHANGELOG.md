@@ -1,5 +1,18 @@
 # @tumau-example/content-encoding
 
+## 1.0.0-alpha.88
+
+### Minor Changes
+
+- daf606d: Upgrade deps
+
+### Patch Changes
+
+- Updated dependencies [daf606d]
+  - @tumau/router@1.0.0-alpha.88
+  - @tumau/ws@1.0.0-alpha.87
+  - tumau@1.0.0-alpha.88
+
 ## 1.0.0-alpha.87
 
 ### Minor Changes

@@ -1,5 +1,15 @@
 # @tumau-example/cors
 
+## 1.0.0-alpha.89
+
+### Minor Changes
+
+- daf606d: Upgrade deps
+
+### Patch Changes
+
+- tumau@1.0.0-alpha.88
+
 ## 1.0.0-alpha.88
 
 ### Minor Changes

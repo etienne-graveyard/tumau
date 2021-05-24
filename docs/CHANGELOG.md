@@ -1,5 +1,11 @@
 # docs
 
+## 1.0.0-alpha.86
+
+### Minor Changes
+
+- daf606d: Upgrade deps
+
 ## 1.0.0-alpha.85
 
 ### Minor Changes

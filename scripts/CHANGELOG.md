@@ -1,5 +1,11 @@
 # scripts
 
+## 1.0.0-alpha.84
+
+### Minor Changes
+
+- daf606d: Upgrade deps
+
 ## 1.0.0-alpha.83
 
 ### Minor Changes

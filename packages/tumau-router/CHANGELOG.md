@@ -1,5 +1,11 @@
 # @tumau/router
 
+## 1.0.0-alpha.88
+
+### Minor Changes
+
+- daf606d: Upgrade deps
+
 ## 1.0.0-alpha.87
 
 ### Minor Changes
