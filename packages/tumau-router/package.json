@@ -14,7 +14,7 @@
   "dependencies": {
     "@tumau/core": "workspace:*",
     "@tumau/url-parser": "workspace:*",
-    "chemin": "^6.0.3"
+    "chemin": "^6.1.0"
   },
   "devDependencies": {
     "tsdx": "^0.14.1",
