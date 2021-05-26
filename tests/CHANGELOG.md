@@ -1,5 +1,18 @@
 # tests
 
+## 1.0.0-alpha.90
+
+### Minor Changes
+
+- ff174b1: Upgrade deps
+- ff174b1: Upgrade deps
+
+### Patch Changes
+
+- Updated dependencies [ff174b1]
+- Updated dependencies [ff174b1]
+  - @tumau/router@1.0.0-alpha.90
+
 ## 1.0.0-alpha.89
 
 ### Major Changes

@@ -1,5 +1,12 @@
 # @tumau-example/router-ws
 
+## 1.0.0-alpha.90
+
+### Minor Changes
+
+- ff174b1: Upgrade deps
+- ff174b1: Upgrade deps
+
 ## 1.0.0-alpha.89
 
 ### Major Changes

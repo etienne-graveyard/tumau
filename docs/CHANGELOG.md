@@ -1,5 +1,12 @@
 # docs
 
+## 1.0.0-alpha.87
+
+### Minor Changes
+
+- ff174b1: Upgrade deps
+- ff174b1: Upgrade deps
+
 ## 1.0.0-alpha.86
 
 ### Minor Changes
