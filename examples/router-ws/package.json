@@ -1,6 +1,6 @@
 {
   "name": "@tumau-example/router-ws",
-  "version": "1.0.0-alpha.90",
+  "version": "1.0.0-alpha.91",
   "private": true,
   "description": "Websocket example for tumau",
   "repository": "git@github.com:etienne-dldc/tumau.git",

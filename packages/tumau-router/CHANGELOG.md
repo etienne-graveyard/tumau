@@ -1,5 +1,11 @@
 # @tumau/router
 
+## 1.0.0-alpha.91
+
+### Major Changes
+
+- 5dbad97: Change router to better handle allowed methods
+
 ## 1.0.0-alpha.90
 
 ### Minor Changes
