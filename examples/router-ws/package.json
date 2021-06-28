@@ -12,6 +12,7 @@
     "start": "ts-node ./index.ts"
   },
   "dependencies": {
+    "tslib": "^2.3.0",
     "tumau": "workspace:*",
     "ws": "^7.4.6"
   },

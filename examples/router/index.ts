@@ -2,7 +2,6 @@ import {
   createServer,
   TumauResponse,
   Middleware,
-  HttpMethod,
   RouterPackage,
   Route,
   Routes,
@@ -60,31 +59,31 @@ const ROUTES: Routes = [
       appParam: params.app,
     });
   }),
-  Route.create({ pattern: '/group', exact: false }, logRoute, [
-    Route.GET('/skip', async () => {
-      // return null will skip the route
-      return null;
-    }),
-    Route.GET('/1', () => {
-      return TumauResponse.withHtml(render('Group 1'));
-    }),
-    Route.GET('/2', () => {
-      return TumauResponse.withHtml(render('Group 2'));
-    }),
-  ]),
+  ...Route.namespace(
+    '/group',
+    Route.group(logRoute, [
+      Route.GET('/skip', async () => {
+        // return null will skip the route
+        return null;
+      }),
+      Route.GET('/1', () => {
+        return TumauResponse.withHtml(render('Group 1'));
+      }),
+      Route.GET('/2', () => {
+        return TumauResponse.withHtml(render('Group 2'));
+      }),
+    ])
+  ),
   Route.GET('/group/skip', async (ctx, next) => {
     await next(ctx);
     return TumauResponse.withHtml(render('Group skiped !'));
   }),
-  Route.namespace('/foo', [
+  ...Route.namespace('/foo', [
     Route.GET('/bar', logRoute, () => {
       return TumauResponse.withHtml(render('Baaaaar'));
     }),
     Route.GET(null, () => TumauResponse.withHtml(render('GET on /foo Not found'))),
     Route.POST(null, () => TumauResponse.withHtml(render('POST on /foo Not found'))),
-    Route.create({ method: [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT] }, () =>
-      TumauResponse.withHtml(render('foo Not found'))
-    ),
   ]),
   Route.GET('/search', (ctx) => {
     const parsedUrl = ctx.getOrFail(UrlParserConsumer);

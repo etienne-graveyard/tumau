@@ -1,48 +1,60 @@
-import {
-  Middleware,
-  HttpMethod,
-  TumauResponse,
-  RequestConsumer,
-  Result,
-  HttpError,
-  TumauHandlerResponse,
-} from '@tumau/core';
+import { Middleware, HttpMethod, TumauResponse, Result, HttpError, TumauHandlerResponse, compose } from '@tumau/core';
 import { Routes, Route } from './Route';
-import { UrlParserConsumer } from '@tumau/url-parser';
 import { RouterAllowedMethodsContext } from './RouterContext';
 import { AllowedMethodsResponse } from './AllowedMethodsResponse';
 
-export function AllowedMethods(routes: Routes): Middleware {
-  // flatten routes
-  const flatRoutes = Route.flatten(routes);
-  return async (ctx, next): Promise<Result> => {
-    const request = ctx.getOrFail(RequestConsumer);
-    if (request.method !== HttpMethod.OPTIONS) {
-      return next(ctx);
-    }
-    const parsedUrl = ctx.getOrFail(UrlParserConsumer);
-    const matchingRoutesAllMethods = Route.find(flatRoutes, parsedUrl.pathname);
-
-    const allowedMethods = matchingRoutesAllMethods.reduce<Set<HttpMethod> | null>((acc, findResult) => {
-      if (acc === null || findResult.route.method === null) {
-        return null;
+export function AllowedMethods(routes: Routes): Routes {
+  const result: Routes = [];
+  const byPattern = Route.groupByPattern(routes);
+  const updatedRoutes = new Map<Route, Route>();
+  byPattern.forEach(({ pattern, routes }) => {
+    if (pattern !== null) {
+      const allowedMethods = routes.reduce<Set<HttpMethod> | null>((acc, route) => {
+        if (route.isFallback) {
+          return acc;
+        }
+        if (acc === null || route.method === null) {
+          return null;
+        }
+        acc.add(route.method);
+        return acc;
+      }, new Set<HttpMethod>([HttpMethod.OPTIONS]));
+      const methods = allowedMethods || HttpMethod.__ALL;
+      if (methods.size === 1) {
+        return;
       }
-      if (Array.isArray(findResult.route.method)) {
-        findResult.route.method.forEach((m) => {
-          acc.add(m);
-        });
+      const optionsRoute = routes.find((route) => route.method === HttpMethod.OPTIONS);
+      if (optionsRoute) {
+        const newRoute: Route = {
+          ...optionsRoute,
+          middleware: compose(AllowedMethodsMiddleware(methods), optionsRoute.middleware),
+        };
+        updatedRoutes.set(optionsRoute, newRoute);
       } else {
-        acc.add(findResult.route.method);
+        result.push(
+          Route.create({ pattern, exact: true, method: HttpMethod.OPTIONS }, AllowedMethodsMiddleware(methods))
+        );
       }
-      return acc;
-    }, new Set<HttpMethod>());
+    }
+  });
+  routes.forEach((route) => {
+    const updated = updatedRoutes.get(route);
+    if (updated) {
+      result.push(updated);
+    } else {
+      result.push(route);
+    }
+  });
+  return result;
+}
 
-    const methods = allowedMethods || HttpMethod.__ALL;
+function AllowedMethodsMiddleware(methods: Set<HttpMethod>): Middleware {
+  return async (ctx, next): Promise<Result> => {
     const response = await next(ctx.with(RouterAllowedMethodsContext.Provider(methods)));
     if (response instanceof TumauHandlerResponse) {
       return response;
     }
-    if (response instanceof TumauResponse === false) {
+    if (response !== null && response instanceof TumauResponse === false) {
       throw new HttpError.Internal(`AllowedMethods received an invalid response !`);
     }
     const res = response === null ? new TumauResponse({ code: 204 }) : (response as TumauResponse);

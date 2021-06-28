@@ -13,7 +13,7 @@
     "build:docs": "pnpm run export --filter docs",
     "build": "pnpm run -r build",
     "test": "pnpm run -r test",
-    "typecheck:all": "pnpm recursive exec --filter '@tumau/*' --filter '@tumau-example/*' -- pnpx tsc --noEmit",
+    "typecheck:all": "pnpm recursive --filter '@tumau/*' --filter '@tumau-example/*' exec pnpx tsc --noEmit",
     "norm": "echo 'TODO'",
     "norm:core": "echo 'TODO'",
     "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",

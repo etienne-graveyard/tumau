@@ -1,15 +1,10 @@
-import { Middleware, RequestConsumer, HttpError, Result } from '@tumau/core';
+import { Middleware, RequestConsumer, Result } from '@tumau/core';
 import { Route, Routes, FindResult } from './Route';
 import { RouterContext } from './RouterContext';
 import { UrlParserConsumer } from '@tumau/url-parser';
 import { Chemin } from 'chemin';
 
-/**
- * Handle an array of routes
- */
 export function Router(routes: Routes): Middleware {
-  // flatten routes
-  const flatRoutes = Route.flatten(routes);
   return async (ctx, next): Promise<Result> => {
     if (ctx.has(RouterContext.Consumer)) {
       console.warn(
@@ -20,41 +15,18 @@ export function Router(routes: Routes): Middleware {
       );
     }
 
-    // all matching routes
-    const parsedUrl = ctx.get(UrlParserConsumer);
-    if (!parsedUrl) {
-      throw new HttpError.Internal(`[Router] Missing UrlParser contenxt !`);
-    }
-    const routesWithMatchingPattern = Route.find(flatRoutes, parsedUrl.pathname);
+    const parsedUrl = ctx.getOrFail(UrlParserConsumer);
     const request = ctx.getOrFail(RequestConsumer);
     const requestMethod = request.method;
-    const isUpgrade = request.isUpgrade;
-
-    const matchingRoutes = routesWithMatchingPattern.filter((findResult) => {
-      if (findResult.route.upgrade !== null && findResult.route.upgrade !== isUpgrade) {
-        // upgrade did not match
-        return false;
-      }
-      const routeMethod = findResult.route.method;
-      if (routeMethod === null) {
-        // any method
-        return true;
-      }
-      if (Array.isArray(routeMethod)) {
-        // array of allowed methods
-        return routeMethod.includes(requestMethod);
-      }
-      return routeMethod === requestMethod;
-    });
+    const matchingRoutes = Route.find(routes, parsedUrl.pathname, requestMethod);
 
     return handleNext(0);
 
     async function handleNext(index: number): Promise<Result> {
       const findResult: FindResult | null = matchingRoutes[index] || null;
-      const routeMiddleware = findResult ? findResult.route.middleware : null;
       const route = findResult ? findResult.route : null;
       const pattern = route ? route.pattern : null;
-      const patterns = route ? route.patterns || [] : [];
+      const patterns = pattern ? pattern.extract() : [];
       const params = findResult ? findResult.params : {};
 
       const has = (chemin: Chemin): boolean => {
@@ -63,10 +35,8 @@ export function Router(routes: Routes): Middleware {
 
       // create router context
       const routerData: RouterContext = {
-        middleware: routeMiddleware,
         notFound: findResult === null,
         pattern,
-        patterns,
         params,
         has,
         get: <P>(chemin: Chemin<P>) => {

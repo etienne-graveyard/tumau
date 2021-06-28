@@ -35,7 +35,7 @@ test('real life 2', async () => {
         Route.POST('login', () => {
           return JsonResponse.withJson({ success: true });
         }),
-        Route.all(null, () => {
+        Route.fallback(() => {
           throw new HttpError.NotFound();
         }),
       ])

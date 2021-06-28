@@ -263,9 +263,11 @@ importers:
       '@types/ws': ^7.4.4
       ts-node: ^10.0.0
       ts-node-dev: ^1.1.6
+      tslib: ^2.3.0
       tumau: workspace:*
       ws: ^7.4.6
     dependencies:
+      tslib: 2.3.0
       tumau: link:../../packages/tumau
       ws: 7.4.6
     devDependencies:
@@ -12091,6 +12093,10 @@ packages:
 
   /tslib/2.2.0:
     resolution: {integrity: sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==}
+
+  /tslib/2.3.0:
+    resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
+    dev: false
 
   /tsscmp/1.0.6:
     resolution: {integrity: sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==}

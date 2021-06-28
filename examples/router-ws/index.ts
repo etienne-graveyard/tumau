@@ -24,15 +24,12 @@ const server = createServer({
     HttpErrorToTextResponse,
     ErrorToHttpError,
     WebsocketProvider(wss),
-    RouterPackage([
+    RouterPackage(
       Route.namespace('user', [
         Route.GET(null, () => TumauResponse.withText('OK')),
-        Route.all(
-          'ws',
-          compose(HandleWebsocket, () => TumauResponse.withText('Not WS ?'))
-        ),
-      ]),
-    ])
+        ...Route.namespace('ws', [Route.fallback(compose(HandleWebsocket, () => TumauResponse.withText('Not WS ?')))]),
+      ])
+    )
   ),
 });
 
