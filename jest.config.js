@@ -8,4 +8,5 @@ module.exports = {
     require.resolve('./tests/config/serializeIncomingMessage.js'),
     require.resolve('./tests/config/serializeFetchResponse.js'),
   ],
+  testTimeout: 8000,
 };
