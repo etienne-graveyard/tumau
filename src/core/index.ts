@@ -1,4 +1,5 @@
-export { createContext, Context, ContextConsumer, ContextProvider, ContextProviderFn, ContextStack } from 'miid';
+export { createContext, ContextStack } from 'miid';
+export type { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'miid';
 export { HttpError } from './HttpError';
 export { HttpHeaders } from './HttpHeaders';
 export type { HttpHeadersName } from './HttpHeaders';

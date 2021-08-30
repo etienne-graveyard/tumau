@@ -1,4 +1,5 @@
-export { Chemin, CheminMatch, CheminMatchMaybe, CheminParam, splitPathname } from 'chemin';
+export { Chemin, CheminParam, splitPathname } from 'chemin';
+export type { CheminMatch, CheminMatchMaybe } from 'chemin';
 export { Route } from './Route';
 export type { Routes } from './Route';
 export type { FindResult } from './Route';
