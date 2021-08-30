@@ -9,16 +9,18 @@
 
 > A node HTTP framework written in Typescript
 
-Tumau is a small NodeJS server (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with almost no external dependencies and written in TypeScript.
+Tumau is NodeJS server framework (just like [Express](https://expressjs.com/) or [Koa](https://koajs.com/)) with almost no external dependencies and written in TypeScript.
 
 ## Gist
 
 ```ts
 import { createServer, TumauResponse, RequestConsumer } from 'tumau';
+
 const server = createServer((ctx) => {
   const request = ctx.get(RequestConsumer);
   return TumauResponse.withText(`Hello World ! (from ${request.url})`);
 });
+
 server.listen(3002, () => {
   console.log(`Server is up at http://localhost:3002`);
 });
@@ -41,22 +43,9 @@ npm install tumau
 yarn add tumau
 ```
 
-## Packages
-
-The `tumau` package is a proxi for different packages:
-
-- [`@tumau/core`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-core)
-- [`@tumau/url-parser`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-url-parser) for parsing url (pathname, query...)
-- [`@tumau/router`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-router) for routing (it uses `@tumau/url-parser` for url parsing)
-- [`@tumau/json`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-json) for parsing / sending JSON
-- [`@tumau/compress`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-compress) for Brotli / GZip / Deflate compression
-- [`@tumau/cookie`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-cookie) for readong and setting cookies
-- [`@tumau/cors`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-cors) for CORS headers
-
 ## Dependencies
 
-[`@tumau/router`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-router) has [`chemin`](https://github.com/etienne-dldc/chemin) as a dependency and `chemin` itself has zero dependencies.
-[`@tumau/ws`](https://github.com/etienne-dldc/tumau/tree/master/packages/tumau-ws) depend on [`WS`](https://github.com/websockets/ws).
+-[`chemin`](https://github.com/etienne-dldc/chemin) for the router path matching (`chemin` itself has zero dependencies). -[`miid`](https://github.com/etienne-dldc/miid) for the middleware system (`miid` itself has zero dependencies).
 
 ## Overview
 
@@ -76,15 +65,6 @@ A middleware can stop the chain and return a response. In that case the next mid
 
 </p>
 
-## Tools
-
-In tumau the tools is what you get in middleware to interact wth the other middlewares.
-
-The tools let you do two things:
-
-- Read / Write a context (Take a look a [this example](https://github.com/etienne-dldc/tumau/blob/master/examples/context/index.ts))
-- Call the next middleware
-
 ### For TypeScript users
 
 Contexts are typed when you create them:
@@ -101,11 +81,11 @@ const NameCtx = createContext<string>();
 
 A middleare is a function that:
 
-- receives the tools
+- receives the context and the `next` function
 - can return a response or null (or a promise of one of them)
 
 ```ts
-type Middleware = (tools: Tools) => null | Response | Promise<null | Response>;
+type Middleware = (ctx, next) => null | Response | Promise<null | Response>;
 ```
 
 Example:
@@ -123,10 +103,10 @@ const myMiddleware = async (ctx, next) => {
 };
 ```
 
-### `tools.next`
+### The `next` function
 
-The `tools.next` function is always async (it return a Promise).
-It take np parameter and return a Promise of a Response or null
+The `next` function is always async (it return a Promise).
+It take a context as parameter and return a Promise of a Response or null
 
 ```ts
 type Next = () => Promise<Response | null>;
@@ -139,8 +119,8 @@ type Next = () => Promise<Response | null>;
 const middleware = () => Response.withText('Hello');
 
 // Return a response if the next middleware did not
-const middleware = async (tools) => {
-  const response = await tools.next();
+const middleware = async (ctx, next) => {
+  const response = await next();
   if (response === null) {
     return Response.withText('Not found');
   }
@@ -149,15 +129,15 @@ const middleware = async (tools) => {
 
 // Add a item to the context before calling the next middleware
 // return whatever the next middleware return
-const middleware = (tools) => {
-  const nextTools = tools.with(ReceivedAtContext.Provide(new Date()));
-  return nextTools.next();
+const middleware = (ctx) => {
+  const nextCtx = ctx.with(ReceivedAtContext.Provide(new Date()));
+  return next(nextCtx);
 };
 ```
 
 ### Conbining multiple Middlewares
 
-The `Server.create` function take only one middleware as parameter. To use multiple middleware you need to combine them with `compose` :
+The `createServer` function take only one middleware as parameter. To use multiple middleware you need to combine them with `compose` :
 
 ```js
 import { createServer, compose } from 'tumau';
@@ -169,17 +149,11 @@ const server = createServer(composed);
 
 **Note**: Middlewares are executed in the order they are passed to `compose`. In the example above: `logger`, then `cors`, then `main` (then the reverse order on the way up).
 
-## More Examples
-
-Take a look a the [Examples](https://github.com/etienne-dldc/tumau/tree/master/examples) folder !
-
 ## Performance
 
 > Is it fast ?
 
-I'm no expert in benchmarks but from [my attempt to measure it](https://github.com/etienne-dldc/tumau/tree/master/benchmarks) it's a bit faster than Koa and Express but not as fast as [fastify](https://github.com/fastify/fastify).
-
-You can run the benchmark yourself by running `yarn benchmark` in the root folder of the monorepo. Fell free to add more framework or more complex cases !
+I'm no expert in benchmarks but from my attempt to measure it, it's a bit faster than Koa and Express but not as fast as [fastify](https://github.com/fastify/fastify).
 
 ## What does "Tumau" means
 

@@ -1,4 +1,4 @@
-import { TumauServer } from '@tumau/core';
+import { TumauServer } from '../../src';
 
 export async function mountTumau(app: TumauServer): Promise<{ url: string; port: number; close: () => Promise<void> }> {
   return new Promise((resolve) => {

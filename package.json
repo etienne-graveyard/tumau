@@ -1,48 +1,67 @@
 {
   "name": "tumau",
-  "private": true,
+  "version": "1.0.0-alpha.90",
+  "description": "A node HTTP framework written in Typescript",
   "keywords": [
     "node",
     "server",
     "ts"
   ],
   "repository": "git@github.com:etienne-dldc/tumau.git",
+  "license": "MIT",
   "author": "Etienne Dldc <e.deladonchamps@gmail.com>",
-  "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "build:docs": "pnpm run export --filter docs",
-    "build": "pnpm run -r build",
-    "test": "pnpm run -r test",
-    "typecheck:all": "pnpm recursive --filter '@tumau/*' --filter '@tumau-example/*' exec pnpx tsc --noEmit",
-    "norm": "echo 'TODO'",
-    "norm:core": "echo 'TODO'",
-    "benchmark": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/benchmark.ts",
-    "pub": "pnpm run build && pnpm run test && pnpm publish -r",
-    "lint": "eslint .",
-    "generate-readme": "ts-node --files --project ./scripts/tsconfig.json ./scripts/src/generateReadme.ts",
-    "changeset": "changeset",
-    "changeset:version": "changeset version"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/tumau.es.js",
+      "require": "./dist/tumau.cjs.js"
     }
   },
-  "devDependencies": {
-    "@changesets/cli": "^2.16.0",
-    "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "eslint": "^7.27.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-react": "^7.23.2",
-    "husky": "^6.0.0",
-    "prettier": "^2.3.0",
-    "pretty-quick": "^3.1.0",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.2.4"
+  "main": "./dist/tumau.cjs.js",
+  "module": "./dist/tumau.es.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && vite build && yarn build:types",
+    "build:types": "tsc -p ./tsconfig.build.json",
+    "example:run": "vite serve example",
+    "lint": "prettier . --check && eslint . && tsc --noEmit",
+    "lint:fix": "prettier . --write . && eslint . --fix",
+    "release": "yarn build && np",
+    "test": "yarn lint && jest --coverage",
+    "test:run": "jest",
+    "test:watch": "jest --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "caniuse-lite": "^1.0.30001230"
+    "chemin": "^8.0.0",
+    "miid": "^4.0.1",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/koa": "^2.13.4",
+    "@types/node": "^16.7.6",
+    "@types/node-fetch": "^2.5.12",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.0.6",
+    "jest-ts-tsx-resolver": "^1.0.0",
+    "koa": "^2.13.1",
+    "node-fetch": "^2.6.1",
+    "np": "^7.5.0",
+    "prettier": "^2.3.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.4",
+    "typescript": "^4.3.5",
+    "vite": "^2.4.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }

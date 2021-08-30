@@ -1,19 +1,15 @@
 {
-  "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint/eslint-plugin"],
-  "extends": ["eslint-config-prettier", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "root": true,
   "rules": {
-    "@typescript-eslint/indent": 0,
-    "@typescript-eslint/no-use-before-define": 0,
-    "@typescript-eslint/explicit-function-return-type": 0,
-    "@typescript-eslint/array-type": [2, { "default": "generic" }],
-    "@typescript-eslint/no-explicit-any": 0,
-    "react/prop-types": 0,
-    "@typescript-eslint/no-inferrable-types": 0
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "require-yield": "off",
+    "@typescript-eslint/ban-types": "off",
+    "no-constant-condition": "off"
   }
 }
