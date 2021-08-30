@@ -13,7 +13,7 @@ import {
   InvalidResponseToHttpError,
   UrlParser,
   Router,
-  AllowedMethods,
+  AllowedMethodsRoutes,
 } from '../../src';
 import { mountTumau } from '../utils/mountTumau';
 import fetch from 'node-fetch';
@@ -41,7 +41,7 @@ test('real life', async () => {
       ErrorToHttpError,
       CookieManager(),
       Router(
-        AllowedMethods([
+        AllowedMethodsRoutes([
           // Route.UPGRADE('connect', HandleWebsocket),
           Route.GET('login', () => {
             return TumauResponse.withText('TODO');

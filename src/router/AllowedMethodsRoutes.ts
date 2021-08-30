@@ -1,9 +1,39 @@
-import { Middleware, HttpMethod, TumauResponse, Result, HttpError, TumauHandlerResponse, compose } from '../core';
-import { Routes, Route } from './Route';
-import { RouterAllowedMethodsContext } from './RouterContext';
-import { AllowedMethodsResponse } from './AllowedMethodsResponse';
+import {
+  compose,
+  createContext,
+  HttpError,
+  HttpHeaders,
+  HttpMethod,
+  Middleware,
+  Result,
+  TumauHandlerResponse,
+  TumauResponse,
+} from '../core';
+import { Route, Routes } from './Route';
 
-export function AllowedMethods(routes: Routes): Routes {
+export const RouterAllowedMethodsContext = createContext<Set<HttpMethod>>({ name: 'RouterAllowedMethods' });
+export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;
+
+export class AllowedMethodsResponse extends TumauResponse {
+  public originalResponse: TumauResponse;
+  public allowedMethods: Set<HttpMethod>;
+
+  constructor(originalResponse: TumauResponse, allowedMethods: Set<HttpMethod>) {
+    const allowHeaderContent = Array.from(allowedMethods.values()).join(',');
+
+    super(
+      originalResponse.extends({
+        headers: {
+          [HttpHeaders.Allow]: allowHeaderContent,
+        },
+      })
+    );
+    this.originalResponse = originalResponse;
+    this.allowedMethods = allowedMethods;
+  }
+}
+
+export function AllowedMethodsRoutes(routes: Routes): Routes {
   const result: Routes = [];
   const byPattern = Route.groupByPattern(routes);
   const updatedRoutes = new Map<Route, Route>();

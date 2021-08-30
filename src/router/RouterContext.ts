@@ -1,5 +1,5 @@
-import { HttpMethod, createContext } from '../core';
 import { Chemin } from 'chemin';
+import { createContext } from '../core';
 
 export interface Params {
   [key: string]: unknown;
@@ -16,6 +16,3 @@ export interface RouterContext {
 
 export const RouterContext = createContext<RouterContext>({ name: 'Router' });
 export const RouterConsumer = RouterContext.Consumer;
-
-export const RouterAllowedMethodsContext = createContext<Set<HttpMethod>>({ name: 'RouterAllowedMethods' });
-export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;

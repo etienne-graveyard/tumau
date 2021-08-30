@@ -1,15 +1,15 @@
-import { Middleware, RequestConsumer, Result } from '../core';
-import { Route, Routes, FindResult } from './Route';
-import { RouterContext } from './RouterContext';
-import { UrlParserConsumer } from '../url-parser';
+import { FindResult, Route, Routes } from './Route';
 import { Chemin } from 'chemin';
+import { Middleware, RequestConsumer, Result } from '../core';
+import { UrlParserConsumer } from '../url-parser';
+import { RouterContext } from './RouterContext';
 
 export function Router(routes: Routes): Middleware {
   return async (ctx, next): Promise<Result> => {
     if (ctx.has(RouterContext.Consumer)) {
       console.warn(
         [
-          `Warning: Using a Router inside another Router will break 'Allow' header for OPTIONS request !`,
+          `Warning: Using a Router inside another Router will break 'Allow' header and CORS !`,
           `If you want to group routes together you can use Route.namespace() or the low level Route.create()`,
         ].join('\n')
       );

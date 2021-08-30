@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const http = require('http');
@@ -5,7 +6,7 @@ const http = require('http');
 function formatHeaderName(name) {
   return name
     .split('-')
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join('-');
 }
 
@@ -25,10 +26,10 @@ module.exports = {
     const sortedHeaders = Object.keys(val.headers).sort();
     return [
       `HTTP/1.1 ${val.statusCode}${val.statusMessage ? ' ' + val.statusMessage : ''}`,
-      ...sortedHeaders.map(key => {
+      ...sortedHeaders.map((key) => {
         const rawValue = val.headers[key];
         if (Array.isArray(rawValue)) {
-          return rawValue.map(v => formatValue(key, v)).join('\n');
+          return rawValue.map((v) => formatValue(key, v)).join('\n');
         }
         return formatValue(key, rawValue);
       }),

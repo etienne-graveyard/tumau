@@ -13,7 +13,7 @@ import {
   CorsPreflight,
   Compress,
   HttpErrorToJsonResponse,
-  AllowedMethods,
+  AllowedMethodsRoutes,
   Router,
   UrlParser,
 } from '../../src';
@@ -35,7 +35,7 @@ test('real life 2', async () => {
       CookieParser(),
       CookieManager(),
       Router(
-        AllowedMethods([
+        AllowedMethodsRoutes([
           Route.POST('login', () => {
             return JsonResponse.withJson({ success: true });
           }),

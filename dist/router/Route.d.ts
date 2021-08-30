@@ -1,8 +1,6 @@
-import { HttpMethod, Middleware } from '../core';
 import { Chemin } from 'chemin';
-export declare const ROUTE_TOKEN: unique symbol;
+import { HttpMethod, Middleware } from '../core';
 export interface Route {
-    [ROUTE_TOKEN]: true;
     pattern: Chemin | null;
     method: HttpMethod | null;
     exact: boolean;
@@ -14,18 +12,18 @@ export declare const Route: {
     find: typeof find;
     groupByPattern: typeof groupByPattern;
     create: typeof createRoute;
-    GET: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) => Route;
-    POST: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) => Route;
-    PUT: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) => Route;
-    DELETE: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) => Route;
-    PATCH: (pattern: Chemin | string | null, ...middleware: Array<Middleware>) => Route;
+    GET: (pattern: Chemin, ...middleware: Array<Middleware>) => Route;
+    POST: (pattern: Chemin, ...middleware: Array<Middleware>) => Route;
+    PUT: (pattern: Chemin, ...middleware: Array<Middleware>) => Route;
+    DELETE: (pattern: Chemin, ...middleware: Array<Middleware>) => Route;
+    PATCH: (pattern: Chemin, ...middleware: Array<Middleware>) => Route;
     namespace: (pattern: Chemin | string, routes: Routes) => Routes;
     group: (middlewares: Middleware | Array<Middleware>, routes: Routes) => Routes;
     fallback: (...middlewares: Array<Middleware>) => Route;
 };
 declare function createRoute({ isFallback, method, pattern, exact, }: {
     isFallback?: boolean;
-    pattern?: Chemin | string | null;
+    pattern?: Chemin | null;
     method?: HttpMethod | null;
     exact?: boolean;
 }, middleware: Middleware | Array<Middleware>): Route;
