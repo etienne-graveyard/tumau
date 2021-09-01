@@ -1,15 +1,8 @@
 import { Middleware, RequestConsumer, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
 import { CorsActualResponse } from './CorsActualResponse';
 import { CorsActualConfig, createActualConfigResolver } from './utils';
-import { DEFAULT_ALLOW_ORIGIN, DEFAULT_ALLOW_CREDENTIALS } from './defaults';
 
 export function CorsActual(config: CorsActualConfig = {}): Middleware {
-  const { allowOrigin = DEFAULT_ALLOW_ORIGIN, allowCredentials = DEFAULT_ALLOW_CREDENTIALS } = config;
-
-  if (allowOrigin.indexOf('*') >= 0 && allowCredentials === true) {
-    throw new Error(`credentials not supported with wildcard`);
-  }
-
   const resolver = createActualConfigResolver(config);
 
   return async (ctx, next) => {

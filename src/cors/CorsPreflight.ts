@@ -1,15 +1,8 @@
 import { Middleware, RequestConsumer, HttpHeaders } from '../core';
 import { CorsPreflightResponse } from './CorsPreflightResponse';
 import { createPreflightConfigResolver, CorsPreflightConfig } from './utils';
-import { DEFAULT_ALLOW_ORIGIN, DEFAULT_ALLOW_CREDENTIALS } from './defaults';
 
 export function CorsPreflight(config: CorsPreflightConfig = {}): Middleware {
-  const { allowOrigin = DEFAULT_ALLOW_ORIGIN, allowCredentials = DEFAULT_ALLOW_CREDENTIALS } = config;
-
-  if (allowOrigin.indexOf('*') >= 0 && allowCredentials === true) {
-    throw new Error(`credentials not supported with wildcard`);
-  }
-
   const resolver = createPreflightConfigResolver(config);
 
   return async (ctx, next) => {
