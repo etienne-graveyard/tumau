@@ -30,6 +30,8 @@ export class HttpError extends Error {
   public static Internal: typeof Internal;
   public static Forbidden: typeof Forbidden;
   public static Unauthorized: typeof Unauthorized;
+  // alias
+  public static Unauthenticated: typeof Unauthorized;
   public static TooManyRequests: typeof TooManyRequests;
 }
 
@@ -113,4 +115,5 @@ HttpError.ServerDidNotRespond = ServerDidNotRespond;
 HttpError.Internal = Internal;
 HttpError.Forbidden = Forbidden;
 HttpError.Unauthorized = Unauthorized;
+HttpError.Unauthenticated = Unauthorized;
 HttpError.TooManyRequests = TooManyRequests;
