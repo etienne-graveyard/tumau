@@ -9,6 +9,8 @@ export function CorsPreflightRoutes(routes: Routes, config: CorsPreflightConfig 
   const result: Routes = [];
   byPattern.forEach(({ pattern, routes }) => {
     const optionsRoute = routes.find((route) => route.method === HttpMethod.OPTIONS);
+    const isFallback = routes.some((r) => r.isFallback);
+    const exact = routes.every((r) => r.exact);
     if (optionsRoute) {
       const newRoute: Route = {
         ...optionsRoute,
@@ -16,7 +18,7 @@ export function CorsPreflightRoutes(routes: Routes, config: CorsPreflightConfig 
       };
       updatedRoutes.set(optionsRoute, newRoute);
     } else {
-      result.push(Route.create({ pattern, exact: true, method: HttpMethod.OPTIONS }, PreflightMiddleware));
+      result.push(Route.create({ pattern, isFallback, exact, method: HttpMethod.OPTIONS }, PreflightMiddleware));
     }
   });
   routes.forEach((route) => {

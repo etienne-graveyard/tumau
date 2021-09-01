@@ -7,6 +7,7 @@ import {
   HttpError,
   TumauHandlerResponse,
 } from '../core';
+import { LoggerConsumer } from '../logger';
 import { CreateCookieOptions, SetCookie, SetCookies } from './Cookie';
 import { CookieResponse } from './CookieResponse';
 
@@ -47,7 +48,8 @@ export function CookieManager(): Middleware {
     const response = await next(ctx.with(CookieManagerCtx.Provider(manager)));
     if (isUpgrade) {
       if (cookies.length) {
-        console.warn(`Cookies set/deleted in an upgrade event are ignored`);
+        const logger = ctx.get(LoggerConsumer);
+        logger.warn(`Cookies set/deleted in an upgrade event are ignored`);
       }
       return response;
     }
