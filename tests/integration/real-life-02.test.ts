@@ -29,7 +29,7 @@ test('real life 2', async () => {
       Compress,
       HttpErrorToJsonResponse,
       InvalidResponseToHttpError,
-      ErrorToHttpError,
+      ErrorToHttpError(),
       UrlParser(),
       JsonParser(),
       CookieParser(),

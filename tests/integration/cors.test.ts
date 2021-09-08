@@ -100,15 +100,6 @@ describe('CORS: simple / actual requests', () => {
     await close();
   });
 
-  test('6.1.3 Does not set Access-Control-Allow-Credentials header if Origin is *', async () => {
-    expect(() =>
-      createCorsServer({
-        allowOrigin: ['*'],
-        allowCredentials: true,
-      })
-    ).toThrowError('');
-  });
-
   test('6.1.3 Sets Access-Control-Allow-Credentials header if configured', async () => {
     const app = createCorsServer({
       allowOrigin: ['http://api.myapp.com'],
@@ -180,7 +171,7 @@ describe('CORS: simple / actual requests', () => {
 describe('CORS: preflight requests', () => {
   function createCorsServer(config: CorsPreflightConfig = {}) {
     return createServer(
-      compose(CorsPreflight(config), HttpErrorToTextResponse, ErrorToHttpError, (ctx) => {
+      compose(CorsPreflight(config), HttpErrorToTextResponse, ErrorToHttpError(), (ctx) => {
         const req = ctx.getOrFail(RequestConsumer);
         if (req.method === HttpMethod.POST) {
           return TumauResponse.withText('Hello');
@@ -418,7 +409,7 @@ describe('CorsPackage', () => {
 
   test('handle error', async () => {
     const app = createServer(
-      compose(CorsActual(), CorsPreflight(), HttpErrorToTextResponse, ErrorToHttpError, () => {
+      compose(CorsActual(), CorsPreflight(), HttpErrorToTextResponse, ErrorToHttpError(), () => {
         throw new HttpError.NotFound();
       })
     );

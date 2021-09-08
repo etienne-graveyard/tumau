@@ -7,13 +7,18 @@ export type Logger = {
   warn(...data: Array<any>): void;
 };
 
+const IS_TEST = process.env.NODE_ENV === 'test';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
+
 export const LoggerContext = createContext<Logger>({
   name: 'Logger',
   defaultValue: {
-    error: console.error,
-    info: console.info,
-    log: console.log,
-    warn: console.warn,
+    error: IS_TEST ? noop : console.error,
+    info: IS_TEST ? noop : console.info,
+    log: IS_TEST ? noop : console.log,
+    warn: IS_TEST ? noop : console.warn,
   },
 });
 export const LoggerConsumer = LoggerContext.Consumer;

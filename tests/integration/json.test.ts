@@ -23,7 +23,7 @@ import fetch from 'node-fetch';
 function JsonPackage() {
   return compose(
     HttpErrorToJsonResponse,
-    ErrorToHttpError,
+    ErrorToHttpError(),
     InvalidResponseToHttpError,
     StringBodyParser(),
     JsonParser()
@@ -33,7 +33,7 @@ function JsonPackage() {
 describe('Server', () => {
   test('parse JSON body', async () => {
     const app = createServer(
-      compose(HttpErrorToTextResponse, ErrorToHttpError, StringBodyParser(), JsonParser(), (ctx) => {
+      compose(HttpErrorToTextResponse, ErrorToHttpError(), StringBodyParser(), JsonParser(), (ctx) => {
         return JsonResponse.withJson({ body: ctx.get(JsonParserConsumer) });
       })
     );

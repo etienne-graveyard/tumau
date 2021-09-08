@@ -38,7 +38,7 @@ test('real life', async () => {
       UrlParser(),
       HttpErrorToTextResponse,
       InvalidResponseToHttpError,
-      ErrorToHttpError,
+      ErrorToHttpError(),
       CookieManager(),
       Router(
         AllowedMethodsRoutes([

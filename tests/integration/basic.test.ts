@@ -147,7 +147,7 @@ describe('TumauServer', () => {
 
   test('throw HttpError return an error', async () => {
     const app = createServer(
-      compose(HttpErrorToTextResponse, ErrorToHttpError, () => {
+      compose(HttpErrorToTextResponse, ErrorToHttpError(), () => {
         throw new HttpError.NotFound();
       })
     );
@@ -165,7 +165,7 @@ describe('TumauServer', () => {
 
   test('throw return an error', async () => {
     const app = createServer(
-      compose(HttpErrorToTextResponse, ErrorToHttpError, () => {
+      compose(HttpErrorToTextResponse, ErrorToHttpError(), () => {
         throw new Error('Oops');
       })
     );
@@ -187,7 +187,7 @@ describe('TumauServer', () => {
     }
 
     const app = createServer({
-      mainMiddleware: compose(HttpErrorToTextResponse, ErrorToHttpError, () => {
+      mainMiddleware: compose(HttpErrorToTextResponse, ErrorToHttpError(), () => {
         throwError();
       }),
       debug: true,
