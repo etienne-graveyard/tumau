@@ -8,15 +8,9 @@ import { HttpMethod } from './HttpMethod';
 import { HttpHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
 import { HttpError } from './HttpError';
-import {
-  RequestContext,
-  ServerResponseContext,
-  UpgradeSocketContext,
-  UpgradeHeadContext,
-  DebugContext,
-} from './Contexts';
+import { RequestKey, ServerResponseKey, UpgradeSocketKey, UpgradeHeadKey, DebugKey } from './Keys';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
-import { ContextStack } from 'miid';
+import { Stack } from 'miid';
 import { TumauHandlerResponse } from './TumauHandlerResponse';
 
 export interface TumauHandlers {
@@ -59,11 +53,11 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
   async function requestHandler(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const request = new TumauRequest(req);
 
-    const requestCtx = RequestContext.Provider(request);
-    const resCtx = ServerResponseContext.Provider(res);
-    const debugCtx = DebugContext.Provider(debug);
+    const requestCtx = RequestKey.Provider(request);
+    const resCtx = ServerResponseKey.Provider(res);
+    const debugCtx = DebugKey.Provider(debug);
 
-    return Promise.resolve(mainMiddleware(ContextStack.createFrom(requestCtx, resCtx, debugCtx), () => null))
+    return Promise.resolve(mainMiddleware(new Stack().with(requestCtx, resCtx, debugCtx), async () => null))
       .then((response) => {
         return sendResponseAny(response, res, request);
       })
@@ -82,14 +76,12 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
   async function upgradeHandler(req: IncomingMessage, socket: Duplex, head: Buffer): Promise<void> {
     const request = new TumauRequest(req, { isUpgrade: true });
 
-    const requestCtx = RequestContext.Provider(request);
-    const socketCtx = UpgradeSocketContext.Provider(socket);
-    const headCtx = UpgradeHeadContext.Provider(head);
-    const debugCtx = DebugContext.Provider(debug);
+    const requestCtx = RequestKey.Provider(request);
+    const socketCtx = UpgradeSocketKey.Provider(socket);
+    const headCtx = UpgradeHeadKey.Provider(head);
+    const debugCtx = DebugKey.Provider(debug);
 
-    return Promise.resolve(
-      mainMiddleware(ContextStack.createFrom(requestCtx, socketCtx, headCtx, debugCtx), () => null)
-    )
+    return Promise.resolve(mainMiddleware(new Stack().with(requestCtx, socketCtx, headCtx, debugCtx), async () => null))
       .then((response) => {
         // On upgrade if no response we just destroy the socket.
         if (response === null) {
@@ -174,14 +166,17 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
     res.writeHead(code, headers);
 
     if (isEmpty) {
-      return res.end();
+      res.end();
+      return;
     }
     // send body
     if (body === null || body === undefined) {
-      return res.end();
+      res.end();
+      return;
     }
     if (typeof body === 'string') {
-      return res.end(body);
+      res.end(body);
+      return;
     }
     if (isWritableStream(body)) {
       body.pipe(res);

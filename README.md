@@ -70,11 +70,11 @@ A middleware can stop the chain and return a response. In that case the next mid
 Contexts are typed when you create them:
 
 ```ts
-import { createContext } from 'tumau';
+import { createKey } from 'tumau';
 // here we could omit <number> because it would be infered
-const NumCtx = createContext<number>(0);
+const NumKey = createKey<number>(0);
 // you can omit the default value
-const NameCtx = createContext<string>();
+const NameKey = createKey<string>();
 ```
 
 ## Middleware

@@ -1,6 +1,6 @@
 import {
   compose,
-  createContext,
+  createKey,
   HttpError,
   HttpHeaders,
   HttpMethod,
@@ -11,8 +11,8 @@ import {
 } from '../core';
 import { Route, Routes } from './Route';
 
-export const RouterAllowedMethodsContext = createContext<Set<HttpMethod>>({ name: 'RouterAllowedMethods' });
-export const RouterAllowedMethodsConsumer = RouterAllowedMethodsContext.Consumer;
+export const RouterAllowedMethodsKey = createKey<Set<HttpMethod>>({ name: 'RouterAllowedMethods' });
+export const RouterAllowedMethodsConsumer = RouterAllowedMethodsKey.Consumer;
 
 export class AllowedMethodsResponse extends TumauResponse {
   public originalResponse: TumauResponse;
@@ -80,7 +80,7 @@ export function AllowedMethodsRoutes(routes: Routes): Routes {
 
 function AllowedMethodsMiddleware(methods: Set<HttpMethod>): Middleware {
   return async (ctx, next): Promise<Result> => {
-    const response = await next(ctx.with(RouterAllowedMethodsContext.Provider(methods)));
+    const response = await next(ctx.with(RouterAllowedMethodsKey.Provider(methods)));
     if (response instanceof TumauHandlerResponse) {
       return response;
     }

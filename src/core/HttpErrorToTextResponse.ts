@@ -1,7 +1,7 @@
 import { Middleware } from './Middleware';
 import { TumauResponse } from './TumauResponse';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
-import { RequestConsumer, DebugConsumer } from './Contexts';
+import { RequestConsumer, DebugConsumer } from './Keys';
 import { HttpError } from './HttpError';
 
 /**

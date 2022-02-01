@@ -1,6 +1,6 @@
 import {
   Middleware,
-  createContext,
+  createKey,
   Result,
   RequestConsumer,
   TumauResponse,
@@ -18,10 +18,10 @@ export interface CookieManager {
   delete(name: string, options?: CreateCookieOptions): void;
 }
 
-export const CookieManagerCtx = createContext<CookieManager>({
+export const CookieManagerKey = createKey<CookieManager>({
   name: 'CookieManager',
 });
-export const CookieManagerConsumer = CookieManagerCtx.Consumer;
+export const CookieManagerConsumer = CookieManagerKey.Consumer;
 
 /**
  *
@@ -45,7 +45,7 @@ export function CookieManager(): Middleware {
         cookies = cookies.filter((c) => c.name !== name);
       },
     };
-    const response = await next(ctx.with(CookieManagerCtx.Provider(manager)));
+    const response = await next(ctx.with(CookieManagerKey.Provider(manager)));
     if (isUpgrade) {
       if (cookies.length) {
         const logger = ctx.get(LoggerConsumer);

@@ -2,11 +2,11 @@ import { FindResult, Route, Routes } from './Route';
 import { Chemin } from 'chemin';
 import { Middleware, RequestConsumer, Result } from '../core';
 import { UrlParserConsumer } from '../url-parser';
-import { RouterContext } from './RouterContext';
+import { RouterKey, RouterContext } from './RouterContext';
 
 export function Router(routes: Routes): Middleware {
   return async (ctx, next): Promise<Result> => {
-    if (ctx.has(RouterContext.Consumer)) {
+    if (ctx.has(RouterKey.Consumer)) {
       console.warn(
         [
           `Warning: Using a Router inside another Router will break 'Allow' header and CORS !`,
@@ -50,7 +50,7 @@ export function Router(routes: Routes): Middleware {
         },
       };
 
-      const withRouterDataCtx = ctx.with(RouterContext.Provider(routerData));
+      const withRouterDataCtx = ctx.with(RouterKey.Provider(routerData));
 
       if (findResult === null) {
         // no more match, run next

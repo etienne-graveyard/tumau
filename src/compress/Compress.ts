@@ -1,5 +1,5 @@
 import { Middleware, HttpHeaders, RequestConsumer, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
-import { CompressContext } from './CompressContext';
+import { CompressKey } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 import { ContentEncoding } from './ContentEnconding';
 
@@ -20,7 +20,7 @@ export const Compress: Middleware = async (ctx, next) => {
   };
 
   // we allow next middleware to change what acceptedEncoding are accepted
-  const response = await next(ctx.with(CompressContext.Provider(compressCtx)));
+  const response = await next(ctx.with(CompressKey.Provider(compressCtx)));
   if (isUpgrade) {
     return response;
   }

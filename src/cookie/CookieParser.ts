@@ -1,11 +1,11 @@
-import { Middleware, HttpHeaders, createContext, RequestConsumer, Result } from '../core';
+import { Middleware, HttpHeaders, createKey, RequestConsumer, Result } from '../core';
 import { Cookies } from './Cookie';
 
-export const CookieParserContext = createContext<Cookies>({
+export const CookieParserKey = createKey<Cookies>({
   name: 'CookieParser',
   defaultValue: {},
 });
-export const CookieParserConsumer = CookieParserContext.Consumer;
+export const CookieParserConsumer = CookieParserKey.Consumer;
 
 export function CookieParser(): Middleware {
   return async (ctx, next): Promise<Result> => {
@@ -14,6 +14,6 @@ export function CookieParser(): Middleware {
 
     const cookiesStr = headers[HttpHeaders.Cookie];
     const cookies = cookiesStr === undefined ? {} : Cookies.parse(cookiesStr);
-    return next(ctx.with(CookieParserContext.Provider(cookies)));
+    return next(ctx.with(CookieParserKey.Provider(cookies)));
   };
 }

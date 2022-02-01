@@ -1,4 +1,4 @@
-import { createContext } from '../core';
+import { createKey } from '../core';
 
 export type Logger = {
   log(...data: Array<any>): void;
@@ -12,7 +12,7 @@ const IS_TEST = process.env.NODE_ENV === 'test';
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-export const LoggerContext = createContext<Logger>({
+export const LoggerContext = createKey<Logger>({
   name: 'Logger',
   defaultValue: {
     error: IS_TEST ? noop : console.error,
@@ -21,4 +21,5 @@ export const LoggerContext = createContext<Logger>({
     warn: IS_TEST ? noop : console.warn,
   },
 });
+
 export const LoggerConsumer = LoggerContext.Consumer;

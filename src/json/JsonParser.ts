@@ -1,5 +1,5 @@
 import { ContentType, ContentTypeUtils } from '../content-type';
-import { Middleware, HttpMethod, HttpHeaders, HttpError, createContext, RequestConsumer, Result } from '../core';
+import { Middleware, HttpMethod, HttpHeaders, HttpError, createKey, RequestConsumer, Result } from '../core';
 import { StringBodyConsumer } from '../string-body';
 
 // Allowed whitespace is defined in RFC 7159
@@ -7,14 +7,14 @@ import { StringBodyConsumer } from '../string-body';
 // eslint-disable-next-line no-control-regex
 const strictJSONReg = /^[\x20\x09\x0a\x0d]*(\[|\{)/;
 
-export const JsonParserContext = createContext<any>({ name: 'JsonParser' });
-export const JsonParserConsumer = JsonParserContext.Consumer;
+export const JsonParserKey = createKey<any>({ name: 'JsonParser' });
+export const JsonParserConsumer = JsonParserKey.Consumer;
 
 export function JsonParser(): Middleware {
   return async (ctx, next): Promise<Result> => {
     const request = ctx.getOrFail(RequestConsumer);
     const headers = request.headers;
-    const noBodyCtx = ctx.with(JsonParserContext.Provider(null));
+    const noBodyCtx = ctx.with(JsonParserKey.Provider(null));
 
     if (
       request.method === HttpMethod.GET ||
@@ -43,6 +43,6 @@ export function JsonParser(): Middleware {
       throw new HttpError.NotAcceptable('invalid JSON, only supports object and array');
     }
     const jsonBody = JSON.parse(stringContent);
-    return next(ctx.with(JsonParserContext.Provider(jsonBody)));
+    return next(ctx.with(JsonParserKey.Provider(jsonBody)));
   };
 }

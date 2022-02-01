@@ -1,5 +1,5 @@
 import { Chemin } from 'chemin';
-import { createContext } from '../core';
+import { createKey } from '../core';
 
 export interface Params {
   [key: string]: unknown;
@@ -14,5 +14,5 @@ export interface RouterContext {
   has(chemin: Chemin): boolean;
 }
 
-export const RouterContext = createContext<RouterContext>({ name: 'Router' });
-export const RouterConsumer = RouterContext.Consumer;
+export const RouterKey = createKey<RouterContext>({ name: 'Router' });
+export const RouterConsumer = RouterKey.Consumer;

@@ -1,5 +1,5 @@
 import { ContentType, ContentTypeUtils } from '../content-type';
-import { Middleware, HttpMethod, HttpHeaders, HttpError, createContext, RequestConsumer, Result } from '../core';
+import { Middleware, HttpMethod, HttpHeaders, HttpError, createKey, RequestConsumer, Result } from '../core';
 import { parseStringBody } from './parseStringBody';
 
 interface Options {
@@ -7,8 +7,8 @@ interface Options {
   limit?: number;
 }
 
-export const StringBodyContext = createContext<string | null>({ name: 'StringBody' });
-export const StringBodyConsumer = StringBodyContext.Consumer;
+export const StringBodyKey = createKey<string | null>({ name: 'StringBody' });
+export const StringBodyConsumer = StringBodyKey.Consumer;
 
 const STRING_CONTENT_TYPES = [ContentType.Json, ContentType.Text, ContentType.Html, ContentType.GraphQL] as const;
 
@@ -19,7 +19,7 @@ export function StringBodyParser(options: Options = {}): Middleware {
   return async (ctx, next): Promise<Result> => {
     const request = ctx.getOrFail(RequestConsumer);
     const headers = request.headers;
-    const noStringBodyCtx = ctx.with(StringBodyContext.Provider(null));
+    const noStringBodyCtx = ctx.with(StringBodyKey.Provider(null));
 
     if (
       request.method === HttpMethod.GET ||
@@ -61,6 +61,6 @@ export function StringBodyParser(options: Options = {}): Middleware {
       throw new HttpError.PayloadTooLarge();
     }
     const strBody = await parseStringBody(request.req, limit, length);
-    return next(ctx.with(StringBodyContext.Provider(strBody)));
+    return next(ctx.with(StringBodyKey.Provider(strBody)));
   };
 }

@@ -1,5 +1,5 @@
 import { parse as parseQueryString, ParsedUrlQuery } from 'querystring';
-import { Middleware, createContext, RequestConsumer } from '../core';
+import { Middleware, createKey, RequestConsumer } from '../core';
 
 export interface ParsedUrl {
   query: null | ParsedUrlQuery;
@@ -9,13 +9,13 @@ export interface ParsedUrl {
   rawQuery: null | string;
 }
 
-export const UrlParserContext = createContext<ParsedUrl>({ name: 'UrlParser' });
+export const UrlParserKey = createKey<ParsedUrl>({ name: 'UrlParser' });
 
-export const UrlParserConsumer = UrlParserContext.Consumer;
+export const UrlParserConsumer = UrlParserKey.Consumer;
 
 export function UrlParser(): Middleware {
   return (ctx, next) => {
-    if (ctx.has(UrlParserContext.Consumer)) {
+    if (ctx.has(UrlParserKey.Consumer)) {
       return next(ctx);
     }
     const request = ctx.getOrFail(RequestConsumer);
@@ -27,7 +27,7 @@ export function UrlParser(): Middleware {
       query: parsedObj.query ? parseQueryString(parsedObj.query) : null,
       search: parsedObj.search,
     };
-    return next(ctx.with(UrlParserContext.Provider(parsed)));
+    return next(ctx.with(UrlParserKey.Provider(parsed)));
   };
 }
 

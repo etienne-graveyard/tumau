@@ -1,11 +1,11 @@
-import { createContext } from '../core';
+import { createKey } from '../core';
 import { ContentEncoding } from './ContentEnconding';
 
-export const CompressContext = createContext<{
+export const CompressKey = createKey<{
   acceptedEncoding: Array<ContentEncoding>;
   usedEncoding: null | Array<ContentEncoding>;
 }>({
   name: 'Compress',
 });
 
-export const CompressConsumer = CompressContext.Consumer;
+export const CompressConsumer = CompressKey.Consumer;

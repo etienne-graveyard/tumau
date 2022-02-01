@@ -1,5 +1,5 @@
-export { createContext, ContextStack } from 'miid';
-export type { Context, ContextConsumer, ContextProvider, ContextProviderFn } from 'miid';
+export { createKey, Stack } from 'miid';
+export type { KeyConsumer, KeyProvider, KeyProviderFn, Key } from 'miid';
 export { HttpError } from './HttpError';
 export { HttpHeaders } from './HttpHeaders';
 export type { HttpHeadersName } from './HttpHeaders';
@@ -24,7 +24,7 @@ export {
   UpgradeHeadConsumer,
   UpgradeSocketConsumer,
   DebugConsumer,
-} from './Contexts';
+} from './Keys';
 export { InvalidResponseToHttpError } from './InvalidResponseToHttpError';
 export { ErrorToHttpError } from './ErrorToHttpError';
 export { HttpErrorToTextResponse } from './HttpErrorToTextResponse';
