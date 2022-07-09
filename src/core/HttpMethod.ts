@@ -1,4 +1,4 @@
-const AllHttpMethod = {
+const ALL_METHODS = {
   GET: 'GET',
   HEAD: 'HEAD',
   PATCH: 'PATCH',
@@ -8,15 +8,15 @@ const AllHttpMethod = {
   PUT: 'PUT',
 } as const;
 
-export type HttpMethod = typeof AllHttpMethod[keyof typeof AllHttpMethod];
+export type HttpMethod = typeof ALL_METHODS[keyof typeof ALL_METHODS];
 
 const ALL_HTTP_METHODS: Set<HttpMethod> = new Set(
-  (Object.keys(AllHttpMethod) as Array<keyof typeof AllHttpMethod>).map(
-    (k: keyof typeof AllHttpMethod) => AllHttpMethod[k]
+  (Object.keys(ALL_METHODS) as Array<keyof typeof ALL_METHODS>).map(
+    (k: keyof typeof ALL_METHODS) => ALL_METHODS[k]
   ) as any
 );
 
 export const HttpMethod = {
-  ...AllHttpMethod,
+  ...ALL_METHODS,
   __ALL: ALL_HTTP_METHODS,
 };

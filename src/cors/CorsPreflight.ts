@@ -1,4 +1,4 @@
-import { Middleware, RequestConsumer, HttpHeaders } from '../core';
+import { Middleware, HttpHeader } from '../core';
 import { CorsPreflightResponse } from './CorsPreflightResponse';
 import { createPreflightConfigResolver, CorsPreflightConfig } from './utils';
 
@@ -6,11 +6,10 @@ export function CorsPreflight(config: CorsPreflightConfig = {}): Middleware {
   const resolver = createPreflightConfigResolver(config);
 
   return async (ctx, next) => {
-    const request = ctx.getOrFail(RequestConsumer);
-    const origin = request.origin;
+    const origin = ctx.origin;
 
     // The requested method
-    const requestMethod = request.headers[HttpHeaders.AccessControlRequestMethod] as string | undefined;
+    const requestMethod = ctx.headers[HttpHeader.AccessControlRequestMethod] as string | undefined;
 
     // If there are no Access-Control-Request-Method this is not CORS preflight
     if (!requestMethod) {

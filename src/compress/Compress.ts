@@ -1,12 +1,11 @@
-import { Middleware, HttpHeaders, RequestConsumer, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
+import { Middleware, HttpHeader, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
 import { CompressKey } from './CompressContext';
 import { CompressResponse } from './CompressResponse';
 import { ContentEncoding } from './ContentEnconding';
 
 export const Compress: Middleware = async (ctx, next) => {
-  const request = ctx.getOrFail(RequestConsumer);
-  const isUpgrade = request.isUpgrade;
-  const acceptedEncodingHeader = request.headers[HttpHeaders.AcceptEncoding];
+  const isUpgrade = ctx.isUpgrade;
+  const acceptedEncodingHeader = ctx.headers[HttpHeader.AcceptEncoding];
   const acceptedEncoding: Array<ContentEncoding> =
     typeof acceptedEncodingHeader === 'string'
       ? (acceptedEncodingHeader.split(/, ?/) as any)

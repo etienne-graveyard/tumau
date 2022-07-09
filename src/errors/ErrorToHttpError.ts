@@ -1,5 +1,4 @@
-import { Middleware } from './Middleware';
-import { HttpError } from './HttpError';
+import { Middleware, HttpError } from '../core';
 import { LoggerConsumer } from '../logger';
 
 export type ErrorToHttpErrorOptions = {

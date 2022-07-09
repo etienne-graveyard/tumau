@@ -1,6 +1,6 @@
 import { FindResult, Route, Routes } from './Route';
 import { Chemin } from 'chemin';
-import { Middleware, RequestConsumer, Result } from '../core';
+import { Middleware, Result } from '../core';
 import { UrlParserConsumer } from '../url-parser';
 import { RouterKey, RouterContext } from './RouterContext';
 
@@ -16,8 +16,7 @@ export function Router(routes: Routes): Middleware {
     }
 
     const parsedUrl = ctx.getOrFail(UrlParserConsumer);
-    const request = ctx.getOrFail(RequestConsumer);
-    const requestMethod = request.method;
+    const requestMethod = ctx.method;
     const matchingRoutes = Route.find(routes, parsedUrl.pathname, requestMethod);
 
     return handleNext(0);

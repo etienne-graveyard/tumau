@@ -1,12 +1,4 @@
-import {
-  Middleware,
-  createKey,
-  Result,
-  RequestConsumer,
-  TumauResponse,
-  HttpError,
-  TumauHandlerResponse,
-} from '../core';
+import { Middleware, createKey, Result, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
 import { LoggerConsumer } from '../logger';
 import { CreateCookieOptions, SetCookie, SetCookies } from './Cookie';
 import { CookieResponse } from './CookieResponse';
@@ -23,12 +15,9 @@ export const CookieManagerKey = createKey<CookieManager>({
 });
 export const CookieManagerConsumer = CookieManagerKey.Consumer;
 
-/**
- *
- */
 export function CookieManager(): Middleware {
   return async (ctx, next): Promise<Result> => {
-    const isUpgrade = ctx.getOrFail(RequestConsumer).isUpgrade;
+    const isUpgrade = ctx.isUpgrade;
     let cookies: SetCookies = [];
     const manager: CookieManager = {
       set: (name, value, options) => {

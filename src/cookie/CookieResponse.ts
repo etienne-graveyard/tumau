@@ -1,4 +1,4 @@
-import { TumauResponse, HttpHeaders, HttpStatus } from '../core';
+import { TumauResponse, HttpHeader, HttpStatus } from '../core';
 import { SetCookies, SetCookie } from './Cookie';
 
 export class CookieResponse extends TumauResponse {
@@ -8,7 +8,7 @@ export class CookieResponse extends TumauResponse {
     super(
       originalResponse.extends({
         headers: {
-          [HttpHeaders.SetCookie]: CookieResponse.buildSetCookieHeader(cookies),
+          [HttpHeader.SetCookie]: CookieResponse.buildSetCookieHeader(cookies),
         },
       })
     );

@@ -1,3 +1,2 @@
-export { ContentType, ContentTypeCharset } from './ContentType';
-export type { ContentTypeObject, ContentTypeParameters } from './ContentType';
-export { ContentTypeUtils } from './ContentTypeUtils';
+export { ContentType, ContentTypeCharset, type ContentTypeObject, type ContentTypeParameters } from './ContentType';
+export { MimeType, type MimeTypeExtension } from './MimeType';

@@ -1,4 +1,4 @@
-import { Middleware, RequestConsumer, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
+import { Middleware, TumauResponse, HttpError, TumauHandlerResponse } from '../core';
 import { CorsActualResponse } from './CorsActualResponse';
 import { CorsActualConfig, createActualConfigResolver } from './utils';
 
@@ -6,13 +6,12 @@ export function CorsActual(config: CorsActualConfig = {}): Middleware {
   const resolver = createActualConfigResolver(config);
 
   return async (ctx, next) => {
-    const request = ctx.getOrFail(RequestConsumer);
-    const origin = request.origin;
+    const origin = ctx.origin;
 
     const response = await next(ctx);
 
     // Can't respond on upgrade
-    if (request.isUpgrade) {
+    if (ctx.isUpgrade) {
       return response;
     }
     if (response instanceof TumauHandlerResponse) {

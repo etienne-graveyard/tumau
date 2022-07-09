@@ -2,7 +2,7 @@ import {
   createServer,
   HttpError,
   HttpMethod,
-  HttpHeaders,
+  HttpHeader,
   ContentType,
   JsonParser,
   JsonResponse,
@@ -34,7 +34,7 @@ describe('Server', () => {
   test('parse JSON body', async () => {
     const app = createServer(
       compose(HttpErrorToTextResponse, ErrorToHttpError(), StringBodyParser(), JsonParser(), (ctx) => {
-        return JsonResponse.withJson({ body: ctx.get(JsonParserConsumer) });
+        return JsonResponse.create({ body: ctx.get(JsonParserConsumer) });
       })
     );
     const { close, url } = await mountTumau(app);
@@ -42,7 +42,7 @@ describe('Server', () => {
       method: HttpMethod.POST,
       body: JSON.stringify({ name: 'Perceval', alias: 'Provençal le Gaulois' }),
       headers: {
-        [HttpHeaders.ContentType]: ContentType.Json,
+        [HttpHeader.ContentType]: ContentType.format('application/json'),
       },
     });
     expect(res).toMatchInlineSnapshot(`
@@ -59,7 +59,7 @@ describe('Server', () => {
   test('JsonPackage handle JsonResponse', async () => {
     const app = createServer(
       compose(JsonPackage(), () => {
-        return JsonResponse.withJson({ foo: 'bar' });
+        return JsonResponse.create({ foo: 'bar' });
       })
     );
     const { close, url } = await mountTumau(app);
@@ -161,7 +161,7 @@ describe('Server', () => {
     const app = createServer(
       compose(JsonPackage(), CookieManager(), (ctx) => {
         ctx.getOrFail(CookieManagerConsumer).set('token', 'AZERTYUIO');
-        return JsonResponse.withJson({ foo: 'bar' });
+        return JsonResponse.create({ foo: 'bar' });
       })
     );
     const { close, url } = await mountTumau(app);
@@ -184,7 +184,7 @@ describe('Server', () => {
     const app = createServer(
       compose(JsonPackage(), (ctx) => {
         const body = ctx.getOrFail(JsonParserConsumer);
-        return JsonResponse.withJson(body);
+        return JsonResponse.create(body);
       })
     );
     const { close, url } = await mountTumau(app);
@@ -213,7 +213,7 @@ describe('Server', () => {
     const app = createServer(
       compose(JsonPackage(), (ctx) => {
         const body = ctx.getOrFail(JsonParserConsumer);
-        return JsonResponse.withJson(body);
+        return JsonResponse.create(body);
       })
     );
     const { close, url } = await mountTumau(app);

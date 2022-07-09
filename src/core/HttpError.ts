@@ -10,7 +10,7 @@ export class HttpError extends Error {
       console.error(
         [
           `You passed a non error HTTP code to HttpError (${code}). Tumau will use a 500 code instead.`,
-          `If you want to interupt the flow with a non-error response you can \`throw new Response()\``,
+          `If you want to interupt the flow with a non-error response you can \`throw TumauResponse.create()\``,
         ].join('\n')
       );
       this.code = 500;
@@ -18,6 +18,7 @@ export class HttpError extends Error {
       this.code = code;
     }
     this.message = message || HttpStatus.getMessage(code);
+    // Fix prototype chain
     Object.setPrototypeOf(this, new.target.prototype);
   }
 

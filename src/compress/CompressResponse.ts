@@ -1,4 +1,4 @@
-import { TumauResponse, Body, HttpHeaders, HttpStatus } from '../core';
+import { TumauResponse, Body, HttpHeader, HttpStatus } from '../core';
 import { OutgoingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { StringStream } from './StringStream';
@@ -12,12 +12,12 @@ export class CompressResponse extends TumauResponse {
     const body = CompressResponse.encodeBodyWithEncodings(originalResponse.body, encodings);
     const headers: OutgoingHttpHeaders = {
       ...originalResponse.headers,
-      [HttpHeaders.ContentEncoding]: encodings,
+      [HttpHeader.ContentEncoding]: encodings,
     };
 
     // remove content length because we no longer know the size of the body
     // (unless we compress first, then send it but that would be quite bad)
-    delete headers[HttpHeaders.ContentLength];
+    delete headers[HttpHeader.ContentLength];
 
     super({
       body,

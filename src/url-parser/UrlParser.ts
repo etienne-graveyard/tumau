@@ -1,5 +1,5 @@
 import { parse as parseQueryString, ParsedUrlQuery } from 'querystring';
-import { Middleware, createKey, RequestConsumer } from '../core';
+import { Middleware, createKey } from '../core';
 
 export interface ParsedUrl {
   query: null | ParsedUrlQuery;
@@ -18,8 +18,7 @@ export function UrlParser(): Middleware {
     if (ctx.has(UrlParserKey.Consumer)) {
       return next(ctx);
     }
-    const request = ctx.getOrFail(RequestConsumer);
-    const parsedObj = parseUrl(request.url);
+    const parsedObj = parseUrl(ctx.url);
     const parsed: ParsedUrl = {
       path: parsedObj.path,
       pathname: parsedObj.pathname,

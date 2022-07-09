@@ -1,5 +1,5 @@
-import { ContentType, ContentTypeUtils } from '../content-type';
-import { Middleware, HttpMethod, HttpHeaders, HttpError, createKey, RequestConsumer, Result } from '../core';
+import { ContentType, MimeType } from '../content-type';
+import { Middleware, HttpMethod, HttpHeader, HttpError, createKey, Result } from '../core';
 import { StringBodyConsumer } from '../string-body';
 
 // Allowed whitespace is defined in RFC 7159
@@ -12,27 +12,22 @@ export const JsonParserConsumer = JsonParserKey.Consumer;
 
 export function JsonParser(): Middleware {
   return async (ctx, next): Promise<Result> => {
-    const request = ctx.getOrFail(RequestConsumer);
-    const headers = request.headers;
+    const headers = ctx.headers;
     const noBodyCtx = ctx.with(JsonParserKey.Provider(null));
 
-    if (
-      request.method === HttpMethod.GET ||
-      request.method === HttpMethod.DELETE ||
-      request.method === HttpMethod.OPTIONS
-    ) {
+    if (ctx.method === HttpMethod.GET || ctx.method === HttpMethod.DELETE || ctx.method === HttpMethod.OPTIONS) {
       return next(noBodyCtx);
     }
 
-    const contentType = headers[HttpHeaders.ContentType];
+    const contentType = headers[HttpHeader.ContentType];
 
     if (!contentType) {
       return next(noBodyCtx);
     }
 
-    const parsedContentType = ContentTypeUtils.parse(contentType);
+    const parsedContentType = ContentType.parse(contentType);
     const stringContent = ctx.get(StringBodyConsumer);
-    const isJsonContentType = parsedContentType.type === ContentType.Json;
+    const isJsonContentType = parsedContentType.type === MimeType.fromExtension('json');
 
     if (stringContent === null || stringContent.length === 0 || !isJsonContentType) {
       return next(noBodyCtx);

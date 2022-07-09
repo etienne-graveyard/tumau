@@ -1,16 +1,14 @@
 import { Server, createServer as createHttpServer, OutgoingHttpHeaders, ServerResponse, IncomingMessage } from 'http';
 import { Duplex } from 'stream';
 import { Middleware } from './Middleware';
-import { TumauRequest } from './TumauRequest';
-import { TumauResponse } from './TumauResponse';
+import { TumauContext } from './TumauContext';
+import { TumauRequestResponse } from './TumauRequestResponse';
 import { HttpStatus } from './HttpStatus';
 import { HttpMethod } from './HttpMethod';
-import { HttpHeaders } from './HttpHeaders';
+import { HttpResponseHeader, HttpResponseHeaders } from './HttpHeaders';
 import { isWritableStream } from './utils';
 import { HttpError } from './HttpError';
-import { RequestKey, ServerResponseKey, UpgradeSocketKey, UpgradeHeadKey, DebugKey } from './Keys';
 import { TumauUpgradeResponse } from './TumauUpgradeResponse';
-import { Stack } from 'miid';
 import { TumauHandlerResponse } from './TumauHandlerResponse';
 
 export interface TumauHandlers {
@@ -51,15 +49,11 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
   return handlers;
 
   async function requestHandler(req: IncomingMessage, res: ServerResponse): Promise<void> {
-    const request = new TumauRequest(req);
+    const ctx = TumauContext.create(req, { isUpgrade: false, res, debug });
 
-    const requestCtx = RequestKey.Provider(request);
-    const resCtx = ServerResponseKey.Provider(res);
-    const debugCtx = DebugKey.Provider(debug);
-
-    return Promise.resolve(mainMiddleware(new Stack().with(requestCtx, resCtx, debugCtx), async () => null))
+    return Promise.resolve(mainMiddleware(ctx, async () => null))
       .then((response) => {
-        return sendResponseAny(response, res, request);
+        return sendResponseAny(req, res, response, ctx);
       })
       .catch((err): void => {
         // fatal
@@ -74,14 +68,9 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
   }
 
   async function upgradeHandler(req: IncomingMessage, socket: Duplex, head: Buffer): Promise<void> {
-    const request = new TumauRequest(req, { isUpgrade: true });
+    const ctx = TumauContext.create(req, { isUpgrade: true, socket, debug, head });
 
-    const requestCtx = RequestKey.Provider(request);
-    const socketCtx = UpgradeSocketKey.Provider(socket);
-    const headCtx = UpgradeHeadKey.Provider(head);
-    const debugCtx = DebugKey.Provider(debug);
-
-    return Promise.resolve(mainMiddleware(new Stack().with(requestCtx, socketCtx, headCtx, debugCtx), async () => null))
+    return Promise.resolve(mainMiddleware(ctx, async () => null))
       .then((response) => {
         // On upgrade if no response we just destroy the socket.
         if (response === null) {
@@ -92,7 +81,7 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
           // valid response
           return response.handler(req, socket, head);
         }
-        if (response instanceof TumauResponse) {
+        if (response instanceof TumauRequestResponse) {
           throw new Error(
             `Tumau received a TumauResponse on an 'upgrade' event. You should return null or a 'TumauUpgradeResponse'`
           );
@@ -115,9 +104,14 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
       });
   }
 
-  async function sendResponseAny(response: any, res: ServerResponse, request: TumauRequest): Promise<void> {
+  async function sendResponseAny(
+    req: IncomingMessage,
+    res: ServerResponse,
+    response: unknown,
+    ctx: TumauContext
+  ): Promise<void> {
     if (response instanceof TumauHandlerResponse) {
-      await response.handler(request.req, res);
+      await response.handler(req, res);
       return;
     }
     if (res.writableEnded) {
@@ -129,36 +123,34 @@ export function createHandlers(opts: Middleware | HandlerOptions): TumauHandlers
     if (response === null) {
       throw new Error('Response is null');
     }
-    if (response instanceof TumauResponse === false) {
-      throw new Error('The returned response is not valid (does not inherit the TumauResponse class)');
+    if (response instanceof TumauRequestResponse) {
+      return sendRequestResponse(res, ctx, response);
     }
-    return sendResponse(response, res, request);
+    throw new Error('The returned response is not valid (does not inherit the TumauRequestResponse class)');
   }
 
-  function sendResponse(response: TumauResponse, res: ServerResponse, request: TumauRequest): void {
-    const headers: OutgoingHttpHeaders = {
-      ...response.headers,
-    };
+  function sendRequestResponse(res: ServerResponse, ctx: TumauContext, response: TumauRequestResponse): void {
+    const headers = headersFromResponseHeaders(response.headers);
 
     const isEmpty =
-      HttpStatus.isEmpty(response.code) || request.method === HttpMethod.HEAD || request.method === HttpMethod.OPTIONS;
+      HttpStatus.isEmpty(response.status) || ctx.method === HttpMethod.HEAD || ctx.method === HttpMethod.OPTIONS;
 
     if (isEmpty) {
       // remove content related header
-      if (headers[HttpHeaders.ContentType]) {
-        delete headers[HttpHeaders.ContentType];
+      if (headers[HttpResponseHeader.ContentType]) {
+        delete headers[HttpResponseHeader.ContentType];
       }
-      if (headers[HttpHeaders.ContentLength]) {
-        delete headers[HttpHeaders.ContentLength];
+      if (headers[HttpResponseHeader.ContentLength]) {
+        delete headers[HttpResponseHeader.ContentLength];
       }
-      if (headers[HttpHeaders.ContentEncoding]) {
-        delete headers[HttpHeaders.ContentEncoding];
+      if (headers[HttpResponseHeader.ContentEncoding]) {
+        delete headers[HttpResponseHeader.ContentEncoding];
       }
     }
 
     const body = response.body;
 
-    let code = response.code;
+    let code = response.status;
     if (code === 200 && isEmpty) {
       code = 204;
     }
@@ -213,4 +205,21 @@ export function createServer(opts: Middleware | ServerOptions): TumauServer {
     resolvedHttpServer.listen(port, listeningListener);
     return server;
   }
+}
+
+function headersFromResponseHeaders(headers: HttpResponseHeaders): OutgoingHttpHeaders {
+  const result: OutgoingHttpHeaders = {};
+  for (const [key, value] of headers) {
+    const current = result[key];
+    if (current) {
+      if (Array.isArray(current)) {
+        current.push(value as any);
+      } else {
+        result[key] = [current as any, value];
+      }
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
 }

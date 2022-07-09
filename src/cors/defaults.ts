@@ -1,4 +1,4 @@
-import { HttpMethod, HttpHeaders, HttpHeadersName } from '../core';
+import { HttpMethod, HttpHeadersName, HttpHeader } from '../core';
 
 export const DEFAULT_ALLOW_METHODS: Array<HttpMethod> = [
   HttpMethod.POST,
@@ -10,12 +10,12 @@ export const DEFAULT_ALLOW_METHODS: Array<HttpMethod> = [
 ];
 
 export const DEFAULT_ALLOW_HEADERS: Array<HttpHeadersName> = [
-  HttpHeaders.XRequestedWith,
-  HttpHeaders.AccessControlAllowOrigin,
-  HttpHeaders.XHTTPMethodOverride,
-  HttpHeaders.ContentType,
-  HttpHeaders.Authorization,
-  HttpHeaders.Accept,
+  HttpHeader.XRequestedWith,
+  HttpHeader.AccessControlAllowOrigin,
+  HttpHeader.XHttpMethodOverride,
+  HttpHeader.ContentType,
+  HttpHeader.Authorization,
+  HttpHeader.Accept,
 ];
 
 export const DEFAULT_EXPOSE_HEADERS: Array<HttpHeadersName> = [];

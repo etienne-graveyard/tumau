@@ -1,4 +1,4 @@
-import { Middleware, HttpHeaders, createKey, RequestConsumer, Result } from '../core';
+import { Middleware, HttpHeader, createKey, RequestConsumer, Result } from '../core';
 import { Cookies } from './Cookie';
 
 export const CookieParserKey = createKey<Cookies>({
@@ -12,7 +12,7 @@ export function CookieParser(): Middleware {
     const request = ctx.getOrFail(RequestConsumer);
     const headers = request.headers;
 
-    const cookiesStr = headers[HttpHeaders.Cookie];
+    const cookiesStr = headers[HttpHeader.Cookie];
     const cookies = cookiesStr === undefined ? {} : Cookies.parse(cookiesStr);
     return next(ctx.with(CookieParserKey.Provider(cookies)));
   };

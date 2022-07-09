@@ -1,90 +1,107 @@
 export type HttpStatusCode = keyof typeof ALL_STATUS;
 
+export type HttpStatusName = typeof ALL_STATUS[HttpStatusCode]['name'];
+
 export type HttpStatusMessage = string;
-export interface HttpStatus {
+
+export interface HttpStatusObject {
   code: HttpStatusCode;
+  name: HttpStatusName;
   message: HttpStatusMessage;
 }
 
 const ALL_STATUS = {
-  100: 'Continue',
-  101: 'Switching Protocols',
-  102: 'Processing',
-  103: 'Early Hints',
-  200: 'OK',
-  201: 'Created',
-  202: 'Accepted',
-  203: 'Non-Authoritative Information',
-  204: 'No Content',
-  205: 'Reset Content',
-  206: 'Partial Content',
-  207: 'Multi-Status',
-  208: 'Already Reported',
-  226: 'IM Used',
-  300: 'Multiple Choices',
-  301: 'Moved Permanently',
-  302: 'Found',
-  303: 'See Other',
-  304: 'Not Modified',
-  305: 'Use Proxy',
-  306: '(Unused)',
-  307: 'Temporary Redirect',
-  308: 'Permanent Redirect',
-  400: 'Bad Request',
-  401: 'Unauthorized',
-  402: 'Payment Required',
-  403: 'Forbidden',
-  404: 'Not Found',
-  405: 'Method Not Allowed',
-  406: 'Not Acceptable',
-  407: 'Proxy Authentication Required',
-  408: 'Request Timeout',
-  409: 'Conflict',
-  410: 'Gone',
-  411: 'Length Required',
-  412: 'Precondition Failed',
-  413: 'Payload Too Large',
-  414: 'URI Too Long',
-  415: 'Unsupported Media Type',
-  416: 'Range Not Satisfiable',
-  417: 'Expectation Failed',
-  418: "I'm a teapot",
-  421: 'Misdirected Request',
-  422: 'Unprocessable Entity',
-  423: 'Locked',
-  424: 'Failed Dependency',
-  425: 'Too Early',
-  426: 'Upgrade Required',
-  428: 'Precondition Required',
-  429: 'Too Many Requests',
-  431: 'Request Header Fields Too Large',
-  451: 'Unavailable For Legal Reasons',
-  500: 'Internal Server Error',
-  501: 'Not Implemented',
-  502: 'Bad Gateway',
-  503: 'Service Unavailable',
-  504: 'Gateway Timeout',
-  505: 'HTTP Version Not Supported',
-  506: 'Variant Also Negotiates',
-  507: 'Insufficient Storage',
-  508: 'Loop Detected',
-  509: 'Bandwidth Limit Exceeded',
-  510: 'Not Extended',
-  511: 'Network Authentication Required',
+  100: { message: 'Continue', name: 'Continue' },
+  101: { message: 'Switching Protocols', name: 'SwitchingProtocols' },
+  102: { message: 'Processing', name: 'Processing' },
+  103: { message: 'Early Hints', name: 'EarlyHints' },
+  200: { message: 'Ok', name: 'Ok' },
+  201: { message: 'Created', name: 'Created' },
+  202: { message: 'Accepted', name: 'Accepted' },
+  203: { message: 'Non-Authoritative Information', name: 'NonAuthoritativeInformation' },
+  204: { message: 'No Content', name: 'NoContent' },
+  205: { message: 'Reset Content', name: 'ResetContent' },
+  206: { message: 'Partial Content', name: 'PartialContent' },
+  207: { message: 'Multi-Status', name: 'MultiStatus' },
+  208: { message: 'Already Reported', name: 'AlreadyReported' },
+  226: { message: 'IM Used', name: 'IMUsed' },
+  300: { message: 'Multiple Choices', name: 'MultipleChoices' },
+  301: { message: 'Moved Permanently', name: 'MovedPermanently' },
+  302: { message: 'Found', name: 'Found' },
+  303: { message: 'See Other', name: 'SeeOther' },
+  304: { message: 'Not Modified', name: 'NotModified' },
+  305: { message: 'Use Proxy', name: 'UseProxy' },
+  307: { message: 'Temporary Redirect', name: 'TemporaryRedirect' },
+  308: { message: 'Permanent Redirect', name: 'PermanentRedirect' },
+  400: { message: 'Bad Request', name: 'BadRequest' },
+  401: { message: 'Unauthorized', name: 'Unauthorized' },
+  402: { message: 'Payment Required', name: 'PaymentRequired' },
+  403: { message: 'Forbidden', name: 'Forbidden' },
+  404: { message: 'Not Found', name: 'NotFound' },
+  405: { message: 'Method Not Allowed', name: 'MethodNotAllowed' },
+  406: { message: 'Not Acceptable', name: 'NotAcceptable' },
+  407: { message: 'Proxy Authentication Required', name: 'ProxyAuthenticationRequired' },
+  408: { message: 'Request Timeout', name: 'RequestTimeout' },
+  409: { message: 'Conflict', name: 'Conflict' },
+  410: { message: 'Gone', name: 'Gone' },
+  411: { message: 'Length Required', name: 'LengthRequired' },
+  412: { message: 'Precondition Failed', name: 'PreconditionFailed' },
+  413: { message: 'Payload Too Large', name: 'PayloadTooLarge' },
+  414: { message: 'URI Too Long', name: 'URITooLong' },
+  415: { message: 'Unsupported Media Type', name: 'UnsupportedMediaType' },
+  416: { message: 'Range Not Satisfiable', name: 'RangeNotSatisfiable' },
+  417: { message: 'Expectation Failed', name: 'ExpectationFailed' },
+  418: { message: "I'm a teapot", name: 'Teapot' },
+  421: { message: 'Misdirected Request', name: 'MisdirectedRequest' },
+  422: { message: 'Unprocessable Entity', name: 'UnprocessableEntity' },
+  423: { message: 'Locked', name: 'Locked' },
+  424: { message: 'Failed Dependency', name: 'Failed Dependency' },
+  425: { message: 'Too Early', name: 'TooEarly' },
+  426: { message: 'Upgrade Required', name: 'UpgradeRequired' },
+  428: { message: 'Precondition Required', name: 'PreconditionRequired' },
+  429: { message: 'Too Many Requests', name: 'TooManyRequests' },
+  431: { message: 'Request Header Fields Too Large', name: 'RequestHeaderFieldsTooLarge' },
+  451: { message: 'Unavailable For Legal Reasons', name: 'UnavailableForLegalReasons' },
+  500: { message: 'Internal Server Error', name: 'InternalServerError' },
+  501: { message: 'Not Implemented', name: 'NotImplemented' },
+  502: { message: 'Bad Gateway', name: 'BadGateway' },
+  503: { message: 'Service Unavailable', name: 'ServiceUnavailable' },
+  504: { message: 'Gateway Timeout', name: 'GatewayTimeout' },
+  505: { message: 'HTTP Version Not Supported', name: 'HTTPVersionNotSupported' },
+  506: { message: 'Variant Also Negotiates', name: 'VariantAlsoNegotiates' },
+  507: { message: 'Insufficient Storage', name: 'InsufficientStorage' },
+  508: { message: 'Loop Detected', name: 'LoopDetected' },
+  509: { message: 'Bandwidth Limit Exceeded', name: 'BandwidthLimitExceeded' },
+  510: { message: 'Not Extended', name: 'NotExtended' },
+  511: { message: 'Network Authentication Required', name: 'NetworkAuthenticationRequired' },
 };
 
-function getStatus(code: HttpStatusCode): HttpStatus {
-  return {
-    code,
-    message: ALL_STATUS[code],
-  };
-}
+const ALL_STATUS_BY_CODE: { [K in HttpStatusCode]: HttpStatusObject } = Object.fromEntries(
+  Object.entries(ALL_STATUS).map(([code, infos]) => [code, { code, ...infos }])
+) as any;
+
+const ALL_STATUS_BY_NAME: { [K in HttpStatusName]: HttpStatusObject } = Object.fromEntries(
+  Object.entries(ALL_STATUS).map(([code, infos]) => [infos.name, { code, ...infos }])
+) as any;
 
 export const HttpStatus = {
   getMessage(code: HttpStatusCode, details?: string): HttpStatusMessage {
     return ALL_STATUS[code] + (details ? `: ${details}` : '');
   },
-  get: getStatus,
+  fromCode(code: HttpStatusCode): HttpStatusObject {
+    const obj = ALL_STATUS_BY_CODE[code];
+    if (!obj) {
+      throw new Error(`Unknown status code: ${code}`);
+    }
+    return obj;
+  },
+  fromName(name: HttpStatusName): HttpStatusObject {
+    const obj = ALL_STATUS_BY_NAME[name];
+    if (!obj) {
+      throw new Error(`Unknown status name: ${name}`);
+    }
+    return obj;
+  },
   isEmpty(code: HttpStatusCode): boolean {
     return code < 200 || [204, 205, 304].indexOf(code) >= 0;
   },
@@ -92,56 +109,3 @@ export const HttpStatus = {
     return code >= 400;
   },
 };
-
-// status code to message map
-// status.STATUS_CODES = codes
-
-// array of status codes
-// status.codes = populateStatusesMap(status, codes)
-
-// status codes for redirects
-// status.redirect = {
-//   300: true,
-//   301: true,
-//   302: true,
-//   303: true,
-//   305: true,
-//   307: true,
-//   308: true
-// }
-
-// status codes for empty bodies
-// status.empty = {
-//   204: true,
-//   205: true,
-//   304: true
-// }
-
-// status codes for when you should retry the request
-// status.retry = {
-//   502: true,
-//   503: true,
-//   504: true
-// }
-
-// function status (code: HttpStatusCode) {
-//   if (typeof code === 'number') {
-//     if (!status[code]) throw new Error('invalid status code: ' + code)
-//     return code
-//   }
-
-//   if (typeof code !== 'string') {
-//     throw new TypeError('code must be a number or string')
-//   }
-
-//   // '403'
-//   var n = parseInt(code, 10)
-//   if (!isNaN(n)) {
-//     if (!status[n]) throw new Error('invalid status code: ' + n)
-//     return n
-//   }
-
-//   n = status[code.toLowerCase()]
-//   if (!n) throw new Error('invalid status message: "' + code + '"')
-//   return n
-// }

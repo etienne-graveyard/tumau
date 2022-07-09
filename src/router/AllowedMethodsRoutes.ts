@@ -2,7 +2,7 @@ import {
   compose,
   createKey,
   HttpError,
-  HttpHeaders,
+  HttpHeader,
   HttpMethod,
   Middleware,
   Result,
@@ -14,23 +14,11 @@ import { Route, Routes } from './Route';
 export const RouterAllowedMethodsKey = createKey<Set<HttpMethod>>({ name: 'RouterAllowedMethods' });
 export const RouterAllowedMethodsConsumer = RouterAllowedMethodsKey.Consumer;
 
-export class AllowedMethodsResponse extends TumauResponse {
-  public originalResponse: TumauResponse;
-  public allowedMethods: Set<HttpMethod>;
-
-  constructor(originalResponse: TumauResponse, allowedMethods: Set<HttpMethod>) {
-    const allowHeaderContent = Array.from(allowedMethods.values()).join(',');
-
-    super(
-      originalResponse.extends({
-        headers: {
-          [HttpHeaders.Allow]: allowHeaderContent,
-        },
-      })
-    );
-    this.originalResponse = originalResponse;
-    this.allowedMethods = allowedMethods;
-  }
+export function allowedMethodsResponse(response: TumauResponse, allowedMethods: Set<HttpMethod>): TumauResponse {
+  const allowHeaderContent = Array.from(allowedMethods.values()).join(',');
+  return response
+    .addHeaders([HttpHeader.Allow, allowHeaderContent])
+    .with(RouterAllowedMethodsKey.Provider(allowedMethods));
 }
 
 export function AllowedMethodsRoutes(routes: Routes): Routes {
@@ -84,10 +72,12 @@ function AllowedMethodsMiddleware(methods: Set<HttpMethod>): Middleware {
     if (response instanceof TumauHandlerResponse) {
       return response;
     }
-    if (response !== null && response instanceof TumauResponse === false) {
-      throw new HttpError.Internal(`AllowedMethods received an invalid response !`);
+    if (response === null) {
+      return allowedMethodsResponse(TumauResponse.noContent(), methods);
     }
-    const res = response === null ? new TumauResponse({ code: 204 }) : (response as TumauResponse);
-    return new AllowedMethodsResponse(res, methods);
+    if (response instanceof TumauResponse) {
+      return allowedMethodsResponse(response, methods);
+    }
+    throw new HttpError.Internal(`AllowedMethods received an invalid response !`);
   };
 }

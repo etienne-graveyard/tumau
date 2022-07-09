@@ -4,7 +4,6 @@ import {
   CorsActual,
   CorsActualConfig,
   CorsPreflight,
-  RequestConsumer,
   HttpMethod,
   HttpError,
   CorsPreflightConfig,
@@ -172,8 +171,7 @@ describe('CORS: preflight requests', () => {
   function createCorsServer(config: CorsPreflightConfig = {}) {
     return createServer(
       compose(CorsPreflight(config), HttpErrorToTextResponse, ErrorToHttpError(), (ctx) => {
-        const req = ctx.getOrFail(RequestConsumer);
-        if (req.method === HttpMethod.POST) {
+        if (ctx.method === HttpMethod.POST) {
           return TumauResponse.withText('Hello');
         }
         throw new HttpError(405);

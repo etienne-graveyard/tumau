@@ -1,18 +1,12 @@
-import { Middleware } from './Middleware';
-import { TumauResponse } from './TumauResponse';
-import { HttpError } from './HttpError';
-import { RequestConsumer } from './Keys';
-import { TumauUpgradeResponse } from './TumauUpgradeResponse';
-import { TumauHandlerResponse } from './TumauHandlerResponse';
+import { Middleware, TumauResponse, HttpError, TumauUpgradeResponse, TumauHandlerResponse } from '../core';
 import { LoggerConsumer } from '../logger';
 
 /**
  * Return a Valid Repsonse or throw an HttpError
  */
 export const InvalidResponseToHttpError: Middleware = async (ctx, next) => {
-  const request = ctx.get(RequestConsumer);
   const logger = ctx.get(LoggerConsumer);
-  const isUpgrade = request.isUpgrade;
+  const isUpgrade = ctx.isUpgrade;
   const response = await next(ctx);
   if (isUpgrade) {
     if (response === null || response === undefined) {

@@ -1,10 +1,9 @@
-import { Middleware, RequestConsumer, HttpError, DebugConsumer } from '../core';
+import { Middleware, HttpError } from '../core';
 import { JsonResponse } from './JsonResponse';
 
 export const HttpErrorToJsonResponse: Middleware = async (ctx, next) => {
-  const debug = ctx.get(DebugConsumer);
-  const isUpgrade = ctx.getOrFail(RequestConsumer).isUpgrade;
-  if (isUpgrade) {
+  const debug = ctx.debugMode;
+  if (ctx.isUpgrade) {
     // If Upgrade ignore this since upgrade can't return a response
     return next(ctx);
   }
